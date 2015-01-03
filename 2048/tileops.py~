@@ -1,0 +1,17 @@
+import sys, random
+
+		
+def modifyTile(Tiles, tileID): 
+
+       	# Set the colour of this random tile
+	Tiles[ tileID ].setCol(colourcodes.BLUE)
+
+	# Specify this tile as being "full", rather than empty
+	Tiles[ tileID ].setFull()
+
+	# Get the location on the board of this randomly chosen tile
+	tl = Tiles[tileID].getLoc()
+
+	# Modify the board accordingly
+	pygame.draw.rect(BG, Tiles[tileID].getCol(), [tl[0], tl[1], TILE_SIZE_X, TILE_SIZE_Y])
+

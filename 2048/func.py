@@ -1,3 +1,5 @@
+import sys, random
+
 def getloc(i, SP, S, M):
 	return M + i * (SP + S)
 
@@ -8,4 +10,4 @@ def getind(i, nx, j, ny):
     
     
 def GetRandomTileID(nt):
-    return math.random.randint(0, nt-1)
+    return random.randint(0, nt-1)

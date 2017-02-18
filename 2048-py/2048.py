@@ -8,8 +8,6 @@ from pygame.locals import *
 import math, colourcodes 
 from math import *
 
-
-
 # Dimensions of the game window
 WINDOW_SIZE_X = 500
 WINDOW_SIZE_Y = 500
@@ -29,8 +27,8 @@ BOARD_HEIGHT = WINDOW_SIZE_Y - MARGIN_TOP - MARGIN_BOTTOM
 
 # Settings for the tiles
 # How many tiles in each direction?
-nx = 5
-ny = 5
+nx = 6
+ny = 6
 ntiles = (nx, ny)
 totntiles = nx * ny
 TILE_SPACING = 5
@@ -64,16 +62,27 @@ BG_COLOUR = colourcodes.WHITE
 BOARD_COLOUR = colourcodes.BLACK
 pygame.display.set_caption('2048')
 		
+        
+
+
+# Get a vector containing the available colours
+COLOURS = (colourcodes.BLUE, colourcodes.RED, colourcodes.GREEN)
+
+
+        
 def modifyTile(BG, Tiles, tileID, colourID, newVal):
     
     # Set the colour of this random tile
     Tiles[ tileID ].setCol(colourID)
+    
     # Specify this tile as being "full", rather than empty
     Tiles[tileID].setFull()
     
     # Change the value of this tile
     Tiles[tileID].setVal( newVal )
-    
+    if newVal == BLANKTILE_VAL:
+        Tiles[tileID].setEmpty()
+        
     # Get the location on the board of this randomly chosen tile
     tl = Tiles[tileID].getLoc()
     
@@ -92,7 +101,7 @@ def modifyTile(BG, Tiles, tileID, colourID, newVal):
     myfont = pygame.font.SysFont(TILE_TEXT_FONT, TILE_TEXT_FONT_SIZE)
     TILE_LABEL = myfont.render( Tiles[tileID].getTxt(), 1, colourcodes.BLACK )
     BG.blit( TILE_LABEL, ( TILE_TEXT_POS_X, TILE_TEXT_POS_Y ) )            
-    pygame.display.update()
+  #  pygame.display.update()
 
     
 def existsemptytiles(tiles):
@@ -114,9 +123,6 @@ def existsemptytiles(tiles):
 
 
 
-
-# Get a vector containing the available colours
-COLOURS = (colourcodes.BLUE, colourcodes.RED, colourcodes.GREEN)
 
 
 BG.fill(BG_COLOUR)
@@ -175,63 +181,153 @@ def killTile(Tiles, ID):
     Tiles[ ID ].setVal( BLANKTILE_VAL )
     Tiles[ ID ].setTxt( BLANKTILE_TXT )
 
-def DoCombine(Tiles, tileID_this, tileID_next):
+def DoCombine(Tiles, tileID_this, tileID_next, KEYID):
+    
+   # if KEYID == pygame.K_UP or KEYID == pygame.K_LEFT:
     if not Tiles[ tileID_this ].isEmpty() and not Tiles[ tileID_next ].isEmpty():
         if Tiles[tileID_this].getVal() == Tiles[tileID_next].getVal():
             modifyTile( BG, Tiles, tileID_this, Tiles[ tileID_this ].getCol() ,  Tiles[tileID_this].getVal() + 1 )
             killTile(Tiles, tileID_next)
+                
+  #  if KEYID == pygame.K_DOWN or KEYID == pygame.K_RIGHT:
+  #      if not Tiles[ tileID_this ].isEmpty() and not Tiles[ tileID_next ].isEmpty():
+  #          if Tiles[tileID_this].getVal() == Tiles[tileID_next].getVal():
+  #              modifyTile( BG, Tiles, tileID_this, Tiles[ tileID_this ].getCol() ,  Tiles[tileID_this].getVal() + 1 )
+  #              killTile(Tiles, tileID_next)                
+
+
+def DoReplace(Tiles, tileID_this, tileID_next):
+    modifyTile( BG, Tiles, tileID_next, Tiles[ tileID_this ].getCol() , Tiles[tileID_this].getVal() )
+    modifyTile( BG, Tiles, tileID_this, BLANKTILE_BG_COLOUR, BLANKTILE_VAL)
+    killTile( Tiles, tileID_this )
+
+def GetInBoard(i, bound, type):
+    if type == 1:
+        if i > bound:
+            return True
+        else:
+            return False
+    if type == 2:
+        if i < bound:
+            return True
+        else:
+            return False  
+
+def DoShuffle(Tiles, tileID_this, tileID_next, i, j, dirn, bound):
+    
+    KEYID = 2
+
+    if dirn[KEYID] == pygame.K_UP or dirn[KEYID] == pygame.K_LEFT:
+        DirnType = 1
+    if dirn[KEYID] == pygame.K_DOWN or dirn[KEYID] == pygame.K_RIGHT:
+        DirnType = 2
+    
+    while GetInBoard(i, bound, DirnType) and GetInBoard(j, bound, DirnType) and Tiles[ tileID_next ].isEmpty() and not Tiles[ tileID_this ].isEmpty():
+        DoReplace(Tiles, tileID_this, tileID_next)
+        if i + 2 * dirn[0] > bound and j + 2 * dirn[1] > bound:
+            i = i + dirn[0]
+            j = j + dirn[1]
+            tileID_this = func.getind( i, nx, j, ny)
+            tileID_next = func.getind( i + dirn[0], nx, j + dirn[1], ny)
+        else:
+            break
+                             
+                
+
+def Shuffle(Tiles,i,j,nx,ny,dirn,bound):
+    tileID_this = func.getind( i, nx, j, ny)
+    tileID_next = func.getind( i + dirn[0], nx, j + dirn[1], ny)
+    DoShuffle(Tiles, tileID_this, tileID_next, i, j, dirn, bound)
+
+def Combine(Tiles,i,j,nx,ny,dirn):
+    tileID_this = func.getind( i, nx, j, ny)
+    tileID_next = func.getind( i + dirn[0], nx, j + dirn[1], ny)
+    DoCombine(Tiles, tileID_this, tileID_next, dirn[2])
 
 def DoMove(keyPRESS):
     
     if keyPRESS == pygame.K_UP:
-        for i in xrange(0, ntiles[0]):
-            TILE_POS_X = func.getloc( i, TILE_SPACING, TILE_SIZE_X, BOARD_TOP_X )
+        dirn = (0, -1, keyPRESS)
+        bound = -1
+        rang_bound = (0, 1)
+        act_s = 0
+        act_m = 1
+        for i in xrange(rang_bound[act_s], ntiles[act_s]):
             # 1: shuffle up
-            for j in xrange(1, ntiles[1]):
-                TILE_POS_Y = func.getloc( j, TILE_SPACING, TILE_SIZE_Y, BOARD_TOP_Y )
-                tileID_this = func.getind( i, nx, j, ny)
-                tileID_next = func.getind( i, nx, j - 1, ny)
-                jj = j
-                while jj > -1 and not GameTiles[ tileID_this ].isEmpty() and GameTiles[ tileID_next ].isEmpty():
-    
-                    modifyTile( BG, GameTiles, tileID_next, GameTiles[ tileID_this ].getCol() , GameTiles[tileID_this].getVal() )
-                    modifyTile( BG, GameTiles, tileID_this, BLANKTILE_BG_COLOUR, BLANKTILE_VAL)
-                    killTile(GameTiles, tileID_this)
-                    
-                    jj = jj - 1
-                    tileID_this = func.getind( i, nx, jj, ny)
-                    if jj - 1 > -1:
-                        tileID_next = func.getind( i, nx, jj - 1, ny)
-                    else:
-                        break
-                        
+            for j in xrange(rang_bound[act_m], ntiles[act_m]):
+                Shuffle(GameTiles,i,j,nx,ny,dirn,bound)
+                         
             # 2: combine like tiles        
-            for j in xrange(1, ntiles[1]):
-                TILE_POS_Y = func.getloc( j, TILE_SPACING, TILE_SIZE_Y, BOARD_TOP_Y )
-                tileID_this = func.getind( i, nx, j, ny)
-                tileID_next = func.getind( i, nx, j - 1, ny)
-                DoCombine(GameTiles, tileID_this, tileID_next)
+            for j in xrange(rang_bound[act_m], ntiles[act_m]):
+                Combine(GameTiles,i,j,nx,ny,dirn)
                         
             # 3: shuffle up
-            for j in xrange(1, ntiles[1]):
-                TILE_POS_Y = func.getloc( j, TILE_SPACING, TILE_SIZE_Y, BOARD_TOP_Y )
-                tileID_this = func.getind( i, nx, j, ny)
-                tileID_next = func.getind( i, nx, j - 1, ny)
-                jj = j
-                while jj > -1 and not GameTiles[ tileID_this ].isEmpty() and GameTiles[ tileID_next ].isEmpty():
-    
-                    modifyTile( BG, GameTiles, tileID_next, GameTiles[ tileID_this ].getCol() , GameTiles[tileID_this].getVal() )
-                    modifyTile( BG, GameTiles, tileID_this, BLANKTILE_BG_COLOUR, BLANKTILE_VAL)
-                    killTile(GameTiles, tileID_this)
-                    
-                    jj = jj - 1
-                    tileID_this = func.getind( i, nx, jj, ny)
-                    if jj - 1 > -1:
-                        tileID_next = func.getind( i, nx, jj - 1, ny)
-                    else:
-                        break 
+            for j in xrange(rang_bound[act_m], ntiles[act_m]):
+               Shuffle(GameTiles,i,j,nx,ny,dirn,bound)
                                
-    pygame.display.update()                   
+                               
+    if keyPRESS == pygame.K_LEFT:
+        dirn = (-1, 0, keyPRESS)
+        bound = -1
+        rang_bound = (1, 0)
+        act_s = 1
+        act_m = 0
+        
+        for j in xrange(rang_bound[act_s], ntiles[act_s]):
+            # 1: shuffle left
+            for i in xrange(rang_bound[act_m], ntiles[act_m]):
+                Shuffle(GameTiles,i,j,nx,ny,dirn,bound)
+                         
+            # 2: combine like tiles        
+            for i in xrange(rang_bound[act_m], ntiles[act_m]):
+                Combine(GameTiles,i,j,nx,ny,dirn)
+                        
+            # 3: shuffle left
+            for i in xrange(rang_bound[act_m], ntiles[act_m]):
+                Shuffle(GameTiles,i,j,nx,ny,dirn,bound)   
+                                          
+    if keyPRESS == pygame.K_RIGHT:
+        dirn = (1, 0, keyPRESS)
+        act_s = 1
+        act_m = 0
+        bound = ntiles[act_m]
+        rang_bound = (0, 0)
+        
+        for j in xrange(rang_bound[act_s], ntiles[act_s]):
+            # 1: shuffle 
+            for i in xrange(rang_bound[act_m], ntiles[act_m]-1):
+                Shuffle(GameTiles,i,j,nx,ny,dirn,bound)
+                         
+            # 2: combine like tiles        
+            for i in xrange(rang_bound[act_m], ntiles[act_m]-1):
+                Combine(GameTiles,i,j,nx,ny,dirn)
+                        
+            # 3: shuffle  
+            for i in xrange(rang_bound[act_m], ntiles[act_m]-1):
+                Shuffle(GameTiles,i,j,nx,ny,dirn,bound)   
+
+    if keyPRESS == pygame.K_DOWN:
+        dirn = (0, 1, keyPRESS)
+        act_s = 0
+        act_m = 1
+        bound = ntiles[act_m]
+        rang_bound = (0, 0)
+        
+        
+        for i in xrange(rang_bound[act_s], ntiles[act_s]):
+            # 1: shuffle 
+            for j in xrange(rang_bound[act_m], ntiles[act_m]-1):
+                Shuffle(GameTiles,i,j,nx,ny,dirn,bound)
+                         
+            # 2: combine like tiles        
+            for j in xrange(rang_bound[act_m], ntiles[act_m]-1):
+                Combine(GameTiles,i,j,nx,ny,dirn)
+                        
+            # 3: shuffle  
+            for j in xrange(rang_bound[act_m], ntiles[act_m]-1):
+                Shuffle(GameTiles,i,j,nx,ny,dirn,bound)   
+                                                          
+   # pygame.display.update()                   
                        
 
 
@@ -306,7 +402,7 @@ def getemptytile(Tiles):
 setupboard()
 
 # Put a new tile down (this is for testing)
-modifyTile(BG, GameTiles, 4, colourcodes.BLUE, 1)
+modifyTile(BG, GameTiles, getemptytile( GameTiles ), colourcodes.RED, 1)
 
 # Update the screen
 pygame.display.update()
@@ -331,6 +427,8 @@ while True:
         if event.type == pygame.KEYDOWN:
             keyPRESSED = True
             DoMove(event.key)   
+            pygame.display.update()   
+            print event.key
         else:
             keyPRESSED = False   
                  
@@ -340,9 +438,11 @@ while True:
             # First, check that there exists empty tiles
             stillEmptyTiles = existsemptytiles(GameTiles)
             if stillEmptyTiles:
+
                 NewTileID = getemptytile( GameTiles )
                 # Now modify that empty tile    
-                NewTileBG = COLOURS[random.randint(0, len(COLOURS) - 1 ) ]
+                #NewTileBG = COLOURS[random.randint(0, len(COLOURS) - 1 ) ]
+                NewTileBG = COLOURS[1]
                 NewTileTXT = TXT_LIST[1]
                 modifyTile(BG, GameTiles, NewTileID, NewTileBG , 1 )
             

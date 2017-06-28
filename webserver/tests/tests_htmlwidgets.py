@@ -1,25 +1,34 @@
+# pylint: disable=C0111
+# pylint: disable=C0103
+
 from htmlwidgets import *
 import test_framework as test
 
 
 def test_html():
     actual = html('test')
-    expected = '<html>test</html>'
+    expected = '<html><head><title>Blank</title></head>test</html>'
+    return test.exe_test(actual, expected)
+
+
+def test_withTitle_html():
+    actual = html('test', title='my title')
+    expected = '<html><head><title>my title</title></head>test</html>'
     return test.exe_test(actual, expected)
 
 
 def test_input_submit_form():
 
-    id = 'send'
+    an_id = 'send'
     labels = ['label_1', 'label_2']
-    vars = ['var1', 'var2']
+    in_vars = ['var1', 'var2']
     expected = '<form action="/send?var1&var2" method="POST">'\
-        + '<label>label_1</label><input type="text" name="var1">'\
-        + '<input type="submit" name="Send">'\
+        + '<label>label_1</label><input name="var1" type="text">'\
+        + '<input name="Send" type="submit">'\
         + '<label>label_2</label>'\
-        + '<input type="text" name="var2">'\
-        + '<input type="submit" name="Send"></form>'
-    actual = input_submit_form(id, labels, vars)
+        + '<input name="var2" type="text">'\
+        + '<input name="Send" type="submit"></form>'
+    actual = input_submit_form(an_id, labels, in_vars)
     return test.exe_test(actual, expected)
 
 
@@ -88,5 +97,17 @@ def test_style_div():
 
 def test_stylesList_div():
     expected = "<div style=\"color: blue; weight: bold;\">TEXT</div>"
-    actual = div("TEXT", style={'color':'blue', 'weight':'bold'})
+    actual = div("TEXT", style={'color': 'blue', 'weight': 'bold'})
+    return test.exe_test(actual, expected)
+
+
+def test_title():
+    expected = '<title>TEXT</title>'
+    actual = title("TEXT")
+    return test.exe_test(actual, expected)
+
+
+def test_head():
+    expected = '<head><title>TEXT</title></head>'
+    actual = head("TEXT")
     return test.exe_test(actual, expected)

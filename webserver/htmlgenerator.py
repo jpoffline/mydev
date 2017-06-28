@@ -1,7 +1,7 @@
 """ html generator """
 
 import serverhelp as srv
-from htmlwidgets import *
+from htmlwidgets import html, body, h1, img, input_submit_form, pagePut, div
 
 
 def hello_world_text():
@@ -19,26 +19,29 @@ def hello_person(text):
     return html(
         body(
             h1('Hello, ' + text)
-            + img("https://s-media-cache-ak0.pinimg.com/736x/60/9f/39/609f392284fd9e5d787ee190ca1bbc40--animal-quotes-animal-humor.jpg")
+            + img(".jpg")
         )
     )
 
 
 def get_response_page(code):
+    """ Get the response page for a given code """
     decon = srv.deconstruct_response_string(code)
     event_id = decon[0]
     return pick_response_page(event_id, decon)
 
 
 def pick_response_page(eventid, replies):
+    """ Pick a response page, based on the eventid """
     if eventid == '/send_name_and_age':
-        return page_form('jonathan', replies)
+        return page_form(replies)
     elif eventid == 'TEST_ERROR':
         return page_error()
     return page_error()
 
 
 def page_error():
+    """ Return an error page """
     return html(
         body(
             h1(
@@ -47,6 +50,12 @@ def page_error():
         )
     )
 
+def get_simple_css():
+    return {
+        'body' : {
+            'background-color' : 'lightblue'
+        }
+    }
 
 def page_form(reply=None):
     """ Form page """
@@ -61,9 +70,11 @@ def page_form(reply=None):
             + pagePut('send_name_and_age', reply,
                       div(
                           '<b>Name</b>: ?your_name<br /><b>Age</b>: ?your_age',
-                          style='color:blue'
+                          style={'color': 'blue'}
                       ))
-        )
+        ),
+        title='My page',
+        css=get_simple_css()
     )
 
 

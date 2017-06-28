@@ -5,7 +5,7 @@ from tests.tests_htmltags import *
 from tests.tests_htmlwidgets import *
 from tests.tests_serverhelp import *
 from tests.tests_htmlgenerator import *
-
+from tests.tests_tools import *
 
 def some_magic(mod):
     """ Collect together the test functions in the loaded modules """

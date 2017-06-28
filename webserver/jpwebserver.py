@@ -3,8 +3,8 @@
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from os import curdir, sep
 import cgi
-import htmlGenerator as html
-import serverHelp as srv
+import htmlgenerator as html
+import serverhelp as srv
 
 
 PORT_NUMBER = 8080
@@ -14,9 +14,10 @@ PORT_NUMBER = 8080
 
 
 class myHandler(BaseHTTPRequestHandler):
-
+    """ myHandler """
     # Handler for the GET requests
     def do_GET(self):
+        """ do_GET """
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
@@ -25,6 +26,7 @@ class myHandler(BaseHTTPRequestHandler):
         return
 
     def gen_form(self):
+        """ gen_form """
         form = cgi.FieldStorage(
             fp=self.rfile,
             headers=self.headers,
@@ -37,7 +39,7 @@ class myHandler(BaseHTTPRequestHandler):
 
     # Handler for the POST requests
     def do_POST(self):
-
+        """ do_POST """
         recd = self.path.split('?')
         form = self.gen_form()
         self.send_response(200)

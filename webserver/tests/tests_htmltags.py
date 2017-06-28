@@ -114,5 +114,5 @@ def test_optionsAndStyle_options_to_str():
 
 def test_tag_input():
     actual = htmltags.tag_input('T', 'N')
-    expected = '<input type=\"T\" name=\"N\">'
+    expected = '<input name=\"N\" type=\"T\">'
     return test.exe_test(actual, expected)

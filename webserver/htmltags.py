@@ -17,9 +17,24 @@ def tag(item, open=True, meta=''):
     return the_tag + '>'
 
 
+def tag_style(open=True):
+    """ Generate a general HTML-style-tag """
+    return tag('style', open)
+
+
 def tag_html(open=True):
     """ Generate a general HTML-html-tag """
     return tag('html', open)
+
+
+def tag_head(open=True):
+    """ Generate a general HTML-head-tag """
+    return tag('head', open)
+
+
+def tag_title(open=True):
+    """ Generate a general HTML-title-tag """
+    return tag('title', open)
 
 
 def tag_body(open=True):
@@ -82,8 +97,7 @@ def options_to_str(options=None, style=None):
 
     string = ''
     if style is not None:
-        bit = tools.collapse_dict(
-            style, sep_pair='; ', link=': ', val_surround='') + ';'
+        bit = tools.collapse_dict_css(style) + ';'
         string += 'style=\"' + bit + '\"'
     if options is not None:
         if style is not None:

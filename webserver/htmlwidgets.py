@@ -2,12 +2,31 @@
 
 from htmltags import *
 import serverhelp as srv
+import tools as tools
+
+def head(text, css=None):
+    """ Generate a HTML-body environment """
+    # HAS_UNIT_TESTS
+    return tag_head() + title(text) + style(css) + tag_head(open=False)
 
 
-def html(text):
+def style(css):
+    """ Generate a HTML-style environment """
+    return tag_style() + tools.collapse_css(css) + tag_style(open=False)
+
+
+def title(text):
+    """ Generate a HTML-title environment """
+    # HAS_UNIT_TESTS
+    return tag_title() + text + tag_title(open=False)
+
+
+def html(text, title=None, css=None):
     """ Generate a HTML-html environment """
     # HAS_UNIT_TESTS
-    return tag_html() + text + tag_html(open=False)
+    if title is None:
+        title = 'Blank'
+    return tag_html() + head(title, css=css) + text + tag_html(open=False)
 
 
 def body(text):
@@ -15,7 +34,7 @@ def body(text):
     return tag_body() + text + tag_body(open=False)
 
 
-def h1(text): # pylint: disable=C0103
+def h1(text):  # pylint: disable=C0103
     """ Generate a HTML-h1 environment """
     return tag_h1() + text + tag_h1(open=False)
 

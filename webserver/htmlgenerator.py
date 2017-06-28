@@ -50,12 +50,18 @@ def page_error():
         )
     )
 
+
 def get_simple_css():
+    """ Create an return a simple css object """
     return {
-        'body' : {
-            'background-color' : 'lightblue'
+        'body': {
+            'background-color': 'lightblue'
+        },
+        'div' :{
+            'background-color': 'green'
         }
     }
+
 
 def page_form(reply=None):
     """ Form page """

@@ -17,6 +17,29 @@ def test_withTitle_html():
     return test.exe_test(actual, expected)
 
 
+def test_withCSS_html():
+    css = {
+        'body': {
+            'background-color': 'lightblue'
+        }
+    }
+    actual = html('test', css=css)
+    expected = '<html><head><title>Blank</title>'\
+    + '<style>body {background-color: lightblue;} </style></head>test</html>'
+    return test.exe_test(actual, expected)
+
+
+def test_withTitleAndCSS_html():
+    css = {
+        'body': {
+            'background-color': 'lightblue'
+        }
+    }
+    actual = html('test', css=css, title="TITLE")
+    expected = '<html><head><title>TITLE</title><style>body {background-color: lightblue;} </style></head>test</html>'
+    return test.exe_test(actual, expected)
+
+
 def test_input_submit_form():
 
     an_id = 'send'
@@ -110,4 +133,21 @@ def test_title():
 def test_head():
     expected = '<head><title>TEXT</title></head>'
     actual = head("TEXT")
+    return test.exe_test(actual, expected)
+
+
+def test_None_style():
+    expected = ''
+    actual = style(None)
+    return test.exe_test(actual, expected)
+
+
+def test_withCss_style():
+    expected = '<style>body {background-color: lightblue;} </style>'
+    css = {
+        'body': {
+            'background-color': 'lightblue'
+        }
+    }
+    actual = style(css)
     return test.exe_test(actual, expected)

@@ -36,7 +36,17 @@ def gen_pkt_item(key, value):
 
 
 def deconstruct_response_string(string):
-    """ Deconstruct a response string """
+    """ 
+    Deconstruct a response string 
+
+    Parameters
+    ----------
+    string: string
+
+    Returns
+    -------
+    List of packet items
+    """
     # HAS_UNIT_TESTS
 
     first = string.split('?')

@@ -12,6 +12,9 @@ def head(text, css=None):
 
 def style(css):
     """ Generate a HTML-style environment """
+    # HAS_UNIT_TESTS
+    if css is None:
+        return ''
     return tag_style() + tools.collapse_css(css) + tag_style(open=False)
 
 
@@ -39,15 +42,12 @@ def h1(text):  # pylint: disable=C0103
     return tag_h1() + text + tag_h1(open=False)
 
 
-def div(text, style=None, styles=None):
+def div(text, style=None):
     """ Generate a HTML-div environment """
     # HAS_UNIT_TESTS
-    if not style and not styles:
+    if style is None:
         return tag_div() + text + tag_div(open=False)
-    elif not styles:
-        return tag_div(style=style) + text + tag_div(open=False)
-    else:
-        return tag_div(styles=styles) + text + tag_div(open=False)
+    return tag_div(style=style) + text + tag_div(open=False)
 
 
 def label(text):

@@ -74,21 +74,23 @@ def tag_label(open=True):
     return tag('label', open)
 
 
-def tag_input(in_type, name):
+def tag_input(in_type, name, place_holder=None):
     """ Generate a HTML-input-tag """
     # HAS_UNIT_TESTS
-    return tag('input ' + tools.collapse_dict({'type': in_type, 'name': name}))
+    if place_holder is None:
+        return tag('input ' + tools.collapse_dict({'type': in_type, 'name': name}))
+    return tag('input ' + tools.collapse_dict({'type': in_type, 'name': name, 'placeholder': place_holder}))
 
 
-def tag_div(open=True, style=None):
+def tag_div(open=True, style=None, options=None):
     """ Generate a div tag """
     # HAS_UNIT_TESTS
 
     # Check for the unstyled case
-    if style is None:
+    if style is None and options is None:
         return tag('div', open)
-
-    return tag('div', meta=options_to_str(style=style))
+    meta = options_to_str(style=style, options=options)
+    return tag('div', meta=meta)
 
 
 def options_to_str(options=None, style=None):

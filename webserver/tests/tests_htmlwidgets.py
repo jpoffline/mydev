@@ -46,11 +46,12 @@ def test_input_submit_form():
     labels = ['label_1', 'label_2']
     in_vars = ['var1', 'var2']
     expected = '<form action="/send?var1&var2" method="POST">'\
-        + '<label>label_1</label><input name="var1" type="text">'\
-        + '<input name="Send" type="submit">'\
+        + '<label>label_1</label>'\
+        + '<input name="var1" placeholder="label_1" type="text">'\
         + '<label>label_2</label>'\
-        + '<input name="var2" type="text">'\
-        + '<input name="Send" type="submit"></form>'
+        + '<input name="var2" placeholder="label_2" type="text">'\
+        + '<input name="send" type="submit">'\
+        + '</form>'
     actual = input_submit_form(an_id, labels, in_vars)
     return test.exe_test(actual, expected)
 
@@ -150,4 +151,32 @@ def test_withCss_style():
         }
     }
     actual = style(css)
+    return test.exe_test(actual, expected)
+
+def test_withOptions_div():
+    opts = {
+        'id': '1',
+        'name': 'jp'
+    }
+    expected = '<div id="1" name="jp">TEXT</div>'
+    actual = div("TEXT", options=opts)
+    return test.exe_test(actual, expected)
+
+
+def test_withOptionsAndStyle_div():
+    opts = {
+        'id': '1',
+        'name': 'jp'
+    }
+    sty = {
+        'color': 'blue',
+        'weight': 'bold'
+    }
+    expected = '<div style="color: blue; weight: bold;" id="1" name="jp">TEXT</div>'
+    actual = div("TEXT", options=opts, style=sty)
+    return test.exe_test(actual, expected)
+
+def test_input_submit():
+    expected = '<label>TEXT</label><input name="ID" type="text"><input name="send" type="submit">'
+    actual = input_submit("TEXT", "ID")
     return test.exe_test(actual, expected)

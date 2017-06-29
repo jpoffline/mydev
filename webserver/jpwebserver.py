@@ -5,7 +5,7 @@ from os import curdir, sep
 import cgi
 import htmlgenerator as html
 import serverhelp as srv
-
+from app.app import page_index
 
 PORT_NUMBER = 8080
 
@@ -21,7 +21,7 @@ class myHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
-        self.wfile.write(html.page_index())
+        self.wfile.write(page_index())
 
         return
 

@@ -116,3 +116,25 @@ def test_tag_input():
     actual = htmltags.tag_input('T', 'N')
     expected = '<input name=\"N\" type=\"T\">'
     return test.exe_test(actual, expected)
+
+def test_withOptions_tag_div():
+    opts = {
+        'id': '1',
+        'name': 'jp'
+    }
+    actual = htmltags.tag_div(options=opts)
+    expected = '<div id=\"1\" name=\"jp\">'
+    return test.exe_test(actual, expected)
+
+def test_withOptionsAndStyle_tag_div():
+    opts = {
+        'id': '1',
+        'name': 'jp'
+    }
+    style = {
+        'color': 'blue',
+        'weight': 'bold'
+    }
+    actual = htmltags.tag_div(options=opts, style=style)
+    expected = '<div style="color: blue; weight: bold;" id=\"1\" name=\"jp\">'
+    return test.exe_test(actual, expected)

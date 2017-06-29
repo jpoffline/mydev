@@ -1,14 +1,21 @@
 """ Unit test framework """
 import inspect
-
+from tools import pretty_time
 
 def if_any_fail(input_list):
     """ Helper function to detect if any unit tests failed """
+    count_pass = 0
+    count_fail = 0
     for item in input_list:
         if not item['result']:
-            return True
-
-    return False
+            count_fail += 1
+        else:
+            count_pass += 1
+    return {
+        'pass': (count_fail == 0),
+        'count_pass': count_pass,
+        'count_fail': count_fail
+    }
 
 
 def general_test_result(name, result, actual, expected):
@@ -57,8 +64,18 @@ def exe_test(actual, expected):
 def analyse_tests(results):
     """ Analyse the unit test results """
 
-    print 'Running ' + str(len(results)) + ' tests'
-    if not if_any_fail(results):
+    print 'Found ' + str(len(results)) + ' tests'
+    analysis = if_any_fail(results)
+    if analysis['pass']:
         print '* tests passed'
     else:
-        print '* tests failed'
+        print '* tests failed: ' + str(analysis['count_fail']) + '/' + str(analysis['count_pass'])
+
+def unit_tests_banner(empty=False):
+    """ Return a banner for the start of the unit tests """
+    if not empty:
+        return '\n========== unit tests =========='
+    return '================================\n'
+
+def elapsed(time):
+    return '* elapsed: ' + pretty_time(time)

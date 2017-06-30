@@ -64,7 +64,7 @@ def exe_test(actual, expected):
 def analyse_tests(results):
     """ Analyse the unit test results """
 
-    print 'Found ' + str(len(results)) + ' tests'
+    print 'Ran ' + str(len(results)) + ' tests'
     analysis = if_any_fail(results)
     if analysis['pass']:
         print '* tests passed'
@@ -79,3 +79,4 @@ def unit_tests_banner(empty=False):
 
 def elapsed(time):
     return '* elapsed: ' + time
+

@@ -1,5 +1,5 @@
+""" Timer class """
 
-import time
 
 
 def pretty_time(input_time, sig=2):
@@ -7,28 +7,35 @@ def pretty_time(input_time, sig=2):
     Return a pretty-string version of
     an inputted time in seconds
     """
-    units = 'secs'
-    if input_time > 60:
-        input_time = input_time / 60
-        units = 'mins'
+    if input_time < 0.001:
+        units = 'ms'
+        input_time = input_time * 1000
+    else:
+        units = 'secs'
+        if input_time > 60:
+            input_time = input_time / 60
+            units = 'mins'
+
+
     return str(round(input_time, sig)) + ' ' + units
 
 
 class Timer(object):
     """ Timer class """
 
-    def __init__(self):
+    def __init__(self, timer):
         self._start = None
         self._end = None
         self._elapsed_seconds = None
-        self.reset()
         self._sig = 2
         self._laps = []
         self._laps_sorted = False
+        self._lap_stats = None
+        self._time = timer
 
     def start(self):
         """ Start the timer """
-        self._start = time.time()
+        self._start = self._time.time()
 
     def sig(self, input_sig):
         """ Set the significant figures for output """
@@ -36,7 +43,7 @@ class Timer(object):
 
     def end(self):
         """ End the timer """
-        self._end = time.time()
+        self._end = self._time.time()
         self._elapsed_seconds = round(self._end - self._start, self._sig)
 
     def save(self, lap_id, reset=False):
@@ -73,6 +80,7 @@ class Timer(object):
         """ Sort the laps """
         self._laps = sorted(self._laps, key=lambda k: k['elapsed'])
         self._laps_sorted = True
+        self.lap_stats()
 
     def slowest(self, last_n=5):
         """ Return the slowest of all the laps """
@@ -88,11 +96,24 @@ class Timer(object):
         print "NEED TO SORT LAPS FIRST"
         return None
 
-    def lap_stats(self):
+    def lap_stats(self, get=False):
         """ Lap stats """
         last_lap_idx = len(self._laps) - 1
-        return{
-            'fastest': self._laps[last_lap_idx],
-            'slowest': self._laps[0],
+        self._lap_stats = {
+            'fastest': self._laps[0],
+            'slowest': self._laps[last_lap_idx],
             'diff': self._laps[last_lap_idx]['elapsed'] - self._laps[0]['elapsed']
         }
+        if get:
+            return self._lap_stats
+
+    def print_stats(self):
+        """ Print the timing stats """
+        slowest = self._lap_stats['slowest']['elapsed']
+        fastest = self._lap_stats['fastest']['elapsed']
+        pretty_slowest = pretty_time(slowest)
+        pretty_fastest = pretty_time(fastest)
+        slow_to_fast_frac = round(slowest / fastest, 2)
+        print '* runtime stats'
+        print '   - slowest', pretty_slowest, self._lap_stats['slowest']['id']
+        print '   - fastest', pretty_fastest, self._lap_stats['fastest']['id'], '(', slow_to_fast_frac, 'x slowest)'

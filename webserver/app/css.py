@@ -2,7 +2,7 @@
 
 
 def get_simple_css():
-    """ Create an return a simple css object """
+    """ Create an return a css object """
     return {
         'body': {
             'background-color': 'lightblue'

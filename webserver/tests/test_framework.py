@@ -1,6 +1,6 @@
 """ Unit test framework """
 import inspect
-from tools import pretty_time
+
 
 def if_any_fail(input_list):
     """ Helper function to detect if any unit tests failed """
@@ -78,4 +78,4 @@ def unit_tests_banner(empty=False):
     return '================================\n'
 
 def elapsed(time):
-    return '* elapsed: ' + pretty_time(time)
+    return '* elapsed: ' + time

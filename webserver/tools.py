@@ -1,5 +1,5 @@
 """ General helper tools """
-
+import time
 
 def collapse_dict(input_dict, sep_pair=' ', link='=', val_surround='\"'):
     """ Collapse a dict """
@@ -37,13 +37,8 @@ def collapse_css(input_css):
         string += key + ' {' + collapse_dict_css(val) + ';} '
     return string
 
-def pretty_time(time):
-    """
-    Return a pretty-string version of
-    an inputted time in seconds
-    """
-    units = 'secs'
-    if time > 60:
-        time = time / 60
-        units = 'mins'
-    return str(round(time, 2)) + ' ' + units
+
+
+
+
+

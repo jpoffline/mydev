@@ -102,28 +102,55 @@ def pagePut(anchor, replies, what):
 # Compound widgets
 
 
-def input_submit(text, submit_id, input_type='text', add_button=True, place_holder=None):
+def input_submit(text, submit_id, input_type='text', add_button=None, place_holder=None):
     """ Generate an input-submit form HTML-environment """
     html_input_submit = label(text)
     if place_holder is not None:
         html_input_submit += tag_input(input_type, submit_id, place_holder=place_holder)
     else:
         html_input_submit += tag_input(input_type, submit_id)
-    if add_button:
-        html_input_submit += tag_input('submit', 'send')
+    if add_button is not None:
+        html_input_submit += tag_input('submit', 'send', options={'value': add_button})
     return html_input_submit
 
 
-def input_submit_form(form_id, labels, ids):
-    """
-    Generate an input form HTML-environment.
+def input_submit_meta(in_meta):
+    """ Generate an input item from meta data """
+    if 'placeholder' in in_meta:
+        plch = in_meta['placeholder']
+    else:
+        plch = None
+    lbl = in_meta['label']
+    if 'button' in in_meta:
+        btn = in_meta['button']
+    else:
+        btn = None
+    if 'type' in in_meta:
+        ipt = in_meta['type']
+    else:
+        ipt = 'text'
+    return input_submit(lbl, in_meta['id'], input_type=ipt, add_button=btn, place_holder=plch)
 
-    Many input fields, with one button at the end.
-    """
-    # HAS_UNIT_TESTS
+
+def input_submit_form(meta):
+    """ Generate a collection of input fields, with a button """
     form_text = ''
-    for i in xrange(0, len(labels)-1):
-        form_text += input_submit(labels[i], ids[i], add_button=False, place_holder=labels[i])
-    last_idx = len(labels)-1
-    form_text += input_submit(labels[last_idx], ids[last_idx], place_holder=labels[last_idx])
+    form_id = meta['form_id']
+    ids = []
+    for item in meta['inputs']:
+        ids.append(item['id'])
+        form_text += input_submit_meta(item)
     return form('POST', srv.gen_post_string(form_id, ids), form_text)
+
+def checkbox_group(meta):
+    """ Generate a collection of check boxes """
+    html_str = ''
+    ids = []
+    for item in meta['inputs']:
+        this_id = item['id']
+        ids.append(this_id)
+        item.update({'type' : 'checkbox', 'name' : this_id})
+        html_str += tag_input('checkbox', this_id, options={'value': item['value']}) + ' ' + item['text'] + "<br />"
+    html_str += tag_input('submit', 'send', options={'value': meta['button_label']})
+    #return html_str
+    return form('POST', srv.gen_post_string(meta['form_id'], ids), html_str)

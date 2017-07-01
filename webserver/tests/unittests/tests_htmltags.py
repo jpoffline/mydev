@@ -3,7 +3,7 @@
 # pylint: disable=C0103
 
 import htmltags
-import test_framework as test
+import tests.test_framework as test
 
 
 def test_tag_html():
@@ -137,4 +137,9 @@ def test_withOptionsAndStyle_tag_div():
     }
     actual = htmltags.tag_div(options=opts, style=style)
     expected = '<div style="color: blue; weight: bold;" id=\"1\" name=\"jp\">'
+    return test.exe_test(actual, expected)
+
+def test_with_value_tag_input():
+    actual = htmltags.tag_input('checkbox', 'ID', options={'value': 'THE_VALUE'})
+    expected = '<input name="ID" type="checkbox" value="THE_VALUE">'
     return test.exe_test(actual, expected)

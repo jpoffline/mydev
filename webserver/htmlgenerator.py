@@ -13,19 +13,17 @@ def get_response_page(code):
 
 def pick_response_page(eventid, replies):
     """ Pick a response page, based on the eventid """
-    if eventid == '/send_name_and_age':
-        return page_form(replies)
-    elif eventid == 'TEST_ERROR':
+    if eventid == 'TEST_ERROR':
         return page_error()
-    return page_error()
+    return page_form(replies)
 
 
-def page_error():
+def page_error(eventid='404'):
     """ Return an error page """
     return html(
         body(
             h1(
-                "PAGE NOT FOUND"
+                "PAGE NOT FOUND" + eventid
             )
         )
     )

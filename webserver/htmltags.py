@@ -74,12 +74,15 @@ def tag_label(open=True):
     return tag('label', open)
 
 
-def tag_input(in_type, name, place_holder=None):
+def tag_input(in_type, name, place_holder=None, options=None):
     """ Generate a HTML-input-tag """
     # HAS_UNIT_TESTS
-    if place_holder is None:
-        return tag('input ' + tools.collapse_dict({'type': in_type, 'name': name}))
-    return tag('input ' + tools.collapse_dict({'type': in_type, 'name': name, 'placeholder': place_holder}))
+    opts_dict = {'type': in_type, 'name': name}
+    if place_holder is not None:
+        opts_dict.update({'placeholder': place_holder})
+    if options is not None:
+        opts_dict.update(options)
+    return tag('input ' + tools.collapse_dict(opts_dict))
 
 
 def tag_div(open=True, style=None, options=None):

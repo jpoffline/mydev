@@ -4,13 +4,15 @@
 
 def read_form(form, key):
     """ Read a form """
-    var = form[key].value
+    if key in form:
+        var = form[key].value
 
-    if var == '':
-        return 'empty'
+        if var == '':
+            return 'empty'
+        else:
+            return var
     else:
-        return var
-
+        return 'False'
 
 def gen_post_string(send, vars):
     """ Generate a POST string """

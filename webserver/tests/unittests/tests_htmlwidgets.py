@@ -2,7 +2,7 @@
 # pylint: disable=C0103
 
 from htmlwidgets import *
-import test_framework as test
+import tests.test_framework as test
 
 
 def test_html():
@@ -37,22 +37,6 @@ def test_withTitleAndCSS_html():
     }
     actual = html('test', css=css, title="TITLE")
     expected = '<html><head><title>TITLE</title><style>body {background-color: lightblue;} </style></head>test</html>'
-    return test.exe_test(actual, expected)
-
-
-def test_input_submit_form():
-
-    an_id = 'send'
-    labels = ['label_1', 'label_2']
-    in_vars = ['var1', 'var2']
-    expected = '<form action="/send?var1&var2" method="POST">'\
-        + '<label>label_1</label>'\
-        + '<input name="var1" placeholder="label_1" type="text">'\
-        + '<label>label_2</label>'\
-        + '<input name="var2" placeholder="label_2" type="text">'\
-        + '<input name="send" type="submit">'\
-        + '</form>'
-    actual = input_submit_form(an_id, labels, in_vars)
     return test.exe_test(actual, expected)
 
 
@@ -177,6 +161,32 @@ def test_withOptionsAndStyle_div():
     return test.exe_test(actual, expected)
 
 def test_input_submit():
-    expected = '<label>TEXT</label><input name="ID" type="text"><input name="send" type="submit">'
-    actual = input_submit("TEXT", "ID")
+    expected = '<label>TEXT</label><input name="ID" type="text"><input name="send" type="submit" value="BTN TEXT">'
+    actual = input_submit("TEXT", "ID", add_button='BTN TEXT')
+    return test.exe_test(actual, expected)
+
+
+def test_checkbox_group():
+    expected = '<form action="/send_buttons_12?btn1&btn2" method="POST">'\
+    + '<input name="btn1" type="checkbox" value="val1"> CHK 1<br />'\
+    + '<input name="btn2" type="checkbox" value="val2"> CHK 2<br />'\
+    + '<input name="send" type="submit" value="YO">'\
+    + '</form>'
+    meta = {
+        'form_id': 'send_buttons_12',
+        'button_label' : 'YO',
+        'inputs' : [
+            {
+                'id' : 'btn1',
+                'value' : 'val1',
+                'text' : 'CHK 1'
+            },
+            {
+                'id' : 'btn2',
+                'value' : 'val2',
+                'text' : 'CHK 2'
+            }
+        ]
+    }
+    actual = checkbox_group(meta)
     return test.exe_test(actual, expected)

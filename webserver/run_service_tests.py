@@ -1,13 +1,10 @@
-""" unit test driver """
+
 
 import inspect
 import sys
-import tests.test_framework as test
-from tests.unittests.tests_htmltags import *
-from tests.unittests.tests_htmlwidgets import *
-from tests.unittests.tests_serverhelp import *
-from tests.unittests.tests_htmlgenerator import *
-from tests.unittests.tests_tools import *
+from tests.servicetests.test_timer import *
+
+
 
 from lib.timer import Timer
 import time
@@ -17,22 +14,16 @@ def some_magic(mod):
     """ Collect together the test functions in the loaded modules """
     all_functions = inspect.getmembers(mod, inspect.isfunction)
     results = []
-
-    timer = Timer(time)
-    timer.sig(5)
     for key, _ in all_functions:
         if key.startswith("test_"):
-            timer.start()
+
             var = eval(key + '()')  # pylint: disable=W0123
-            timer.end()
-            timer.save(key, reset=True)
+
             results.append(var)
-    timer.sort_laps()
-    timer.print_stats()
     return results
 
 
-def run_tests():
+def run_service_tests():
     """ Run the unit tests """
     timer = Timer(time)
     print test.unit_tests_banner()
@@ -46,4 +37,4 @@ def run_tests():
 
 
 if __name__ == '__main__':
-    run_tests()
+    run_service_tests()

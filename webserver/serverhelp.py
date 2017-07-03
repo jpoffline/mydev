@@ -38,8 +38,8 @@ def gen_pkt_item(key, value):
 
 
 def deconstruct_response_string(string):
-    """ 
-    Deconstruct a response string 
+    """
+    Deconstruct a response string
 
     Parameters
     ----------

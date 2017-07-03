@@ -40,7 +40,6 @@ class myHandler(BaseHTTPRequestHandler):
     # Handler for the POST requests
     def do_POST(self):
         """ do_POST """
-        print self.path
         recd = self.path.split('?')
         form = self.gen_form()
         self.send_response(200)

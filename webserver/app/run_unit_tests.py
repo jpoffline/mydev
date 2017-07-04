@@ -8,7 +8,7 @@ from tests.unittests.tests_htmlwidgets import *
 from tests.unittests.tests_serverhelp import *
 from tests.unittests.tests_htmlgenerator import *
 from tests.unittests.tests_tools import *
-
+from tests.unittests.tests_ajax_factories import *
 from lib.timer import Timer
 import time
 

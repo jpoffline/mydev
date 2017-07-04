@@ -2,6 +2,8 @@
 
 import htmltags as htmltags
 import lib.ajax.ajaxfactories as ajaxtools
+
+
 def page_head():
     return """
 <!doctype html>
@@ -18,8 +20,6 @@ def span(id, text):
     return '<span id=\"' + id + '\">' + text + '</span>'
 
 
-
-
 def numeric_boxes(names):
     options = {'size': '5'}
     bxs = []
@@ -27,7 +27,6 @@ def numeric_boxes(names):
         bxs.append(htmltags.tag_input('text', name, options=options))
     numboxes = ' + '.join(bxs)
     return numboxes
-    
 
 
 def serialize_ajax_inputs_base(name):
@@ -43,8 +42,6 @@ def serialize_ajax_inputs(names):
 
 def link(href, id, text):
     return "<a href=" + href + " id=\"" + id + "\">" + text + "</a>"
-
-
 
 
 def get_ajax(meta):
@@ -65,9 +62,10 @@ def get_ajax(meta):
         """ + serialize_ajax_inputs(id_data) + """
       }, function(data) {
         """ + \
+        ajaxtools.ajax_placer("div#divtochange", options={'how': 'css', 'new_css': {"background-color": "#FF0000"}}) + \
         ajaxtools.ajax_placer(meta['id_result']) + \
         ajaxtools.ajax_placer(meta['id_result_uses']) + \
-        ajaxtools.ajax_placer(meta['id_result_hist'], how='rows', rows_meta={'items': id_data}) + """
+        ajaxtools.ajax_placer(meta['id_result_hist'], options={'how': 'rows', 'rows_meta': {'items': id_data}}) + """
       });
       return false;
     };

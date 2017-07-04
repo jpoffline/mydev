@@ -1,3 +1,5 @@
+""" SQL wrappers """
+
 import sqlite3
 
 
@@ -20,17 +22,6 @@ def create_table(conn, create_table_sql):
     c.execute(create_table_sql)
 
 
-def create_db_qy(table_name, fields):
-    """ SQL-factory: Create a table if not exists """
-
-    zipped_fields = []
-    for field in fields:
-        zipped_fields.append(field['name'] + ' ' + field['type'])
-    string = ' CREATE TABLE IF NOT EXISTS ' + \
-        table_name + ' (' + ', '.join(zipped_fields) + ');'
-    return string
-
-
 def create_db(database, table, fields):
     """ Wrapper function for creating a SQL table """
     # create a database connection
@@ -42,15 +33,6 @@ def create_db(database, table, fields):
         print("Error! cannot create the database connection.")
 
 
-def insert_into_qy(tb, names):
-    """ SQL-factory: Inserting data to a table """
-    string = "INSERT INTO " + tb + " (" + ','.join(names) + ") VALUES ("
-    zipped = ','.join("?" * len(names))
-    string = string + zipped + ");"
-    print string
-    return string
-
-
 def insert_into(db, tb, data):
     """ Wrapper function for inserting data into a SQL db/tb """
     conn = create_connection(db)
@@ -59,14 +41,10 @@ def insert_into(db, tb, data):
     conn.close()
 
 
-def get_all_from_sql_qy(tb):
-    """ SQL-factory: Select all data from a table """
-    return 'SELECT * FROM ' + tb
-
-
-def get_all_from_sql(db, tb):
-    conn = create_connection(db)
-    v = conn.execute(get_all_from_sql_qy(tb)).fetchall()
+def get_all_from_sql(database, table):
+    """ Wrapper function for selecting and returning all from a SQL db/tb """
+    conn = create_connection(database)
+    v = conn.execute(get_all_from_sql_qy(table)).fetchall()
     conn.close()
     return v
 

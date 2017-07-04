@@ -36,6 +36,7 @@ def index():
         span(meta['id_result'], "?") + "<p>" + \
         link("#", "calculate", "DO IT") + \
         "<h2>N uses: " + span(meta['id_result_uses'], "") + "</h2>" +\
+        "<div id=\"divtochange\" style=\"height: 50px; width: 50px; background-color:blue;\"></div>" + \
         "<h2>calc history</h2>" + \
         "<table id=\"" + meta['id_result_hist'] + \
         "\"><tr><th>a</th><th>b</th></tr></table>"

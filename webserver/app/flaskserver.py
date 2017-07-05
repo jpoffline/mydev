@@ -22,7 +22,7 @@ def add_numbers():
     model.add_history_item(a, b)
     model.get_all_history()
 
-    table_html = model.serialise_history()
+    table_html = "<h2>All history</h2>" + model.serialise_history()
 
     return jsonify(
         result=a + b,
@@ -57,7 +57,6 @@ def index():
         "<h2>Session history</h2>" + \
         "<table id=\"" + meta['id_result_hist'] + \
         "\"><tr><th>a</th><th>b</th></tr></table>" + \
-        "<h2>All history</h2>" + \
         htmlwidgets.htmloutput(meta['id_calc_history_table'])
 
 

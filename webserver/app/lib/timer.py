@@ -2,7 +2,7 @@
 
 
 
-def pretty_time(input_time, sig=2):
+def pretty_time(input_time, sig=3):
     """
     Return a pretty-string version of
     an inputted time in seconds
@@ -113,7 +113,7 @@ class Timer(object):
         fastest = self._lap_stats['fastest']['elapsed']
         pretty_slowest = pretty_time(slowest)
         pretty_fastest = pretty_time(fastest)
-        slow_to_fast_frac = round(slowest / fastest, 2)
+        slow_to_fast_frac = round(slowest / fastest, 3)
         print '* runtime stats'
         print '   - slowest', pretty_slowest, self._lap_stats['slowest']['id']
         print '   - fastest', pretty_fastest, self._lap_stats['fastest']['id'], '(', slow_to_fast_frac, 'x slowest)'

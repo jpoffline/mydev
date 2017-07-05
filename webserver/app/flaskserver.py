@@ -3,6 +3,7 @@
 from flask import Flask, jsonify, render_template, request
 from lib.ajax_aux import *
 import lib.tools as tools
+import lib.htmlwidgets as htmlwidgets
 import lib.model_adder as modeladder
 app = Flask(__name__)
 
@@ -49,15 +50,15 @@ def index():
         get_ajax(meta) + \
         "<h1>jQuery Example</h1><p>" + \
         numeric_boxes(meta['id_data']) + "=" + \
-        span(meta['id_result'], "?") + "<p>" + \
+        htmlwidgets.span(meta['id_result'], "?") + "<p>" + \
         link("#", "calculate", "DO IT") + \
-        "<h2>N uses: " + span(meta['id_result_uses'], "") + "</h2>" +\
+        "<h2>N uses: " + htmlwidgets.span(meta['id_result_uses'], "") + "</h2>" +\
         "<div id=\"divtochange\" style=\"height: 50px; width: 50px; background-color:blue;\"></div>" + \
         "<h2>Session history</h2>" + \
         "<table id=\"" + meta['id_result_hist'] + \
         "\"><tr><th>a</th><th>b</th></tr></table>" + \
         "<h2>All history</h2>" + \
-        span(meta['id_calc_history_table'], "")
+        htmlwidgets.span(meta['id_calc_history_table'], "")
 
 
 if __name__ == '__main__':

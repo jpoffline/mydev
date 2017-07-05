@@ -238,9 +238,29 @@ def test_sql_to_html():
     return test.exe_test(actual, expected)
 
 
-def test_unequal_sql_to_html():
+def test_unequalCols_sql_to_html():
     cols = ['id', 'a', 'b']
     data = [(0, 0), (1, 1)]
     expected = None
     actual = htmlwidgets.sql_to_html(cols, data)
+    return test.exe_test(actual, expected)
+
+
+def test_unequalData_sql_to_html():
+    cols = ['id', 'a']
+    data = [(0, 0, 1), (1, 1)]
+    expected = None
+    actual = htmlwidgets.sql_to_html(cols, data)
+    return test.exe_test(actual, expected)
+
+
+def test_span():
+    expected = '<span id="ID">TEXT</span>'
+    actual = htmlwidgets.span("ID", "TEXT")
+    return test.exe_test(actual, expected)
+
+
+def test_htmloutput():
+    expected = '<span id="ID"></span>'
+    actual = htmlwidgets.htmloutput("ID")
     return test.exe_test(actual, expected)

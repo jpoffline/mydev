@@ -11,6 +11,15 @@ def head(text, css=None):
     return tag_head() + title(text) + style(css) + tag_head(open=False)
 
 
+def span(id, text):
+    # HAS_UNIT_TESTS
+    return '<span id=\"' + id + '\">' + text + '</span>'
+
+
+def htmloutput(id):
+    # HAS_UNIT_TESTS
+    return span(id, "")
+
 def style(css):
     """ Generate a HTML-style environment """
     # HAS_UNIT_TESTS
@@ -185,7 +194,7 @@ def serialise_cols_to_row(cols, parent='tr', item='td'):
 def sql_to_html(col_names, rows):
     """ Serialise SQL output to a HTML-table """
     # HAS_UNIT_TESTS
-    if len(col_names) is not len(rows):
+    if len(col_names) is not len(rows[0]):
         return None
     html = tag_table()
     html += serialise_cols_to_row(col_names, item='th')

@@ -15,11 +15,6 @@ def page_head():
 </script>
 """
 
-
-def span(id, text):
-    return '<span id=\"' + id + '\">' + text + '</span>'
-
-
 def numeric_boxes(names):
     options = {'size': '5'}
     bxs = []

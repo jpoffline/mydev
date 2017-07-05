@@ -18,17 +18,36 @@ def ajax_placer_rows(id, res, rows_meta):
 def ajax_placer_css(input_id):
     """ AJAX-factory: change css of an item """
     # HAS_TESTS
-    string = """$('"""+input_id+"""').css('background', data.rgb);"""
+    string = placer_id(input_id) + """css('background', data.rgb);"""
     return string
+
+
+def placer_id(input_id):
+    """ AJAX-factory: id """
+    # HAS_TESTS
+    return """$('""" + input_id + """')."""
+
+
+def placer_item(item):
+    """ AJAX-factory: item """
+    # HAS_TESTS
+    return """(""" + item + """);"""
+
+
+def ajax_placer_general(input_id, method, item):
+    """ AJAX-factory: general placer """
+    # HAS_TESTS
+    return placer_id(input_id) + method + placer_item(item)
 
 
 def ajax_placer(res, options=None):
     """ AJAX-factory: wrapper method """
     if options is None:
         input_id = '#' + res
-        return """$('""" + input_id + """').text(data.""" + res + """);"""
+        return ajax_placer_general(input_id, "text", "data." + res)
     elif options['how'] == 'html':
-        return """$('#""" + res + """').html(data.""" + res + """);"""
+        input_id = '#' + res
+        return ajax_placer_general(input_id, "html", "data." + res)
     elif options['how'] == 'rows':
         input_id = '#' + res
         return ajax_placer_rows(input_id, res, options['rows_meta'])

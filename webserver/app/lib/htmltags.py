@@ -18,7 +18,8 @@ def tag(item, open=True, meta=''):
 
 
 def tag_style_options(type, open=True, style=None, options=None):
-    """ Generate a div tag """
+    """ Generate a general tag which has options and a style """
+    # HAS_UNIT_TESTS
     # Check for the unstyled case
     if style is None and options is None:
         return tag(type, open)

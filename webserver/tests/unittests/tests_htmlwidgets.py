@@ -205,6 +205,27 @@ def test_serialise_cols_to_row():
     return test.exe_test(actual, expected)
 
 
+def test_customParent_serialise_cols_to_row():
+    cols = ['id', 'a']
+    actual = htmlwidgets.serialise_cols_to_row(cols, parent='TT')
+    expected = '<TT><td>id</td><td>a</td></TT>'
+    return test.exe_test(actual, expected)
+
+
+def test_customItem_serialise_cols_to_row():
+    cols = ['id', 'a']
+    actual = htmlwidgets.serialise_cols_to_row(cols, item='th')
+    expected = '<tr><th>id</th><th>a</th></tr>'
+    return test.exe_test(actual, expected)
+
+
+def test_customItemAndParent_serialise_cols_to_row():
+    cols = ['id', 'a']
+    actual = htmlwidgets.serialise_cols_to_row(cols, item='th', parent='TT')
+    expected = '<TT><th>id</th><th>a</th></TT>'
+    return test.exe_test(actual, expected)
+
+
 def test_sql_to_html():
     cols = ['id', 'a']
     data = [(0, 0), (1, 1)]
@@ -213,5 +234,13 @@ def test_sql_to_html():
         '<tr><td>0</td><td>0</td></tr>' + \
         '<tr><td>1</td><td>1</td></tr>' + \
         '</table>'
+    actual = htmlwidgets.sql_to_html(cols, data)
+    return test.exe_test(actual, expected)
+
+
+def test_unequal_sql_to_html():
+    cols = ['id', 'a', 'b']
+    data = [(0, 0), (1, 1)]
+    expected = None
     actual = htmlwidgets.sql_to_html(cols, data)
     return test.exe_test(actual, expected)

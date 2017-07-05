@@ -149,3 +149,48 @@ def test_with_value_tag_input():
     actual = htmltags.tag_input('checkbox', 'ID', options={'value': 'THE_VALUE'})
     expected = '<input name="ID" type="checkbox" value="THE_VALUE">'
     return test.exe_test(actual, expected)
+
+
+def test_openOnly_tag_style_options():
+    expected = '<TAG_TYPE>'
+    actual = htmltags.tag_style_options('TAG_TYPE')
+    return test.exe_test(actual, expected)
+
+def test_closeOnly_tag_style_options():
+    expected = '</TAG_TYPE>'
+    actual = htmltags.tag_style_options('TAG_TYPE', open=False)
+    return test.exe_test(actual, expected)
+
+
+def test_optionsOnly_tag_style_options():
+    expected = '<TAG_TYPE id="1" name="jp">'
+    opts = {
+        'id': '1',
+        'name': 'jp'
+    }
+    actual = htmltags.tag_style_options('TAG_TYPE', options=opts)
+    return test.exe_test(actual, expected)
+
+
+def test_styleOnly_tag_style_options():
+    expected = '<TAG_TYPE style="color: blue; weight: bold;">'
+    style = {
+        'color': 'blue',
+        'weight': 'bold'
+    }
+    actual = htmltags.tag_style_options('TAG_TYPE', style=style)
+    return test.exe_test(actual, expected)
+
+
+def test_styleAndOpts_tag_style_options():
+    expected = '<TAG_TYPE style="color: blue; weight: bold;" id="1" name="jp">'
+    style = {
+        'color': 'blue',
+        'weight': 'bold'
+    }
+    opts = {
+        'id': '1',
+        'name': 'jp'
+    }
+    actual = htmltags.tag_style_options('TAG_TYPE', style=style, options=opts)
+    return test.exe_test(actual, expected)

@@ -4,6 +4,7 @@ from lib.htmltags import *
 import lib.serverhelp as srv
 import lib.tools as tools
 
+
 def head(text, css=None):
     """ Generate a HTML-body environment """
     # HAS_UNIT_TESTS
@@ -106,11 +107,13 @@ def input_submit(text, submit_id, input_type='text', add_button=None, place_hold
     """ Generate an input-submit form HTML-environment """
     html_input_submit = label(text)
     if place_holder is not None:
-        html_input_submit += tag_input(input_type, submit_id, place_holder=place_holder)
+        html_input_submit += tag_input(input_type,
+                                       submit_id, place_holder=place_holder)
     else:
         html_input_submit += tag_input(input_type, submit_id)
     if add_button is not None:
-        html_input_submit += tag_input('submit', 'send', options={'value': add_button})
+        html_input_submit += tag_input('submit',
+                                       'send', options={'value': add_button})
     return html_input_submit
 
 
@@ -150,13 +153,27 @@ def checkbox_group(meta):
     for item in meta['inputs']:
         this_id = item['id']
         ids.append(this_id)
-        item.update({'type' : 'checkbox', 'name' : this_id})
-        html_str += tag_input('checkbox', this_id, options={'value': item['value']}) + ' ' + item['text'] + "<br />"
-    html_str += tag_input('submit', 'send', options={'value': meta['button_label']})
+        item.update({'type': 'checkbox', 'name': this_id})
+        html_str += tag_input('checkbox', this_id,
+                              options={'value': item['value']}) + ' ' + item['text'] + "<br />"
+    html_str += tag_input('submit', 'send',
+                          options={'value': meta['button_label']})
     return form('POST', srv.gen_post_string(meta['form_id'], ids), html_str)
 
 
 def serialise_cols_to_row(cols, parent='tr', item='td'):
+    """
+    Serialise row data to HTML-table row
+
+    Example input: cols = ['var1', 'var2']
+    Output: '<tr><td>var1</td><td>var2</td></tr>
+
+    Can also specify the item-type and parent-type.
+    The relevant strings will get pasted into the HTML-tag:
+    Example input: cols = ['var1', 'var2'], parent='PT', item='IT'
+    Output: '<PT><IT>var1</IT><IT>var2</IT></PT>
+
+    """
     # HAS_UNIT_TESTS
     fmt_start = tag(item)
     fmt_end = tag(item, open=False)
@@ -166,7 +183,10 @@ def serialise_cols_to_row(cols, parent='tr', item='td'):
 
 
 def sql_to_html(col_names, rows):
+    """ Serialise SQL output to a HTML-table """
     # HAS_UNIT_TESTS
+    if len(col_names) is not len(rows):
+        return None
     html = tag_table()
     html += serialise_cols_to_row(col_names, item='th')
     for row in rows:

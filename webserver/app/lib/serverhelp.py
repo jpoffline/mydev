@@ -14,6 +14,7 @@ def read_form(form, key):
     else:
         return 'False'
 
+
 def gen_post_string(send, vars):
     """ Generate a POST string """
     # HAS_UNIT_TESTS

@@ -2,11 +2,11 @@
 import time
 
 
-def collapse_dict(input_dict, sep_pair=' ', link='=', val_surround='\"', key_surround=''):
+def collapse_dict(in_dict, sep_pair=' ', link='=', val_surround='\"', key_surround=''):
     """ Collapse a dict """
     fmt = key_surround + '{}' + key_surround + \
         link + val_surround + '{}' + val_surround
-    return sep_pair.join([fmt.format(k, v) for k, v in sorted(input_dict.iteritems())])
+    return sep_pair.join([fmt.format(k, v) for k, v in sorted(in_dict.iteritems())])
 
 
 def collapse_dict_css(input_css):
@@ -43,3 +43,20 @@ def collapse_css(input_css):
     for key, val in input_css.iteritems():
         string += key + ' {' + collapse_dict_css(val) + ';} '
     return string
+
+
+def val_to_rgb(value):
+    """ Convert a value to an RGB-string """
+    return 'rgb(' + str(value) + ',127,127)'
+
+
+def get_username():
+    """ Get the current user name """
+    import getpass
+    return getpass.getuser()
+
+
+def get_hostname():
+    """ Get the current host machine name """
+    import socket
+    return socket.gethostname()

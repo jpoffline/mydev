@@ -1,9 +1,15 @@
 """ Unit tests for htmltags """
 # pylint: disable=C0111
 # pylint: disable=C0103
+# pylint: disable=C0413
 
-import htmltags
-import tests.test_framework as test
+""" Import file paths correctly """
+from context import app
+import test_framework as test
+
+
+import app.lib.htmltags as htmltags
+
 
 
 def test_tag_html():

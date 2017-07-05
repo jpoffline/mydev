@@ -1,8 +1,8 @@
 """ html generator """
 
-import serverhelp as srv
-from htmlwidgets import html, body, h1
-from app.app import page_form
+import app.lib.serverhelp as srv
+import app.lib.htmlwidgets as htmlwidgets
+from app import app
 
 def get_response_page(code):
     """ Get the response page for a given code """
@@ -15,14 +15,14 @@ def pick_response_page(eventid, replies):
     """ Pick a response page, based on the eventid """
     if eventid == 'TEST_ERROR':
         return page_error()
-    return page_form(replies)
+    return app.page_form(replies)
 
 
 def page_error(eventid='404'):
     """ Return an error page """
-    return html(
-        body(
-            h1(
+    return htmlwidgets.html(
+        htmlwidgets.body(
+            htmlwidgets.h1(
                 "PAGE NOT FOUND" + eventid
             )
         )

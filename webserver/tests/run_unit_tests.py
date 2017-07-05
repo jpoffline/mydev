@@ -2,15 +2,16 @@
 
 import inspect
 import sys
-import tests.test_framework as test
-from tests.unittests.tests_htmltags import *
-from tests.unittests.tests_htmlwidgets import *
-from tests.unittests.tests_serverhelp import *
-from tests.unittests.tests_htmlgenerator import *
-from tests.unittests.tests_tools import *
-from tests.unittests.tests_ajax_factories import *
-from lib.timer import Timer
 import time
+from context import app
+import test_framework as test
+from unittests.tests_htmltags import *
+from unittests.tests_htmlwidgets import *
+from unittests.tests_serverhelp import *
+from unittests.tests_htmlgenerator import *
+from unittests.tests_tools import *
+from unittests.tests_ajax_factories import *
+from app.lib.timer import Timer
 
 
 def some_magic(mod):

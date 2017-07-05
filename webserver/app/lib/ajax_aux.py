@@ -1,6 +1,6 @@
 """ Aux functions for pyflask implementation """
-
-import htmltags as htmltags
+import context
+import lib.htmltags as htmltags
 import lib.ajax.ajaxfactories as ajaxtools
 
 
@@ -54,6 +54,8 @@ def get_ajax(meta):
     if not route.startswith('/'):
         route = '/' + route
 
+    new_css = {'how': 'css', 'new_css': {"background-color": "#FF0000"}}
+
     return """
 <script type="text/javascript">
   $(function() {
@@ -62,8 +64,9 @@ def get_ajax(meta):
         """ + serialize_ajax_inputs(id_data) + """
       }, function(data) {
         """ + \
-        ajaxtools.ajax_placer("div#divtochange", options={'how': 'css', 'new_css': {"background-color": "#FF0000"}}) + \
+        ajaxtools.ajax_placer('div#divtochange', options={'how': 'css-background'}) + \
         ajaxtools.ajax_placer(meta['id_result']) + \
+        ajaxtools.ajax_placer(meta['id_calc_history_table'], options={'how': 'html'}) + \
         ajaxtools.ajax_placer(meta['id_result_uses']) + \
         ajaxtools.ajax_placer(meta['id_result_hist'], options={'how': 'rows', 'rows_meta': {'items': id_data}}) + """
       });

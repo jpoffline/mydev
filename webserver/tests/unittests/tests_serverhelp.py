@@ -1,9 +1,15 @@
 """ Module containing unit tests for the serverHelp module """
 # pylint: disable=C0111
 # pylint: disable=C0103
+# pylint: disable=C0413
 
-import serverhelp as srv
-import tests.test_framework as test
+""" Import file paths correctly """
+from context import app
+import test_framework as test
+
+
+import app.lib.serverhelp as srv
+
 
 
 def test_gen_response_string():

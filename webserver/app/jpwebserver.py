@@ -3,8 +3,8 @@
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from os import curdir, sep
 import cgi
-import htmlgenerator as html
-import serverhelp as srv
+import lib.htmlgenerator as html
+import lib.serverhelp as srv
 from app.app import page_index
 
 PORT_NUMBER = 8080

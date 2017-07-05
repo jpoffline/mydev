@@ -1,7 +1,8 @@
 """ SQL wrappers """
 
 import sqlite3
-
+import context
+import qy_factories as factories
 
 def create_connection(db_file):
     """ create a database connection to the SQLite database
@@ -28,7 +29,7 @@ def create_db(database, table, fields):
     conn = create_connection(database)
     if conn is not None:
         # create projects table
-        create_table(conn, create_db_qy(table, fields))
+        create_table(conn, factories.create_db_qy(table, fields))
     else:
         print("Error! cannot create the database connection.")
 
@@ -36,7 +37,7 @@ def create_db(database, table, fields):
 def insert_into(db, tb, data):
     """ Wrapper function for inserting data into a SQL db/tb """
     conn = create_connection(db)
-    conn.executemany(insert_into_qy(tb, data['cols']), data['data'])
+    conn.executemany(factories.insert_into_qy(tb, data['cols']), data['data'])
     conn.commit()
     conn.close()
 
@@ -44,12 +45,13 @@ def insert_into(db, tb, data):
 def get_all_from_sql(database, table):
     """ Wrapper function for selecting and returning all from a SQL db/tb """
     conn = create_connection(database)
-    v = conn.execute(get_all_from_sql_qy(table)).fetchall()
+    v = conn.execute(factories.get_all_from_sql_qy(table)).fetchall()
     conn.close()
     return v
 
-
+"""
 table_fields = [
+    {'name' : 'id', 'type' : 'integer primary key'},
     {'name': 'person', 'type': 'text'},
     {'name': 'age', 'type': 'integer'}
 ]
@@ -75,3 +77,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+"""

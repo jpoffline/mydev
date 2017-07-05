@@ -1,6 +1,6 @@
 """ my app code """
-
-from htmlwidgets import *
+from context import app
+from app.lib.htmlwidgets import *
 from css import get_simple_css
 
 

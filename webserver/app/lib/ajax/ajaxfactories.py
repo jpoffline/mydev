@@ -1,5 +1,6 @@
 """ ajax factories """
-from tools import *
+import context
+import lib.tools as tools
 
 
 def ajax_placer_rows(id, res, rows_meta):
@@ -14,11 +15,10 @@ def ajax_placer_rows(id, res, rows_meta):
         }); """
 
 
-def ajax_placer_css(input_id, new_css):
+def ajax_placer_css(input_id):
     """ AJAX-factory: change css of an item """
     # HAS_TESTS
-    css = collapse_css_ajax(new_css)
-    string = """$(\"""" + input_id + """\").css({""" + css + """});"""
+    string = """$('"""+input_id+"""').css('background', data.rgb);"""
     return string
 
 
@@ -27,9 +27,11 @@ def ajax_placer(res, options=None):
     if options is None:
         input_id = '#' + res
         return """$('""" + input_id + """').text(data.""" + res + """);"""
+    elif options['how'] == 'html':
+        return """$('#""" + res + """').html(data.""" + res + """);"""
     elif options['how'] == 'rows':
         input_id = '#' + res
         return ajax_placer_rows(input_id, res, options['rows_meta'])
-    elif options['how'] == 'css':
-        return ajax_placer_css(res, options['new_css'])
+    elif options['how'] == 'css-background':
+        return ajax_placer_css(res)
 

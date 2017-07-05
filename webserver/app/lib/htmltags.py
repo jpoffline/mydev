@@ -1,6 +1,6 @@
 """ HTML tags module """
-
-import tools as tools
+import context
+import lib.tools as tools
 
 
 def tag(item, open=True, meta=''):
@@ -15,6 +15,20 @@ def tag(item, open=True, meta=''):
     else:
         the_tag += '/' + item
     return the_tag + '>'
+
+
+def tag_style_options(type, open=True, style=None, options=None):
+    """ Generate a div tag """
+    # Check for the unstyled case
+    if style is None and options is None:
+        return tag(type, open)
+    meta = options_to_str(style=style, options=options)
+    return tag(type, meta=meta)
+
+
+def tag_table(options=None, style=None, open=True):
+    """ Generate a general HTML-table-tag """
+    return tag_style_options('table', options=options, style=style, open=open)
 
 
 def tag_style(open=True):
@@ -88,12 +102,7 @@ def tag_input(in_type, name, place_holder=None, options=None):
 def tag_div(open=True, style=None, options=None):
     """ Generate a div tag """
     # HAS_UNIT_TESTS
-
-    # Check for the unstyled case
-    if style is None and options is None:
-        return tag('div', open)
-    meta = options_to_str(style=style, options=options)
-    return tag('div', meta=meta)
+    return tag_style_options('div', style=style, options=options, open=open)
 
 
 def options_to_str(options=None, style=None):

@@ -1,8 +1,8 @@
 """ HTML widgets """
 
-from htmltags import *
-import serverhelp as srv
-import tools as tools
+from lib.htmltags import *
+import lib.serverhelp as srv
+import lib.tools as tools
 
 def head(text, css=None):
     """ Generate a HTML-body environment """
@@ -142,6 +142,7 @@ def input_submit_form(meta):
         form_text += input_submit_meta(item)
     return form('POST', srv.gen_post_string(form_id, ids), form_text)
 
+
 def checkbox_group(meta):
     """ Generate a collection of check boxes """
     html_str = ''
@@ -152,5 +153,23 @@ def checkbox_group(meta):
         item.update({'type' : 'checkbox', 'name' : this_id})
         html_str += tag_input('checkbox', this_id, options={'value': item['value']}) + ' ' + item['text'] + "<br />"
     html_str += tag_input('submit', 'send', options={'value': meta['button_label']})
-    #return html_str
     return form('POST', srv.gen_post_string(meta['form_id'], ids), html_str)
+
+
+def serialise_cols_to_row(cols, parent='tr', item='td'):
+    # HAS_UNIT_TESTS
+    fmt_start = tag(item)
+    fmt_end = tag(item, open=False)
+    fmt = fmt_start + '{0}' + fmt_end
+    inside = ''.join([fmt.format(x) for x in cols])
+    return tag(parent) + inside + tag(parent, open=False)
+
+
+def sql_to_html(col_names, rows):
+    # HAS_UNIT_TESTS
+    html = tag_table()
+    html += serialise_cols_to_row(col_names, item='th')
+    for row in rows:
+        html += serialise_cols_to_row(row)
+    html += tag_table(open=False)
+    return html

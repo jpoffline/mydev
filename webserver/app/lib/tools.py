@@ -1,6 +1,6 @@
 """ General helper tools """
 import time
-
+import datetime
 
 def collapse_dict(in_dict, sep_pair=' ', link='=', val_surround='\"', key_surround=''):
     """ Collapse a dict """
@@ -60,3 +60,9 @@ def get_hostname():
     """ Get the current host machine name """
     import socket
     return socket.gethostname()
+
+
+def get_datetime():
+    """ Get the current datetime stamp in YYYYMMDDHHMMSS-form """
+    today = datetime.datetime.today()
+    return today.strftime('%Y%m%d%H%M%S')

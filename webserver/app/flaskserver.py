@@ -18,7 +18,7 @@ def add_numbers():
     b = request.args.get('b', 0, type=int)
     history.append({'a': a, 'b': b})
 
-    #m._create_db()
+    model._create_db()
     model.add_history_item(a, b)
     model.get_all_history()
 
@@ -50,15 +50,15 @@ def index():
         get_ajax(meta) + \
         "<h1>jQuery Example</h1><p>" + \
         numeric_boxes(meta['id_data']) + "=" + \
-        htmlwidgets.span(meta['id_result'], "?") + "<p>" + \
+        htmlwidgets.htmloutput(meta['id_result']) + "<p>" + \
         link("#", "calculate", "DO IT") + \
-        "<h2>N uses: " + htmlwidgets.span(meta['id_result_uses'], "") + "</h2>" +\
+        "<h2>N uses: " + htmlwidgets.htmloutput(meta['id_result_uses']) + "</h2>" +\
         "<div id=\"divtochange\" style=\"height: 50px; width: 50px; background-color:blue;\"></div>" + \
         "<h2>Session history</h2>" + \
         "<table id=\"" + meta['id_result_hist'] + \
         "\"><tr><th>a</th><th>b</th></tr></table>" + \
         "<h2>All history</h2>" + \
-        htmlwidgets.span(meta['id_calc_history_table'], "")
+        htmlwidgets.htmloutput(meta['id_calc_history_table'])
 
 
 if __name__ == '__main__':

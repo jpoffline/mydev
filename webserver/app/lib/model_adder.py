@@ -22,13 +22,27 @@ class ModelAdder(object):
                 {'name': 'a', 'type': 'NUMERIC'},
                 {'name': 'b', 'type': 'NUMERIC'},
                 {'name': 'submit_user', 'type': 'text'},
-                {'name': 'submit_machine', 'type': 'text'}
+                {'name': 'submit_machine', 'type': 'text'},
+                {'name': 'submit_time', 'type': 'text'}
             ]
             return table_fields_schema
         if wanted == 'col_names':
-            return ['id', 'a', 'b', 'submit_user', 'submit_machine']
+            return [
+                'id',
+                'a',
+                'b',
+                'submit_user',
+                'submit_machine',
+                'submit_time'
+            ]
         if wanted == 'insert_col_names':
-            return ['a', 'b', 'submit_user', 'submit_machine']
+            return [
+                'a',
+                'b',
+                'submit_user',
+                'submit_machine',
+                'submit_time'
+            ]
 
     def _create_db(self):
         """ Create the SQL tables """
@@ -45,7 +59,7 @@ class ModelAdder(object):
     def add_history_item(self, a, b):
         """ Interface: method to data into the history table """
         hist_cols = self._db_history_fields('insert_col_names')
-        hist_vals = [(a, b, self._user, self._machine)]
+        hist_vals = [(a, b, self._user, self._machine, tools.get_datetime())]
         self._insert(self._table, hist_cols, hist_vals)
 
     def get_all_history(self):
@@ -53,6 +67,7 @@ class ModelAdder(object):
         self._history = sql.get_all_from_sql(self._db_path, self._table)
 
     def serialise_history(self):
+        """ Serialise the history to HTML """
         self.get_all_history()
 
         return htmlwidgets.sql_to_html(self._db_history_fields('col_names'),

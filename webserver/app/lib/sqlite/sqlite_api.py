@@ -4,6 +4,7 @@ import sqlite3
 import context
 import qy_factories as factories
 
+
 def create_connection(db_file):
     """ create a database connection to the SQLite database
         specified by db_file

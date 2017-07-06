@@ -5,16 +5,7 @@ import lib.ajax.ajaxfactories as ajaxtools
 import lib.htmlwidgets as htmlwidgets
 import lib.widgets.default_css as widgetcss
 
-def page_head():
-    return """
-<!doctype html>""" + \
- htmlwidgets.head("jQuery Example", css=widgetcss.global_css()) + \
-"""<script type="text/javascript"
-  src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-<script type="text/javascript">
-  var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-</script>
-"""
+
 
 def numeric_boxes(names):
     options = {'size': '5'}
@@ -40,7 +31,7 @@ def link(href, id, text):
     return "<a href=" + href + " id=\"" + id + "\">" + text + "</a>"
 
 
-def get_ajax(meta):
+def get_ajax_index(meta):
 
     route = meta['route']
     id_action = meta['id_action']

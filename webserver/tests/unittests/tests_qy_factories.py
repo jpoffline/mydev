@@ -10,6 +10,14 @@ import test_framework as test
 import app.lib.sqlite.qy_factories as qy_factories
 
 
+def test_order_get_all_from_sql_qy():
+    table = 'TABLE'
+    ord = 'id desc'
+    actual = qy_factories.get_all_from_sql_qy(table, order=ord)
+    expected = 'SELECT * FROM TABLE ORDER BY id desc'
+    return test.exe_test(actual, expected)
+
+
 def test_get_all_from_sql_qy():
     table = 'TABLE'
     actual = qy_factories.get_all_from_sql_qy(table)

@@ -235,7 +235,7 @@ def test_customItemAndParent_serialise_cols_to_row():
 def test_sql_to_html():
     cols = ['id', 'a']
     data = [(0, 0), (1, 1)]
-    expected = '<table>' + \
+    expected = '<table class="jp-table">' + \
         '<tr><th>id</th><th>a</th></tr>' + \
         '<tr><td>0</td><td>0</td></tr>' + \
         '<tr><td>1</td><td>1</td></tr>' + \

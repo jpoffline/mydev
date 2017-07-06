@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, jsonify, render_template, request
-from lib.ajax_aux import *
+import lib.ajax_aux as ajax_aux
 import lib.tools as tools
 import lib.htmlwidgets as htmlwidgets
 import lib.model_adder as modeladder
+import flasksite.site as site
 app = Flask(__name__)
 
 
@@ -35,30 +36,7 @@ def add_numbers():
 
 @app.route('/')
 def index():
-    meta = {
-        'route': '/_add_numbers',
-        'id_action': 'a#calculate',
-        'id_result': 'result',
-        'id_data': ['a', 'b'],
-        'id_result_hist': 'history',
-        'id_result_uses': 'nuses',
-        'id_rgb': 'rgb',
-        'id_calc_history_table': 'histtbl'
-    }
-
-    return page_head() +\
-        get_ajax(meta) + \
-        "<h1>jQuery Example</h1><p>" + \
-        numeric_boxes(meta['id_data']) + "=" + \
-        htmlwidgets.htmloutput(meta['id_result']) + "<p>" + \
-        link("#", "calculate", "DO IT") + \
-        htmlwidgets.htmlvaluebox("N uses", meta['id_result_uses']) + \
-        "<div id=\"divtochange\" style=\"height: 50px; width: 50px; background-color:blue;\"></div>" + \
-        "<h2>Session history</h2>" + \
-        "<table class=\"jp-table\" id=\"" + meta['id_result_hist'] + \
-        "\"><tr><th>a</th><th>b</th></tr></table>" + \
-        htmlwidgets.htmloutput(meta['id_calc_history_table'])
-
+    return site.index_page()
 
 if __name__ == '__main__':
     app.run()

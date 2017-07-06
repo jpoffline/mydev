@@ -49,7 +49,7 @@ def global_table():
 def global_headers():
     return {
         'h1.jp': {
-            'background': 'white'
+            
         }
     }
 

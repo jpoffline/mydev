@@ -7,7 +7,8 @@ def global_body():
     """ The page body css """
     return {
         'body': {
-            'background-color': 'LightBlue'
+            'background-color': 'LightBlue',
+            'font-family' : 'verdana'
         }
     }
 

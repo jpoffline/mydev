@@ -1,7 +1,7 @@
 import context
 import lib.widgets.htmlwidgets as htmlwidgets
 import css as css
-import lib.ajax_aux as ajax_aux
+import lib.ajax.ajax_aux as ajax_aux
 
 def page_head():
     return """

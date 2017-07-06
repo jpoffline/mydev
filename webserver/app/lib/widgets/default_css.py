@@ -62,4 +62,3 @@ def global_jp_widgets():
     return css
 
 
-

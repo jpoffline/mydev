@@ -1,6 +1,6 @@
 """ html generator """
 
-import app.lib.serverhelp as srv
+import app.lib.tools.serverhelp as srv
 import app.lib.widgets.htmlwidgets as htmlwidgets
 from app import app
 

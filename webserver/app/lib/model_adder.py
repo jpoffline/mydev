@@ -1,7 +1,7 @@
 """ model adder module """
 
 import sqlite.sqlite_api as sql
-import tools as tools
+import tools.tools as tools
 import lib.widgets.htmlwidgets as htmlwidgets
 
 

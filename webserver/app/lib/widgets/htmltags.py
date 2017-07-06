@@ -1,6 +1,6 @@
 """ HTML tags module """
 import context
-import lib.tools as tools
+import lib.tools.tools as tools
 
 
 def tag(item, open=True, meta=''):

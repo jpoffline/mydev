@@ -7,7 +7,7 @@ from context import app
 import test_framework as test
 
 
-import app.lib.tools as tools
+import app.lib.tools.tools as tools
 
 
 def test_collapse_dict():

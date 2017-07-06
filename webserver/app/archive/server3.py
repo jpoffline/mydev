@@ -3,7 +3,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
 from os import curdir, sep
 import cgi
 import htmlGenerator as html
-import serverHelp as srv
+import tools.serverHelp as srv
 
 
 PORT_NUMBER = 8080

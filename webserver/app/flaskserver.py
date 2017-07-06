@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, jsonify, render_template, request
-import lib.ajax_aux as ajax_aux
-import lib.tools as tools
+import lib.ajax.ajax_aux as ajax_aux
+import lib.tools.tools as tools
 import lib.widgets.htmlwidgets as htmlwidgets
 import lib.model_adder as modeladder
 import flasksite.site as site

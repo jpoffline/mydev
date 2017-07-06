@@ -8,7 +8,7 @@ from context import app
 import test_framework as test
 
 
-import app.lib.htmltags as htmltags
+import app.lib.widgets.htmltags as htmltags
 
 
 

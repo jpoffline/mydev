@@ -12,7 +12,7 @@ from unittests.tests_htmlgenerator import *
 from unittests.tests_tools import *
 from unittests.tests_ajax_factories import *
 from unittests.tests_qy_factories import *
-from app.lib.timer import Timer
+from app.lib.tools.timer import Timer
 
 
 def some_magic(mod):

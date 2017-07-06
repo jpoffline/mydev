@@ -55,7 +55,7 @@ def index():
         htmlwidgets.htmlvaluebox("N uses", meta['id_result_uses']) + \
         "<div id=\"divtochange\" style=\"height: 50px; width: 50px; background-color:blue;\"></div>" + \
         "<h2>Session history</h2>" + \
-        "<table id=\"" + meta['id_result_hist'] + \
+        "<table class=\"jp-table\" id=\"" + meta['id_result_hist'] + \
         "\"><tr><th>a</th><th>b</th></tr></table>" + \
         htmlwidgets.htmloutput(meta['id_calc_history_table'])
 

@@ -11,13 +11,17 @@ def head(text, css=None):
     return tag_head() + title(text) + style(css) + tag_head(open=False)
 
 
-def span(tag_id, text, style=None):
+def span(tag_id, text, style=None, options=None):
     """ Generate a HTML-span environment """
     # HAS_UNIT_TESTS
     if tag_id == '':
         span_opts = None
+        if options is not None:
+            span_opts = options
     else:
         span_opts = {'id': tag_id}
+        if options is not None:
+            span_opts.update(options)
     return tag_style_options('span', options=span_opts, style=style) + text + tag_style_options('span', open=False)
 
 
@@ -92,7 +96,16 @@ def linebreak():
 def htmlvaluebox(text, in_id):
     """ Return a HTML value-box """
     value_box_style = widgetcss.valuebox()
-    return div(span('', text, style=widgetcss.valuebox_title()) + linebreak() + htmloutput(in_id), style=value_box_style)
+    return div(
+        span(
+            '',
+            text,
+            options={'class': 'jp-valuebox-title'}
+        )
+        + linebreak()
+        + htmloutput(in_id),
+        options={'class': 'jp-valuebox'}
+    )
 
 
 def label(text):
@@ -215,7 +228,7 @@ def sql_to_html(col_names, rows):
     # HAS_UNIT_TESTS
     if len(col_names) is not len(rows[0]):
         return None
-    html = tag_table()
+    html = tag_table(options={'class': 'jp-table'})
     html += serialise_cols_to_row(col_names, item='th')
     for row in rows:
         html += serialise_cols_to_row(row)

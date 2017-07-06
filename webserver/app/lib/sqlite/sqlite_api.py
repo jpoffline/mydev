@@ -42,10 +42,10 @@ def insert_into(db, tb, data):
     conn.close()
 
 
-def get_all_from_sql(database, table):
+def get_all_from_sql(database, table, order=None):
     """ Wrapper function for selecting and returning all from a SQL db/tb """
     conn = create_connection(database)
-    v = conn.execute(factories.get_all_from_sql_qy(table)).fetchall()
+    v = conn.execute(factories.get_all_from_sql_qy(table, order)).fetchall()
     conn.close()
     return v
 

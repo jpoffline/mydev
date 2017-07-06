@@ -1,10 +1,13 @@
 """ SQL query factories """
 
 
-def get_all_from_sql_qy(table):
+def get_all_from_sql_qy(table, order=None):
     """ SQL-factory: Select all data from a table """
     # HAS_UNIT_TESTS
-    return 'SELECT * FROM ' + table
+    if order is None:
+        return 'SELECT * FROM ' + table
+    else:
+        return 'SELECT * FROM ' + table + ' ORDER BY ' + order
 
 
 def insert_into_qy(table, names):

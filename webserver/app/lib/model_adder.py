@@ -64,7 +64,7 @@ class ModelAdder(object):
 
     def get_all_history(self):
         """ Print all contents of the history table """
-        self._history = sql.get_all_from_sql(self._db_path, self._table)
+        self._history = sql.get_all_from_sql(self._db_path, self._table, order='id desc')
 
     def serialise_history(self):
         """ Serialise the history to HTML """

@@ -2,13 +2,14 @@
 import context
 import lib.htmltags as htmltags
 import lib.ajax.ajaxfactories as ajaxtools
-
+import lib.htmlwidgets as htmlwidgets
+import lib.widgets.default_css as widgetcss
 
 def page_head():
     return """
-<!doctype html>
-<title>jQuery Example</title>
-<script type="text/javascript"
+<!doctype html>""" + \
+ htmlwidgets.head("jQuery Example", css=widgetcss.global_css()) + \
+"""<script type="text/javascript"
   src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script type="text/javascript">
   var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};

@@ -21,6 +21,12 @@ def test_withTitle_html():
     return test.exe_test(actual, expected)
 
 
+def test_linebreak():
+    actual = htmlwidgets.linebreak()
+    expected = '<br />'
+    return test.exe_test(actual, expected)
+
+
 def test_withCSS_html():
     css = {
         'body': {
@@ -257,6 +263,21 @@ def test_unequalData_sql_to_html():
 def test_span():
     expected = '<span id="ID">TEXT</span>'
     actual = htmlwidgets.span("ID", "TEXT")
+    return test.exe_test(actual, expected)
+
+
+def test_withStyle_span():
+    expected = '<span style="color: blue;" id="ID">TEXT</span>'
+    span_style = {
+        'color': 'blue'
+    }
+    actual = htmlwidgets.span("ID", "TEXT", style=span_style)
+    return test.exe_test(actual, expected)
+
+
+def test_emptyID_span():
+    expected = '<span>TEXT</span>'
+    actual = htmlwidgets.span('', "TEXT")
     return test.exe_test(actual, expected)
 
 

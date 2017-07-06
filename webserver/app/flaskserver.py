@@ -52,7 +52,7 @@ def index():
         numeric_boxes(meta['id_data']) + "=" + \
         htmlwidgets.htmloutput(meta['id_result']) + "<p>" + \
         link("#", "calculate", "DO IT") + \
-        "<h2>N uses: " + htmlwidgets.htmloutput(meta['id_result_uses']) + "</h2>" +\
+        htmlwidgets.htmlvaluebox("N uses", meta['id_result_uses']) + \
         "<div id=\"divtochange\" style=\"height: 50px; width: 50px; background-color:blue;\"></div>" + \
         "<h2>Session history</h2>" + \
         "<table id=\"" + meta['id_result_hist'] + \

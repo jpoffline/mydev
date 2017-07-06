@@ -3,7 +3,7 @@
 from lib.htmltags import *
 import lib.serverhelp as srv
 import lib.tools as tools
-
+import lib.widgets.default_css as widgetcss
 
 def head(text, css=None):
     """ Generate a HTML-body environment """
@@ -11,14 +11,21 @@ def head(text, css=None):
     return tag_head() + title(text) + style(css) + tag_head(open=False)
 
 
-def span(id, text):
+def span(tag_id, text, style=None):
+    """ Generate a HTML-span environment """
     # HAS_UNIT_TESTS
-    return '<span id=\"' + id + '\">' + text + '</span>'
+    if tag_id == '':
+        span_opts = None
+    else:
+        span_opts = {'id': tag_id}
+    return tag_style_options('span', options=span_opts, style=style) + text + tag_style_options('span', open=False)
 
 
-def htmloutput(id):
+def htmloutput(tag_id):
+    """ Generate a useful AJAX HTML-output environment """
     # HAS_UNIT_TESTS
-    return span(id, "")
+    return span(tag_id, "")
+
 
 def style(css):
     """ Generate a HTML-style environment """
@@ -74,6 +81,18 @@ def div(text, style=None, options=None):
     if style is None and options is None:
         return tag_div() + text + tag_div(open=False)
     return tag_div(style=style, options=options) + text + tag_div(open=False)
+
+
+def linebreak():
+    """ Return a HTML line break """
+    # HAS_UNIT_TESTS
+    return '<br />'
+
+
+def htmlvaluebox(text, in_id):
+    """ Return a HTML value-box """
+    value_box_style = widgetcss.valuebox()
+    return div(span('', text, style=widgetcss.valuebox_title()) + linebreak() + htmloutput(in_id), style=value_box_style)
 
 
 def label(text):

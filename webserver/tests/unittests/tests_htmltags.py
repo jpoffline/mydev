@@ -194,3 +194,16 @@ def test_styleAndOpts_tag_style_options():
     }
     actual = htmltags.tag_style_options('TAG_TYPE', style=style, options=opts)
     return test.exe_test(actual, expected)
+
+def test_TextAndStyleAndOpts_tag_style_options():
+    expected = '<TAG_TYPE style="color: blue; weight: bold;" id="1" name="jp">TEXT</TAG_TYPE>'
+    style = {
+        'color': 'blue',
+        'weight': 'bold'
+    }
+    opts = {
+        'id': '1',
+        'name': 'jp'
+    }
+    actual = htmltags.tag_style_options('TAG_TYPE', style=style, options=opts, text='TEXT')
+    return test.exe_test(actual, expected)

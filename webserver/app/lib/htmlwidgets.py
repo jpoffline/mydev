@@ -60,7 +60,7 @@ def body(text):
 
 def h1(text):  # pylint: disable=C0103
     """ Generate a HTML-h1 environment """
-    return tag_h1() + text + tag_h1(open=False)
+    return tag_style_options('h1', options={'class': 'jp'}, text=text)
 
 
 def div(text, style=None, options=None):

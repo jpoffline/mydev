@@ -46,4 +46,20 @@ def global_table():
     }
 
 
+def global_headers():
+    return {
+        'h1.jp': {
+            'background': 'white'
+        }
+    }
+
+def global_jp_widgets():
+    """ Assemble and return the css for all widgets """
+    css = {}
+    css.update(global_valuebox())
+    css.update(global_table())
+    css.update(global_headers())
+    return css
+
+
 

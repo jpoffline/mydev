@@ -17,14 +17,17 @@ def tag(item, open=True, meta=''):
     return the_tag + '>'
 
 
-def tag_style_options(type, open=True, style=None, options=None):
+def tag_style_options(type, open=True, style=None, options=None, text=None):
     """ Generate a general tag which has options and a style """
     # HAS_UNIT_TESTS
     # Check for the unstyled case
     if style is None and options is None:
         return tag(type, open)
     meta = options_to_str(style=style, options=options)
-    return tag(type, meta=meta)
+    if text is None:
+        return tag(type, meta=meta)
+    else:
+        return tag(type, meta=meta) + text + tag(type, open=False)
 
 
 def tag_table(options=None, style=None, open=True):

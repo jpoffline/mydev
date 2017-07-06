@@ -6,7 +6,7 @@
 from context import app
 import test_framework as test
 
-import app.lib.htmlwidgets as htmlwidgets
+import app.lib.widgets.htmlwidgets as htmlwidgets
 
 
 def test_html():

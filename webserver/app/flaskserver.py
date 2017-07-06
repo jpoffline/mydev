@@ -3,7 +3,7 @@
 from flask import Flask, jsonify, render_template, request
 import lib.ajax_aux as ajax_aux
 import lib.tools as tools
-import lib.htmlwidgets as htmlwidgets
+import lib.widgets.htmlwidgets as htmlwidgets
 import lib.model_adder as modeladder
 import flasksite.site as site
 app = Flask(__name__)

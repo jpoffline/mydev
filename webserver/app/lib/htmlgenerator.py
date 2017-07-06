@@ -1,7 +1,7 @@
 """ html generator """
 
 import app.lib.serverhelp as srv
-import app.lib.htmlwidgets as htmlwidgets
+import app.lib.widgets.htmlwidgets as htmlwidgets
 from app import app
 
 def get_response_page(code):

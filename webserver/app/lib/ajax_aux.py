@@ -1,8 +1,8 @@
 """ Aux functions for pyflask implementation """
 import context
-import lib.htmltags as htmltags
+import lib.widgets.htmltags as htmltags
 import lib.ajax.ajaxfactories as ajaxtools
-import lib.htmlwidgets as htmlwidgets
+import lib.widgets.htmlwidgets as htmlwidgets
 import lib.widgets.default_css as widgetcss
 
 

@@ -1,6 +1,6 @@
 """ HTML widgets """
 
-from lib.htmltags import *
+from lib.widgets.htmltags import *
 import lib.serverhelp as srv
 import lib.tools as tools
 import lib.widgets.default_css as widgetcss

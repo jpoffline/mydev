@@ -1,5 +1,5 @@
 import context
-import lib.htmlwidgets as htmlwidgets
+import lib.widgets.htmlwidgets as htmlwidgets
 import css as css
 import lib.ajax_aux as ajax_aux
 

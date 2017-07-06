@@ -2,7 +2,7 @@
 
 import sqlite.sqlite_api as sql
 import tools as tools
-import lib.htmlwidgets as htmlwidgets
+import lib.widgets.htmlwidgets as htmlwidgets
 
 
 class ModelAdder(object):

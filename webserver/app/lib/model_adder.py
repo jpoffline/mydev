@@ -1,14 +1,14 @@
 """ model adder module """
 
-import sqlite.sqlite_api as sql
-import tools.tools as tools
-import lib.widgets.htmlwidgets as htmlwidgets
+import app.lib.sqlite.sqlite_api as sql
+import app.lib.tools.tools as tools
+import app.lib.widgets.htmlwidgets as htmlwidgets
 
 
 class ModelAdder(object):
     """ The model class for the adder functionality """
     def __init__(self):
-        self._db_path = 'data/db/adder.db'
+        self._db_path = 'app/data/db/adder.db'
         self._table = 'history'
         self._user = tools.get_username()
         self._machine = tools.get_hostname()

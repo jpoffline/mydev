@@ -1,9 +1,9 @@
 """ HTML widgets """
 
-from lib.widgets.htmltags import *
-import lib.tools.serverhelp as srv
-import lib.tools.tools as tools
-import lib.widgets.default_css as widgetcss
+from app.lib.widgets.htmltags import *
+import app.lib.tools.serverhelp as srv
+import app.lib.tools.tools as tools
+import app.lib.widgets.default_css as widgetcss
 
 def head(text, css=None):
     """ Generate a HTML-body environment """

@@ -2,7 +2,7 @@
 
 import sqlite3
 import context
-import qy_factories as factories
+import app.lib.sqlite.qy_factories as factories
 
 
 def create_connection(db_file):

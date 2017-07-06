@@ -3,7 +3,7 @@
 import inspect
 import sys
 import time
-from context import app
+#from context import app
 import test_framework as test
 from unittests.tests_htmltags import *
 from unittests.tests_htmlwidgets import *

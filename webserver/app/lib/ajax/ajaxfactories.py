@@ -1,6 +1,6 @@
 """ ajax factories """
 import context
-import lib.tools.tools as tools
+import app.lib.tools.tools as tools
 
 
 def ajax_placer_rows(id, res, rows_meta):

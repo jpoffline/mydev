@@ -3,11 +3,13 @@
 
 def get_all_from_sql_qy(table):
     """ SQL-factory: Select all data from a table """
+    # HAS_UNIT_TESTS
     return 'SELECT * FROM ' + table
 
 
 def insert_into_qy(table, names):
     """ SQL-factory: Inserting data to a table """
+    # HAS_UNIT_TESTS
     string = "INSERT INTO " + table + " (" + ','.join(names) + ") VALUES ("
     zipped = ','.join("?" * len(names))
     string = string + zipped + ");"
@@ -16,10 +18,10 @@ def insert_into_qy(table, names):
 
 def create_db_qy(table_name, fields):
     """ SQL-factory: Create a table if not exists """
-
+    # HAS_UNIT_TESTS
     zipped_fields = []
     for field in fields:
         zipped_fields.append(field['name'] + ' ' + field['type'])
-    string = ' CREATE TABLE IF NOT EXISTS ' + \
+    string = 'CREATE TABLE IF NOT EXISTS ' + \
         table_name + ' (' + ', '.join(zipped_fields) + ');'
     return string

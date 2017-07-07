@@ -1,17 +1,6 @@
 """ Unit test framework """
 import inspect
 
-def some_magic(mod):
-    """ Collect together the test functions in the loaded modules """
-    all_functions = inspect.getmembers(mod, inspect.isfunction)
-    results = []
-    for key, _ in all_functions:
-        if key.startswith("test_"):
-
-            var = eval(key + '()')  # pylint: disable=W0123
-
-            results.append(var)
-    return results
 
 def if_any_fail(input_list):
     """ Helper function to detect if any unit tests failed """

@@ -1,6 +1,6 @@
-echo ''
-echo 'Running testing suite'
-echo ''
+echo '========================='
+echo '  Running testing suite'
+echo '========================='
 echo 'Service tests'
 python -m tests.run_service_tests -quiet
 echo 'Unit tests'

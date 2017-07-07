@@ -1,6 +1,54 @@
 """ Unit test framework """
 import inspect
+import context
+from app.lib.tools.timer import Timer
+import time
+import sys
 
+from services import *
+from units import *
+
+
+def run_tests(args, test_type):
+    """ Interface method to run the tests """
+    if '-quiet' in args:
+        verbose = False
+    else:
+        verbose = True
+    timer = Timer(time)
+    if verbose:
+        print unit_tests_banner(testtype=test_type)
+    timer.start()
+    timer.sig(4)
+    results = execute_tests(verbose=verbose, prefix=test_type)
+    timer.end()
+    if analyse_tests(results, verbose=verbose) is False:
+        print 'FAIL'
+
+    if verbose:
+        print elapsed(timer.elapsed())
+        print unit_tests_banner(empty=True)
+
+def execute_tests(verbose=True, prefix='test'):
+    """ Collect together the test functions in the loaded modules """
+
+    results = []
+    all_functions = inspect.getmembers(sys.modules[__name__], inspect.isfunction)
+
+    timer = Timer(time)
+    timer.sig(5)
+    for key, _ in all_functions:
+        if key.startswith(prefix+"_"):
+            timer.start()
+            function_to_exe = key + '()'
+            var = eval(function_to_exe)  # pylint: disable=W0123
+            timer.end()
+            timer.save(key, reset=True)
+            results.append(var)
+    timer.sort_laps()
+    if verbose:
+        timer.print_stats()
+    return results
 
 def if_any_fail(input_list):
     """ Helper function to detect if any unit tests failed """

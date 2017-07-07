@@ -1,6 +1,17 @@
 """ Unit test framework """
 import inspect
 
+def some_magic(mod):
+    """ Collect together the test functions in the loaded modules """
+    all_functions = inspect.getmembers(mod, inspect.isfunction)
+    results = []
+    for key, _ in all_functions:
+        if key.startswith("test_"):
+
+            var = eval(key + '()')  # pylint: disable=W0123
+
+            results.append(var)
+    return results
 
 def if_any_fail(input_list):
     """ Helper function to detect if any unit tests failed """
@@ -52,7 +63,7 @@ def exe_test(actual, expected):
         return throw_pass(calling_function)
     else:
         print '================================='
-        print 'TEST FAIL : ' + calling_function
+        print 'FAILED TEST : ' + calling_function
         print '  ACTUAL:'
         print actual
         print '  EXPECTED:'
@@ -61,20 +72,23 @@ def exe_test(actual, expected):
         return throw_fail(calling_function, actual, expected)
 
 
-def analyse_tests(results):
+def analyse_tests(results, verbose=True):
     """ Analyse the unit test results """
-
-    print 'Ran ' + str(len(results)) + ' tests'
+    
+    print '* ran ' + str(len(results)) + ' tests'
     analysis = if_any_fail(results)
     if analysis['pass']:
-        print '* tests passed'
+        if verbose:
+            print '* tests passed'
+            return True
     else:
         print '* tests failed: ' + str(analysis['count_fail']) + '/' + str(analysis['count_pass'])
+        return False
 
-def unit_tests_banner(empty=False):
+def unit_tests_banner(testtype='unit',empty=False):
     """ Return a banner for the start of the unit tests """
     if not empty:
-        return '\n========== unit tests =========='
+        return '\n========== '+testtype +' tests =========='
     return '================================\n'
 
 def elapsed(time):

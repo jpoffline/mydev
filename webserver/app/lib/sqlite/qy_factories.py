@@ -1,14 +1,21 @@
 """ SQL query factories """
 
 
-def get_all_from_sql_qy(table, order=None):
+def get_all_from_sql_qy(table, order=None, topn=None):
     """ SQL-factory: Select all data from a table """
     # HAS_UNIT_TESTS
-    if order is None:
-        return 'SELECT * FROM ' + table
-    else:
-        return 'SELECT * FROM ' + table + ' ORDER BY ' + order
+    select = 'SELECT * ' + cat_from_tb(table)
 
+    if order is not None:
+        select +=  ' ORDER BY ' + order
+
+    if topn is not None:
+        select += ' LIMIT ' + str(topn)
+    return select
+
+def cat_from_tb(table):
+    """ Prepend FROM onto the table. """
+    return 'FROM ' + table
 
 def insert_into_qy(table, names):
     """ SQL-factory: Inserting data to a table """
@@ -28,3 +35,6 @@ def create_db_qy(table_name, fields):
     string = 'CREATE TABLE IF NOT EXISTS ' + \
         table_name + ' (' + ', '.join(zipped_fields) + ');'
     return string
+
+def select_table_name_from_db_qy(database, table):
+    return "SELECT name FROM sqlite_master WHERE type='table' AND name='"+ table+"' LIMIT 1;"

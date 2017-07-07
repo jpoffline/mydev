@@ -15,7 +15,7 @@ from unittests.tests_qy_factories import *
 from app.lib.tools.timer import Timer
 
 
-def some_magic(mod):
+def some_magic(mod, verbose=True):
     """ Collect together the test functions in the loaded modules """
     all_functions = inspect.getmembers(mod, inspect.isfunction)
     results = []
@@ -30,22 +30,29 @@ def some_magic(mod):
             timer.save(key, reset=True)
             results.append(var)
     timer.sort_laps()
-    timer.print_stats()
+    if verbose:
+        timer.print_stats()
     return results
 
 
-def run_tests():
+def run_tests(args):
     """ Run the unit tests """
+    if '-quiet' in args:
+        verbose = False
+    else:
+        verbose = True
     timer = Timer(time)
-    print test.unit_tests_banner()
+    if verbose:
+        print test.unit_tests_banner()
     timer.start()
     timer.sig(4)
-    results = some_magic(sys.modules[__name__])
+    results = some_magic(sys.modules[__name__], verbose=verbose)
     timer.end()
-    test.analyse_tests(results)
-    print test.elapsed(timer.elapsed())
-    print test.unit_tests_banner(True)
+    test.analyse_tests(results, verbose=verbose)
+    if verbose:
+        print test.elapsed(timer.elapsed())
+        print test.unit_tests_banner(empty=True)
 
 
 if __name__ == '__main__':
-    run_tests()
+    run_tests(sys.argv[1:])

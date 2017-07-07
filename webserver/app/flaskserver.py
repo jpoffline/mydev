@@ -14,14 +14,12 @@ model = modeladder.ModelAdder()
 
 @app.route('/_add_numbers')
 def add_numbers():
-
     a = request.args.get('a', 0, type=int)
     b = request.args.get('b', 0, type=int)
     history.append({'a': a, 'b': b})
 
     model._create_db()
     model.add_history_item(a, b)
-    model.get_all_history()
 
     table_html = "<h2>All history</h2>" + model.serialise_history()
 

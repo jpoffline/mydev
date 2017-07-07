@@ -24,6 +24,12 @@ def test_get_all_from_sql_qy():
     expected = 'SELECT * FROM TABLE'
     return test.exe_test(actual, expected)
 
+def test_top_get_all_from_sql_qy():
+    table = 'TABLE'
+    actual = qy_factories.get_all_from_sql_qy(table, topn=5)
+    expected = 'SELECT * FROM TABLE LIMIT 5'
+    return test.exe_test(actual, expected)
+
 
 def test_emptyNames_insert_into_qy():
     table = 'TABLE'

@@ -6,7 +6,7 @@ import app.lib.widgets.htmlwidgets as htmlwidgets
 
 
 class ModelAdder(object):
-    """ The model class for the adder functionality """
+    """ The wrapper class for the adder functionality """
     def __init__(self):
         self._db_path = 'app/data/db/adder.db'
         self._table = 'history'
@@ -57,17 +57,21 @@ class ModelAdder(object):
         sql.insert_into(self._db_path, table, insert_data)
 
     def add_history_item(self, a, b):
-        """ Interface: method to data into the history table """
+        """ Interface: method to data into the history table. """
         hist_cols = self._db_history_fields('insert_col_names')
         hist_vals = [(a, b, self._user, self._machine, tools.get_datetime())]
         self._insert(self._table, hist_cols, hist_vals)
 
     def get_all_history(self):
-        """ Print all contents of the history table """
+        """ Get all contents of the history table; store in memory. """
         self._history = sql.get_all_from_sql(self._db_path, self._table, order='id desc')
 
     def serialise_history(self):
-        """ Serialise the history to HTML """
+        """
+        Serialise the history to HTML.
+        
+        Returns a HTML-table.
+        """
         self.get_all_history()
 
         return htmlwidgets.sql_to_html(self._db_history_fields('col_names'),

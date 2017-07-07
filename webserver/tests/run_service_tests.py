@@ -3,8 +3,8 @@
 import inspect
 import sys
 from tests.servicetests.test_timer import *
-
-
+from tests.servicetests.tests_sqllite import *
+import tests.test_framework as testframework
 
 from lib.timer import Timer
 import time
@@ -23,18 +23,26 @@ def some_magic(mod):
     return results
 
 
-def run_service_tests():
+def run_service_tests(args):
     """ Run the unit tests """
+    if '-quiet' in args:
+        verbose = False
+    else:
+        verbose = True
     timer = Timer(time)
-    print test.unit_tests_banner()
+    if verbose:
+        print test.unit_tests_banner(testtype='service')
     timer.start()
     timer.sig(4)
     results = some_magic(sys.modules[__name__])
     timer.end()
-    test.analyse_tests(results)
-    print test.elapsed(timer.elapsed())
-    print test.unit_tests_banner(True)
+    if test.analyse_tests(results, verbose=verbose) is False:
+        print 'FAIL'
+
+    if verbose:
+        print test.elapsed(timer.elapsed())
+        print test.unit_tests_banner(empty=True)
 
 
 if __name__ == '__main__':
-    run_service_tests()
+    run_service_tests(sys.argv[1:])

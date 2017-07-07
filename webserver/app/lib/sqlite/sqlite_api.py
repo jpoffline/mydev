@@ -2,8 +2,9 @@
 
 import sqlite3
 import context
+import os
 import app.lib.sqlite.qy_factories as factories
-
+from app.lib.tools.generalreturn import *
 
 def create_connection(db_file):
     """ create a database connection to the SQLite database
@@ -34,17 +35,56 @@ def create_db(database, table, fields):
     else:
         print("Error! cannot create the database connection.")
 
-
 def insert_into(db, tb, data):
-    """ Wrapper function for inserting data into a SQL db/tb """
+    """ Interface: Inserting data into a SQL db/tb """
     conn = create_connection(db)
     conn.executemany(factories.insert_into_qy(tb, data['cols']), data['data'])
     conn.commit()
     conn.close()
 
+def does_table_exist(database, table):
+    """ Does the SQL table exist.
+    Also validates the existence of the database.
+
+    HAS_SERVICE_TESTS
+
+    Args:
+    ----
+        database (str): The database where the table is expected to exist.
+        
+        table (str): The table whose existence is to be validated.
+    Returns:
+    -------
+        generalreturn('No database'): If the database does not exist.
+
+        bool: True or False, depending on whether or not the table exists.
+    """
+    
+    # Validate existence of the database
+    if not does_database_exist(database):
+        return generalreturn(message='No database')
+    conn = create_connection(database)
+    data = conn.execute(factories.select_table_name_from_db_qy(database,table)).fetchall()
+    conn.close()
+    nresults = len(data)
+    if nresults > 0:
+        return data[0][0] == table
+    else:
+        return False
+
+def does_database_exist(database):
+    """ Check whether or not a SQL-lite database file exists 
+    """
+    # HAS_SERVICE_TESTS
+    return os.path.isfile(database)
 
 def get_all_from_sql(database, table, order=None):
-    """ Wrapper function for selecting and returning all from a SQL db/tb """
+    """
+    Wrapper function for selecting and returning all from a SQL db/tb.
+
+    database: The database from which to select
+    table:    The table from which to select
+    """
     conn = create_connection(database)
     v = conn.execute(factories.get_all_from_sql_qy(table, order)).fetchall()
     conn.close()

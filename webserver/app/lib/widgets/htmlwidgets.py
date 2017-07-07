@@ -223,14 +223,22 @@ def serialise_cols_to_row(cols, parent='tr', item='td'):
     return tag(parent) + inside + tag(parent, open=False)
 
 
-def sql_to_html(col_names, rows):
-    """ Serialise SQL output to a HTML-table """
+def datatable(col_names, rows, options=None):
+    """ Create a HTML-table """
     # HAS_UNIT_TESTS
-    if len(col_names) is not len(rows[0]):
-        return None
-    html = tag_table(options={'class': 'jp-table'})
+    table_opts = {'class': 'jp-table'}
+    if options is not None:
+        table_opts.update(options)
+    html = tag_table(table_opts)
     html += serialise_cols_to_row(col_names, item='th')
     for row in rows:
         html += serialise_cols_to_row(row)
     html += tag_table(open=False)
     return html
+
+
+def sql_to_html(col_names, rows):
+    """ Serialise SQL output to a HTML-table """
+    
+    return datatable(col_names, rows)
+

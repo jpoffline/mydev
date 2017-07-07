@@ -30,14 +30,14 @@ def index_page():
     meta = index_ajax_meta()
     return page_head() +\
         ajax_aux.get_ajax_index(meta) + \
-        "<body><h1>jQuery Example</h1><p>" + \
-        ajax_aux.numeric_boxes(meta['id_data']) + "=" + \
-        htmlwidgets.htmloutput(meta['id_result']) + "<p>" + \
+        "<body>"+\
+        htmlwidgets.h1("jQuery Example") + \
+        ajax_aux.numeric_boxes(meta['id_data']) + "=" + htmlwidgets.linebreak() + \
+        htmlwidgets.htmloutput(meta['id_result']) + \
         ajax_aux.link("#", "calculate", "DO IT") + \
         htmlwidgets.htmlvaluebox("N uses", meta['id_result_uses']) + \
-        "<div id=\"divtochange\" style=\"height: 50px; width: 50px; background-color:blue;\"></div>" + \
+        htmlwidgets.div('', options={'id':'divtochange'},style={'height': '50px', 'width': '50px', 'background-color':'blue'})+\
         htmlwidgets.h1("Session history") + \
-        "<table class=\"jp-table\" id=\"" + meta['id_result_hist'] + \
-        "\"><tr><th>a</th><th>b</th></tr></table>" + \
+        htmlwidgets.datatable(['a','b'],[],options={'id':meta['id_result_hist']})+\
         htmlwidgets.htmloutput(meta['id_calc_history_table']) + \
         "</body></html>"

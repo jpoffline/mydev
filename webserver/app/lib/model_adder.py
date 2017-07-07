@@ -69,11 +69,11 @@ class ModelAdder(object):
     def serialise_history(self):
         """
         Serialise the history to HTML.
-        
+
         Returns a HTML-table.
         """
         self.get_all_history()
 
-        return htmlwidgets.sql_to_html(self._db_history_fields('col_names'),
+        return htmlwidgets.datatable(self._db_history_fields('col_names'),
                                        self._history)
 

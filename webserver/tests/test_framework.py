@@ -1,4 +1,4 @@
-""" Unit test framework """
+""" General test framework """
 import inspect
 import context
 from app.lib.tools.timer import Timer
@@ -10,7 +10,19 @@ from units import *
 
 
 def run_tests(args, test_type):
-    """ Interface method to run the tests """
+    """ Interface method to run the tests.
+
+    Test functions will be looked for which
+    have the <test_type>_X prefix.
+    
+    Args
+    ---
+    args: List of options for the execution of this set of tests.
+            -quiet : suppress screen info if pass
+
+    test_type: The test type.
+
+    """
     if '-quiet' in args:
         verbose = False
     else:

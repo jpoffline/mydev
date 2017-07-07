@@ -232,7 +232,7 @@ def test_customItemAndParent_serialise_cols_to_row():
     return test.exe_test(actual, expected)
 
 
-def test_sql_to_html():
+def test_datatable():
     cols = ['id', 'a']
     data = [(0, 0), (1, 1)]
     expected = '<table class="jp-table">' + \
@@ -240,24 +240,31 @@ def test_sql_to_html():
         '<tr><td>0</td><td>0</td></tr>' + \
         '<tr><td>1</td><td>1</td></tr>' + \
         '</table>'
-    actual = htmlwidgets.sql_to_html(cols, data)
+    actual = htmlwidgets.datatable(cols, data)
     return test.exe_test(actual, expected)
 
-
-def test_unequalCols_sql_to_html():
-    cols = ['id', 'a', 'b']
-    data = [(0, 0), (1, 1)]
-    expected = None
-    actual = htmlwidgets.sql_to_html(cols, data)
-    return test.exe_test(actual, expected)
-
-
-def test_unequalData_sql_to_html():
+def test_EmptyData_datatable():
     cols = ['id', 'a']
-    data = [(0, 0, 1), (1, 1)]
-    expected = None
-    actual = htmlwidgets.sql_to_html(cols, data)
+    data = []
+    expected = '<table class="jp-table">' + \
+        '<tr><th>id</th><th>a</th></tr>' + \
+        '</table>'
+    actual = htmlwidgets.datatable(cols, data)
     return test.exe_test(actual, expected)
+
+
+def test_withOptions_datatable():
+    cols = ['id', 'a']
+    data = [(0, 0), (1, 1)]
+    opts = {'thing': 'yup'}
+    expected = '<table class="jp-table" thing="yup">' + \
+        '<tr><th>id</th><th>a</th></tr>' + \
+        '<tr><td>0</td><td>0</td></tr>' + \
+        '<tr><td>1</td><td>1</td></tr>' + \
+        '</table>'
+    actual = htmlwidgets.datatable(cols, data, options = opts)
+    return test.exe_test(actual, expected)
+
 
 
 def test_span():

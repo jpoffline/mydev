@@ -13,7 +13,7 @@ class ModelAdder(object):
 
 
     """
-    def __init__(self, tools, inmemory=False):
+    def __init__(self, tools, inmemory=False, database=sql):
         self._tools = tools
         self._db_path = 'app/data/db/adder.db'
         self._table = 'history'
@@ -22,7 +22,7 @@ class ModelAdder(object):
         self._history = None
         self._in_memory = inmemory
         self._memory = []
-        self.database = sql
+        self.database = database
 
     def _db_history_fields(self, wanted='schema'):
         """ Definition of the fields for the history table """

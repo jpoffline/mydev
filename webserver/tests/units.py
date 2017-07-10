@@ -5,3 +5,4 @@ from unittests.tests_tools import *
 from unittests.tests_htmlgenerator import *
 from unittests.tests_ajax_factories import *
 from unittests.tests_qy_factories import *
+from unittests.tests_mock_sqlite import *

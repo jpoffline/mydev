@@ -61,17 +61,17 @@ def test_createTBAndAdd_mockSQLite():
         'has_pk': sql.check_pk(table),
         'insert_ok': insert_ok
     }
-    
+
     expected = {
         'nrows': 3,
         'ncols': 3,
         'ntables': 1,
         'col_names': ['id', 'person', 'age'],
-        'has_pk': True,
+        'has_pk': False,
         'insert_ok': True
     }
 
-    return test.exe_test(actual, expected)
+    return test.exe_test(actual, expected, many = True)
 
 def test_getAll_mockSQLite():
     table_fields = MOCK_tb_fields

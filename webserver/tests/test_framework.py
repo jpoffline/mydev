@@ -103,8 +103,17 @@ def throw_fail(name, actual, expected):
     """ Throw a unit test fail """
     return general_test_result(name, False, actual, expected)
 
+def diff_dict(actual, expected):
+    diffs = []
+    for k, v in expected.iteritems():
+        if v is not actual[k]:
+            diffs.append({k : (
+                actual[k], v
+            )})
+    print diffs
+    return True
 
-def exe_test(actual, expected):
+def exe_test(actual, expected, many=False):
     """ Execute a particular unit test """
     calling_function = inspect.stack()[1][3]
 
@@ -117,6 +126,8 @@ def exe_test(actual, expected):
         print actual
         print '  EXPECTED:'
         print expected
+        if many:
+            diff_dict(actual, expected)
         print '================================='
         return throw_fail(calling_function, actual, expected)
 

@@ -6,6 +6,7 @@
 from context import app
 import test_framework as test
 import tests.mocks.mock_sqlite as mock_sqlite
+from app.lib.tools.generalreturn import *
 
 MOCK_db_name = 'PATH'
 MOCK_tb_name = 'TABLE'
@@ -17,7 +18,7 @@ MOCK_tb_fields = [
 MOCK_insert_data = {
     'cols': ['person', 'age'],
     'data': [
-        ('jonny', 29), ('iona', 26), ('person', 45)
+        ('jonny', 29), ('iona', 26), ('thingy', 12)
     ]
 }
 
@@ -41,13 +42,13 @@ def test_createTBAndAdd_mockSQLite():
     path = MOCK_db_name
     table = MOCK_tb_name
     sql.create_db(path, table, table_fields)
-    sql.insert_into(table, MOCK_insert_data)
+    insert_ok = sql.insert_into(table, MOCK_insert_data)
     nrows = sql.nrows(table)
     ncols = sql.ncols(table)
     ntables = sql.ntables()
     has_pk = sql.check_pk(table)
-    actual = (nrows, ncols, ntables, sql.get_colnames(table), has_pk)
-    expected = (3, 3, 1, ['id', 'person', 'age'], True)
+    actual = (nrows, ncols, ntables, sql.get_colnames(table), has_pk, insert_ok)
+    expected = (3, 3, 1, ['id', 'person', 'age'], True, True)
     return test.exe_test(actual, expected)
 
 def test_getAll_mockSQLite():
@@ -58,9 +59,24 @@ def test_getAll_mockSQLite():
     sql.create_db(path, table, table_fields)
     sql.insert_into(table, MOCK_insert_data)
     actual = sql.get_all_from_sql(path, table)
-    expected = [
-        {'data': [(0, 'jonny', 29)],  'cols': ['id', 'person', 'age']}, 
-        {'data': [(1, 'iona', 26)],   'cols': ['id', 'person', 'age']}, 
-        {'data': [(2, 'person', 45)], 'cols': ['id', 'person', 'age']}
-    ]
+    expected = [(1, u'jonny', 29), (2, u'iona', 26), (3, u'thingy', 12)]
+    return test.exe_test(actual, expected)
+
+
+def test_badData_mockSQLite():
+    table_fields = MOCK_tb_fields
+    sql = mock_sqlite.mockSQLite()
+    path = MOCK_db_name
+    table = MOCK_tb_name
+    insert_data = {
+        'cols': ['person', 'age'],
+        'data': [
+            ('jonny', 29), 
+            ('iona', 26, 89), 
+            ('thingy', 12)
+        ]
+    }
+    sql.create_db(path, table, table_fields)
+    actual = sql.insert_into(table, insert_data)
+    expected = generalreturn('MOCK_SQLITE ERROR<add_row>: unexpected number of elements')
     return test.exe_test(actual, expected)

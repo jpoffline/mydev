@@ -18,13 +18,3 @@ def service_inMemory_init():
     actual.update({'user' : model._user})
     expected = { 'user' : 'CURRENT_USERNAME', 'store': 'memory'}
     return test.exe_test(actual, expected)
-
-
-def service_insertInMemory():
-
-    model = modeladder.ModelAdder(tools_mock.mockTools(),inmemory=True)
-    model.add_history_item(1,2)
-    model.add_history_item(3,4)
-    actual = model.get_all_history(returnit=True)
-    expected = ''
-    return test.exe_test(actual, expected)

@@ -14,6 +14,10 @@ def create_connection(db_file):
     """
     return sqlite3.connect(db_file)
 
+def delete_database(db_file):
+    """ Delete a database file """
+    os.remove(db_file)
+    return not does_database_exist(db_file)
 
 def create_table(conn, create_table_sql):
     """ create a table from the create_table_sql statement

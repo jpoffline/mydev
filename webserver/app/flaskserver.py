@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 
 history = []
-model = modeladder.ModelAdder()
+model = modeladder.ModelAdder(tools)
 
 @app.route('/_add_numbers')
 def add_numbers():

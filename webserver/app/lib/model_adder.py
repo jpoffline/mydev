@@ -1,18 +1,28 @@
 """ model adder module """
 
 import app.lib.sqlite.sqlite_api as sql
-import app.lib.tools.tools as tools
+
 import app.lib.widgets.htmlwidgets as htmlwidgets
 
 
 class ModelAdder(object):
-    """ The wrapper class for the adder functionality """
-    def __init__(self):
+    """
+    The wrapper class for the adder functionality
+
+    Requires: tools module (for username, hostname, datetime)
+
+
+    """
+    def __init__(self, tools, inmemory=False):
+        self._tools = tools
         self._db_path = 'app/data/db/adder.db'
         self._table = 'history'
-        self._user = tools.get_username()
-        self._machine = tools.get_hostname()
+        self._user = self._tools.get_username()
+        self._machine = self._tools.get_hostname()
         self._history = None
+        self._in_memory = inmemory
+        self._memory = []
+        self.database = sql
 
     def _db_history_fields(self, wanted='schema'):
         """ Definition of the fields for the history table """
@@ -46,7 +56,7 @@ class ModelAdder(object):
 
     def _create_db(self):
         """ Create the SQL tables """
-        sql.create_db(self._db_path, self._table, self._db_history_fields())
+        self.database.create_db(self._db_path, self._table, self._db_history_fields())
 
     def _insert(self, table, cols, data):
         """ Insert into the database """
@@ -54,17 +64,30 @@ class ModelAdder(object):
             'cols': cols,
             'data': data
         }
-        sql.insert_into(self._db_path, table, insert_data)
+        if not self._in_memory:
+            self.database.insert_into(self._db_path, table, insert_data)
+        else:
+            self._memory.append(insert_data)
+
+    def _retrieve(self):
+        if not self._in_memory:
+            self._history = self.database.get_all_from_sql(self._db_path, self._table, order='id desc')
+        else:
+            self._history = self._memory
+
 
     def add_history_item(self, a, b):
         """ Interface: method to data into the history table. """
         hist_cols = self._db_history_fields('insert_col_names')
-        hist_vals = [(a, b, self._user, self._machine, tools.get_datetime())]
+        hist_vals = [(a, b, self._user, self._machine, self._tools.get_datetime())]
         self._insert(self._table, hist_cols, hist_vals)
 
-    def get_all_history(self):
+    def get_all_history(self, returnit=False):
         """ Get all contents of the history table; store in memory. """
-        self._history = sql.get_all_from_sql(self._db_path, self._table, order='id desc')
+        self._retrieve()
+        if returnit is True:
+            return self._history
+
 
     def serialise_history(self):
         """
@@ -77,3 +100,9 @@ class ModelAdder(object):
         return htmlwidgets.datatable(self._db_history_fields('col_names'),
                                        self._history)
 
+    def check_store_type(self):
+        """ Method to check how the data is stored """
+        if self._in_memory:
+            return { 'store': 'memory'}
+        else:
+            return {'store': 'sql'}

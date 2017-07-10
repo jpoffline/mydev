@@ -32,7 +32,7 @@ def index_page():
         ajax_aux.get_ajax_index(meta) + \
         "<body>"+\
         htmlwidgets.h1("jQuery Example") + \
-        ajax_aux.numeric_boxes(meta['id_data']) + "=" + htmlwidgets.linebreak() + \
+        ajax_aux.numeric_boxes(meta['id_data']) + " = " + \
         htmlwidgets.htmloutput(meta['id_result']) + \
         ajax_aux.link("#", "calculate", "DO IT") + \
         htmlwidgets.htmlvaluebox("N uses", meta['id_result_uses']) + \

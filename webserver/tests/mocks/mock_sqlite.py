@@ -5,17 +5,18 @@ from app.lib.tools.generalreturn import *
 class mockSQLite_table(object):
     def __init__(self, table_name, fields):
         self._col_fields = fields
-        self._col_names = None
         self._table_name = table_name
+        self._col_names, self._has_pk = self._set_col_names(self._col_fields)
+
         self._rows = []
-        self._has_pk = self._set_col_names()
         self._pk_count = 1
         pass
 
-    def _set_col_names(self):
-        """ Internal method: set the column names """
-        self._col_names = [rec['name'] for rec in self._col_fields]
-        return self._set_primary_key()
+    def _set_col_names(self, col_fields):
+        """ Internal method: set the column names,
+        and check for the existence of a primary key.
+        """
+        return [rec['name'] for rec in col_fields], self._set_primary_key()
 
     def _set_primary_key(self):
         """ Internal method: set the primary key (if applicable) """
@@ -27,7 +28,12 @@ class mockSQLite_table(object):
         return False
 
     def check_pk(self):
-        """ Check to see if there is a primary key in the table. """
+        """ Check to see if there is a primary key in the table.
+
+        Return
+        -------
+        True if there is a primary key, and False if not.
+        """
         if self._has_pk is not False:
             return True
         return False

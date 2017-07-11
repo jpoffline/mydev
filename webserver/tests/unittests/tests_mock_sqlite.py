@@ -67,7 +67,7 @@ def test_createTBAndAdd_mockSQLite():
         'ncols': 3,
         'ntables': 1,
         'col_names': ['id', 'person', 'age'],
-        'has_pk': False,
+        'has_pk': True,
         'insert_ok': True
     }
 

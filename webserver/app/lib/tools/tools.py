@@ -66,3 +66,44 @@ def get_datetime():
     """ Get the current datetime stamp in YYYYMMDDHHMMSS-form """
     today = datetime.datetime.today()
     return today.strftime('%Y%m%d%H%M%S')
+
+
+def get_dict_keys(input_dict):
+    """ Get the keys in a dict """
+    return set(input_dict.keys())
+
+
+def diff_dict(dict1, dict2):
+    """ Get the difference between two dicts """
+    # HAS_UNIT_TESTS
+
+    # Check keys are identical
+    keys_dict1 = get_dict_keys(dict1)
+    keys_dict2 = get_dict_keys(dict2)
+    keys_same = keys_dict1 ^ keys_dict2
+
+    if keys_same == set([]):
+        is_ks = True
+    else:
+        is_ks = False
+
+    returns = {}
+
+    returns['keys'] = is_ks
+    if is_ks is False:
+        returns['diff_keys'] = keys_same
+
+    # Check content is identical
+    diffs = []
+    for key_dict1, val_dict1 in dict1.iteritems():
+        if key_dict1 in keys_dict2 and not val_dict1 == dict2[key_dict1]:
+            diffs.append({key_dict1: (
+                val_dict1, dict2[key_dict1]
+            )})
+
+    if len(diffs) > 0:
+        returns['val_diffs'] = diffs
+        returns['vals'] = False
+    else:
+        returns['vals'] = True
+    return returns

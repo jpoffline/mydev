@@ -2,6 +2,7 @@
 import inspect
 import context
 from app.lib.tools.timer import Timer
+import app.lib.tools as tools
 import time
 import sys
 
@@ -14,7 +15,7 @@ def run_tests(args, test_type):
 
     Test functions will be looked for which
     have the <test_type>_X prefix.
-    
+
     Args
     ---
     args: List of options for the execution of this set of tests.
@@ -41,6 +42,7 @@ def run_tests(args, test_type):
         print elapsed(timer.elapsed())
         print unit_tests_banner(empty=True)
 
+
 def execute_tests(verbose=True, prefix='test'):
     """ Collect together the test functions in the loaded modules """
 
@@ -61,6 +63,7 @@ def execute_tests(verbose=True, prefix='test'):
     if verbose:
         timer.print_stats()
     return results
+
 
 def if_any_fail(input_list):
     """ Helper function to detect if any unit tests failed """
@@ -103,15 +106,6 @@ def throw_fail(name, actual, expected):
     """ Throw a unit test fail """
     return general_test_result(name, False, actual, expected)
 
-def diff_dict(actual, expected):
-    diffs = []
-    for k, v in expected.iteritems():
-        if v is not actual[k]:
-            diffs.append({k : (
-                actual[k], v
-            )})
-    print diffs
-    return True
 
 def exe_test(actual, expected, many=False):
     """ Execute a particular unit test """
@@ -127,7 +121,7 @@ def exe_test(actual, expected, many=False):
         print '  EXPECTED:'
         print expected
         if many:
-            diff_dict(actual, expected)
+            tools.diff_dict(actual, expected)
         print '================================='
         return throw_fail(calling_function, actual, expected)
 

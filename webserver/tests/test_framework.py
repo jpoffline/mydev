@@ -47,6 +47,7 @@ def execute_tests(verbose=True, prefix='test'):
     """ Collect together the test functions in the loaded modules """
 
     results = []
+
     all_functions = inspect.getmembers(sys.modules[__name__], inspect.isfunction)
 
     timer = Timer(time)
@@ -125,26 +126,38 @@ def exe_test(actual, expected, many=False):
 
 
 def report_simple_fail(actual, expected):
+    """
+    Report a simple fail to screen.
+
+    Reply with the actual and expected values.
+    """
+    space = '    '
     print '  ACTUAL:'
-    print '    ', actual
+    print space, actual
     print '  EXPECTED'
-    print '    ', expected
+    print space, expected
 
 
 def report_failed_many_comparison(actual, expected):
+    """
+    Report a many-type fail to screen.
+
+    Replies with the difference between the dicts given.
+    """
     dict_diffs = tools.diff_dict(actual, expected)
     if dict_diffs['keys'] is False:
         print 'issue with keys'
     if dict_diffs['vals'] is False:
         print '* Issue with values'
         for diff in dict_diffs['val_diffs']:
-            for key, v in diff.iteritems():
+            for key, diff_val in diff.iteritems():
                 print '*', key
-                report_simple_fail(v[0], v[1])
+                report_simple_fail(diff_val[0], diff_val[1])
+
 
 def analyse_tests(results, verbose=True):
     """ Analyse the unit test results """
-    
+
     print '* ran ' + str(len(results)) + ' tests'
     analysis = if_any_fail(results)
     if analysis['pass']:
@@ -152,15 +165,21 @@ def analyse_tests(results, verbose=True):
             print '* tests passed'
             return True
     else:
-        print '* tests failed: ' + str(analysis['count_fail']) + '/' + str(analysis['count_pass'])
+        count_fail = str(analysis['count_fail'])
+        count_pass = str(analysis['count_pass'])
+        print '* tests failed: ' + count_fail + '/' + count_pass
         return False
 
-def unit_tests_banner(testtype='unit',empty=False):
-    """ Return a banner for the start of the unit tests """
+
+def unit_tests_banner(testtype='unit', empty=False):
+    """ Return a banner for the start of the tests """
+    if testtype == 'test':
+        testtype = 'unit'
     if not empty:
-        return '\n========== '+testtype +' tests =========='
+        return '\n========== ' + testtype + ' tests =========='
     return '================================\n'
 
-def elapsed(time):
-    return '* elapsed: ' + time
 
+def elapsed(time):
+    """ Return a pretty-string with the elapsed time """
+    return '* elapsed: ' + time

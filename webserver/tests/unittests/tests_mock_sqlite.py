@@ -40,9 +40,10 @@ def test_createTB_mockSQLite():
     expected = {
         'nrows': 0,
         'ncols': 3,
-        'ntables':1
+        'ntables': 1
     }
-    return test.exe_test(actual, expected)
+    return test.exe_test(actual, expected, many=True)
+
 
 def test_createTBAndAdd_mockSQLite():
     table_fields = MOCK_tb_fields
@@ -72,6 +73,7 @@ def test_createTBAndAdd_mockSQLite():
     }
 
     return test.exe_test(actual, expected, many=True)
+
 
 def test_getAll_mockSQLite():
     table_fields = MOCK_tb_fields

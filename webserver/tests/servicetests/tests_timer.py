@@ -1,5 +1,5 @@
 from context import app
-from tests.mock_time import * 
+from tests.mock_time import *
 import test_framework as test
 from app.lib.tools.timer import Timer, pretty_time
 

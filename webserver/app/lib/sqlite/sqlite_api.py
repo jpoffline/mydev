@@ -6,6 +6,7 @@ import os
 import app.lib.sqlite.qy_factories as factories
 from app.lib.tools.generalreturn import *
 
+
 def create_connection(db_file):
     """ create a database connection to the SQLite database
         specified by db_file
@@ -14,10 +15,12 @@ def create_connection(db_file):
     """
     return sqlite3.connect(db_file)
 
+
 def delete_database(db_file):
     """ Delete a database file """
     os.remove(db_file)
     return not does_database_exist(db_file)
+
 
 def create_table(conn, create_table_sql):
     """ create a table from the create_table_sql statement
@@ -39,12 +42,14 @@ def create_db(database, table, fields):
     else:
         print("Error! cannot create the database connection.")
 
+
 def insert_into(db, tb, data):
     """ Interface: Inserting data into a SQL db/tb """
     conn = create_connection(db)
     conn.executemany(factories.insert_into_qy(tb, data['cols']), data['data'])
     conn.commit()
     conn.close()
+
 
 def does_table_exist(database, table):
     """ Does the SQL table exist.

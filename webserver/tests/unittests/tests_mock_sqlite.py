@@ -5,7 +5,7 @@
 """ Import file paths correctly """
 from context import app
 import test_framework as test
-import tests.mocks.mock_sqlite as mock_sqlite
+import app.lib.sqlite.inmemorysqlite as mock_sqlite
 from app.lib.tools.generalreturn import *
 
 MOCK_db_name = 'PATH'
@@ -23,9 +23,9 @@ MOCK_insert_data = {
 }
 
 
-def test_createTB_mockSQLite():
+def test_createTB_inmemorydb():
     table_fields = MOCK_tb_fields
-    sql = mock_sqlite.mockSQLite()
+    sql = mock_sqlite.inmemorydb()
     path = MOCK_db_name
     table = MOCK_tb_name
     sql.create_db(path, table, table_fields)
@@ -45,9 +45,9 @@ def test_createTB_mockSQLite():
     return test.exe_test(actual, expected, many=True)
 
 
-def test_createTBAndAdd_mockSQLite():
+def test_createTBAndAdd_inmemorydb():
     table_fields = MOCK_tb_fields
-    sql = mock_sqlite.mockSQLite()
+    sql = mock_sqlite.inmemorydb()
     path = MOCK_db_name
     table = MOCK_tb_name
     sql.create_db(path, table, table_fields)
@@ -75,9 +75,9 @@ def test_createTBAndAdd_mockSQLite():
     return test.exe_test(actual, expected, many=True)
 
 
-def test_getAll_mockSQLite():
+def test_getAll_inmemorydb():
     table_fields = MOCK_tb_fields
-    sql = mock_sqlite.mockSQLite()
+    sql = mock_sqlite.inmemorydb()
     path = MOCK_db_name
     table = MOCK_tb_name
     sql.create_db(path, table, table_fields)
@@ -87,20 +87,20 @@ def test_getAll_mockSQLite():
     return test.exe_test(actual, expected)
 
 
-def test_badData_mockSQLite():
+def test_badData_inmemorydb():
     table_fields = MOCK_tb_fields
-    sql = mock_sqlite.mockSQLite()
+    sql = mock_sqlite.inmemorydb()
     path = MOCK_db_name
     table = MOCK_tb_name
     insert_data = {
         'cols': ['person', 'age'],
         'data': [
-            ('jonny', 29), 
-            ('iona', 26, 89), 
+            ('jonny', 29),
+            ('iona', 26, 89),
             ('thingy', 12)
         ]
     }
     sql.create_db(path, table, table_fields)
     actual = sql.insert_into(table, insert_data)
-    expected = generalreturn('MOCK_SQLITE ERROR<add_row>: unexpected number of elements')
+    expected = generalreturn('inmemorydb_tb ERROR<add_row>: unexpected number of elements')
     return test.exe_test(actual, expected)

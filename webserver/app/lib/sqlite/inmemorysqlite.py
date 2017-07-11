@@ -2,7 +2,9 @@
 import context
 from app.lib.tools.generalreturn import *
 
-class mockSQLite_table(object):
+class inmemorydb_tb(object):
+    """ The in-memory class for a table
+    in the in-memory database. """
     def __init__(self, table_name, fields):
         self._col_fields = fields
         self._table_name = table_name
@@ -49,7 +51,7 @@ class mockSQLite_table(object):
             if len(row) == self.ncols():
                 self._rows.append(row)
             else:
-                return generalreturn('MOCK_SQLITE ERROR<add_row>: unexpected number of elements')
+                return generalreturn('inmemorydb_tb ERROR<add_row>: unexpected number of elements')
         return True
 
     def ncols(self):
@@ -69,14 +71,17 @@ class mockSQLite_table(object):
         return self._col_names
 
 
-class mockSQLite(object):
+class inmemorydb(object):
+    """ An in-memory database class,
+    with the same API as the sqlite database.
+    """
     def __init__(self):
         self._database = {}
         self._tables = []
         self._path = None
-        pass
 
     def get_path(self):
+        """ Return the path for the database """
         return self._path
 
     def ntables(self):
@@ -93,9 +98,14 @@ class mockSQLite(object):
 
     def create_db(self, path, table, fields):
         """ Create a table in the database """
-        self._database.update({table: mockSQLite_table(table,fields)})
+        self._path = path
+        self._database.update({table: inmemorydb_tb(table, fields)})
         self._tables.append(table)
-        pass
+
+    def delete_database(self, path):
+        """ Delete the database """
+        self._database = {}
+        self._tables = []
 
     def insert_into(self, table, data):
         """ Insert data into the given table """

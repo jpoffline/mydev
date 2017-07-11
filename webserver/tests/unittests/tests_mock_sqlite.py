@@ -71,7 +71,7 @@ def test_createTBAndAdd_mockSQLite():
         'insert_ok': True
     }
 
-    return test.exe_test(actual, expected, many = True)
+    return test.exe_test(actual, expected, many=True)
 
 def test_getAll_mockSQLite():
     table_fields = MOCK_tb_fields

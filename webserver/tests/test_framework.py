@@ -116,15 +116,31 @@ def exe_test(actual, expected, many=False):
     else:
         print '================================='
         print 'FAILED TEST : ' + calling_function
-        print '  ACTUAL:'
-        print actual
-        print '  EXPECTED:'
-        print expected
         if many:
-            tools.diff_dict(actual, expected)
+            report_failed_many_comparison(actual, expected)
+        else:
+            report_simple_fail(actual, expected)
         print '================================='
         return throw_fail(calling_function, actual, expected)
 
+
+def report_simple_fail(actual, expected):
+    print '  ACTUAL:'
+    print '    ', actual
+    print '  EXPECTED'
+    print '    ', expected
+
+
+def report_failed_many_comparison(actual, expected):
+    dict_diffs = tools.diff_dict(actual, expected)
+    if dict_diffs['keys'] is False:
+        print 'issue with keys'
+    if dict_diffs['vals'] is False:
+        print '* Issue with values'
+        for diff in dict_diffs['val_diffs']:
+            for key, v in diff.iteritems():
+                print '*', key
+                report_simple_fail(v[0], v[1])
 
 def analyse_tests(results, verbose=True):
     """ Analyse the unit test results """

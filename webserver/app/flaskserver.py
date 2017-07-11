@@ -5,12 +5,15 @@ import lib.ajax.ajax_aux as ajax_aux
 import lib.tools.tools as tools
 import lib.widgets.htmlwidgets as htmlwidgets
 import lib.model_adder as modeladder
+import lib.sqlite.inmemorysqlite as ims
 import flasksite.site as site
 app = Flask(__name__)
 
 
 history = []
 model = modeladder.ModelAdder(tools)
+inmemorydb = modeladder.ModelAdder(tools, database=ims.inmemorydb())
+inmemorydb._create_db()
 
 @app.route('/_add_numbers')
 def add_numbers():
@@ -20,6 +23,8 @@ def add_numbers():
 
     model._create_db()
     model.add_history_item(a, b)
+    inmemorydb.add_history_item(a, b)
+    print inmemorydb.get_all_history(returnit=True)
 
     table_html = "<h2>All history</h2>" + model.serialise_history()
 

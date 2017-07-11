@@ -52,7 +52,7 @@ def test_createTBAndAdd_inmemorydb():
     table = MOCK_tb_name
     sql.create_db(path, table, table_fields)
     # Insert some data
-    insert_ok = sql.insert_into(table, MOCK_insert_data)
+    insert_ok = sql.insert_into(path, table, MOCK_insert_data)
 
     actual = {
         'nrows': sql.nrows(table),
@@ -81,7 +81,7 @@ def test_getAll_inmemorydb():
     path = MOCK_db_name
     table = MOCK_tb_name
     sql.create_db(path, table, table_fields)
-    sql.insert_into(table, MOCK_insert_data)
+    sql.insert_into(path, table, MOCK_insert_data)
     actual = sql.get_all_from_sql(path, table)
     expected = [(1, u'jonny', 29), (2, u'iona', 26), (3, u'thingy', 12)]
     return test.exe_test(actual, expected)
@@ -101,6 +101,6 @@ def test_badData_inmemorydb():
         ]
     }
     sql.create_db(path, table, table_fields)
-    actual = sql.insert_into(table, insert_data)
+    actual = sql.insert_into(path, table, insert_data)
     expected = generalreturn('inmemorydb_tb ERROR<add_row>: unexpected number of elements')
     return test.exe_test(actual, expected)

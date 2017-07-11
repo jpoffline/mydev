@@ -107,7 +107,7 @@ class inmemorydb(object):
         self._database = {}
         self._tables = []
 
-    def insert_into(self, table, data):
+    def insert_into(self, path, table, data):
         """ Insert data into the given table """
         return self._database[table].add_row(data)
 

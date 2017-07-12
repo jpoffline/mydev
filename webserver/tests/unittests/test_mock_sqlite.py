@@ -46,6 +46,7 @@ class TestMockSqlite(unittest.TestCase):
             'ntables': 1
         }
         self.assertEqual(actual, expected)
+        self.assertEqual(sql.get_path(), path)
 
     def test_createTBAndAdd_inmemorydb(self):
         table_fields = self.MOCK_tb_fields

@@ -10,6 +10,13 @@ import app.lib.ajax.ajaxfactories as ajaxfactories
 
 class TestAjaxFactories(unittest.TestCase):
 
+    def test_howcssBackground_ajax_placer(self):
+        res = 'RES'
+        opts = {'how': 'css-background'}
+        actual = ajaxfactories.ajax_placer(res, options=opts)
+        expected = """$('RES').css('background', data.rgb);"""
+        self.assertEqual(actual, expected)
+
     def test_howText_ajax_placer(self):
         res = 'RES'
         actual = ajaxfactories.ajax_placer(res)

@@ -25,6 +25,14 @@ class TestTools(unittest.TestCase):
         expected = "key=\"value\" key2=\"val\""
         self.assertEqual(actual, expected)    
     
+    def test_Emptycollapse_css(self):
+        input_css = None
+        actual = tools.collapse_css(input_css)
+        expected = ''
+        self.assertEqual(actual, expected)    
+    
+
+
     def test_collapse_css(self):
         input_css = {
             'h1': {

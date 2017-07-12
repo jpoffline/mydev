@@ -5,3 +5,5 @@ flask-tutorial/
 R/lib/
 
 webserver/docs/coverage
+
+.coverage

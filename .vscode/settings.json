@@ -1,0 +1,4 @@
+{
+    "r.lintr.enabled": false,
+    "python.linting.prospectorEnabled": false
+}

@@ -13,7 +13,7 @@ import app.lib.sqlite.inmemorysqlite as ims
 
 def service_inMemory_init():
 
-    model = modeladder.ModelAdder(tools_mock.mockTools(),database=ims.inmemorydb())
+    model = modeladder.ModelAdder(tools_mock.mockTools(), database=ims.inmemorydb())
     actual = ''
     expected = ''
     return test.exe_test(actual, expected)

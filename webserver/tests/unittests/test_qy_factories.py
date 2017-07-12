@@ -75,3 +75,10 @@ class TestQyFactories(unittest.TestCase):
         actual = qy_factories.create_db_qy(table, fields)
         expected = 'CREATE TABLE IF NOT EXISTS TABLE_NAME (col1 TYPE1, col2 TYPE2);'
         self.assertEqual(actual, expected)
+
+    def test_select_table_name_from_db_qy(self):
+        db = 'DB'
+        tb = 'TB'
+        actual = qy_factories.select_table_name_from_db_qy(db, tb)
+        expected = "SELECT name FROM sqlite_master WHERE type='table' AND name='TB' LIMIT 1;"
+        self.assertEqual(actual, expected)

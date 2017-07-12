@@ -36,5 +36,6 @@ def create_db_qy(table_name, fields):
         table_name + ' (' + ', '.join(zipped_fields) + ');'
     return string
 
+
 def select_table_name_from_db_qy(database, table):
     return "SELECT name FROM sqlite_master WHERE type='table' AND name='"+ table+"' LIMIT 1;"

@@ -10,9 +10,8 @@ def ajax_placer_rows(id, res, rows_meta):
         string.append("""'<td>' + ii.""" + item + """.toString() + '</td>'""")
 
     joined = ' + '.join(string)
-    return """$.each(data.""" + res + """,function(index,ii){
-          $('""" + id + """').append('<tr>' + """ + joined + """ + '</tr>');
-        }); """
+    return """$.each(data.""" + res + """,function(index,ii){""" + \
+           """$('""" + id + """').append('<tr>' + """ + joined + """ + '</tr>');});"""
 
 
 def ajax_placer_css(input_id):

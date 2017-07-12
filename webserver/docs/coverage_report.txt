@@ -13,7 +13,7 @@ app\flasksite\site.py                 11     11     0%   1-31
 app\lib\__init__.py                    0      0   100%
 app\lib\ajax\__init__.py               0      0   100%
 app\lib\ajax\ajax_aux.py              29     29     0%   2-46
-app\lib\ajax\ajaxfactories.py         29     10    66%   8-13, 51-55
+app\lib\ajax\ajaxfactories.py         29      2    93%   53-54
 app\lib\ajax\context.py                3      0   100%
 app\lib\context.py                     3      3     0%   4-6
 app\lib\htmlgenerator.py              13      4    69%   9-11, 18
@@ -35,4 +35,4 @@ app\lib\widgets\default_css.py        16     10    38%   6, 18, 25, 33, 50, 58-6
 app\lib\widgets\htmltags.py           62      3    95%   77-78, 100
 app\lib\widgets\htmlwidgets.py       110     25    77%   20, 24, 98-99, 129, 151, 163-176, 181-187, 243
 ----------------------------------------------------------------
-TOTAL                                678    336    50%
+TOTAL                                678    328    52%

@@ -7,12 +7,24 @@ import unittest
 from context import app
 import app.lib.ajax.ajaxfactories as ajaxfactories
 
+
 class TestAjaxFactories(unittest.TestCase):
 
     def test_howText_ajax_placer(self):
         res = 'RES'
         actual = ajaxfactories.ajax_placer(res)
         expected = """$('#RES').text(data.RES);"""
+        self.assertEqual(actual, expected)
+
+    def test_howrows_ajax_placer(self):
+        res = 'RES'
+        opts = {'how': 'rows', 'rows_meta': {'items': ['i1', 'i2']}}
+        actual = ajaxfactories.ajax_placer(res, options=opts)
+        expected = """$.each(data.RES,function(index,ii){$('#RES').""" + \
+            """append('<tr>' + """ + \
+            """'<td>' + ii.i1.toString() + '</td>' + """ + \
+            """'<td>' + ii.i2.toString() + '</td>' + """ + \
+            """'</tr>');});"""
         self.assertEqual(actual, expected)
 
     def test_howHTML_ajax_placer(self):

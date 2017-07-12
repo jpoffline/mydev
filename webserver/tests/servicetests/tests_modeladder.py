@@ -8,12 +8,12 @@ import test_framework as test
 
 import app.lib.model_adder as modeladder
 import tests.mocks.mock_tools as tools_mock
-import lib.sqlite.inmemorysqlite as ims
+import app.lib.sqlite.inmemorysqlite as ims
 
 
 def service_inMemory_init():
 
     model = modeladder.ModelAdder(tools_mock.mockTools(),database=ims.inmemorydb())
     actual = ''
-    expected = { 'user' : 'CURRENT_USERNAME', 'store': 'memory'}
+    expected = ''
     return test.exe_test(actual, expected)

@@ -13,7 +13,6 @@ from app.lib.tools.generalreturn import *
 class TestMockSqlite(unittest.TestCase):
 
     def setUp(self):
-        import app.lib.sqlite.inmemorysqlite as mock_sqlite
         self.MOCK_tb_fields = [
             {'name': 'id', 'type': 'integer primary key'},
             {'name': 'person', 'type': 'text'},

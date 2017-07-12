@@ -102,6 +102,11 @@ class TestHtmltags(unittest.TestCase):
         expected = 'style=\"color: blue; weight: bold;\" id=\"1\" name=\"jp\"'
         self.assertEqual(actual, expected)
 
+    def test_tag_img(self):
+        actual = htmltags.tag_img('IMAGE_PATH')
+        expected = '<img src = \"IMAGE_PATH\">'
+        self.assertEqual(actual, expected)
+
     def test_tag_input(self):
         actual = htmltags.tag_input('T', 'N')
         expected = '<input name=\"N\" type=\"T\">'
@@ -133,6 +138,11 @@ class TestHtmltags(unittest.TestCase):
         actual = htmltags.tag_input(
             'checkbox', 'ID', options={'value': 'THE_VALUE'})
         expected = '<input name="ID" type="checkbox" value="THE_VALUE">'
+        self.assertEqual(actual, expected)
+
+    def test_withPlaceholder_tag_input(self):
+        actual = htmltags.tag_input('text', 'ID', place_holder='THING')
+        expected = '<input name="ID" placeholder="THING" type="text">'
         self.assertEqual(actual, expected)
 
     def test_openOnly_tag_style_options(self):

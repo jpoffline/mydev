@@ -1,0 +1,38 @@
+Name                               Stmts   Miss  Cover   Missing
+----------------------------------------------------------------
+app\__init__.py                        0      0   100%
+app\app\__init__.py                    0      0   100%
+app\app\app.py                        20     20     0%   2-95
+app\app\context.py                     4      4     0%   4-8
+app\app\css.py                         2      2     0%   4-6
+app\flaskserver.py                    26     26     0%   3-45
+app\flasksite\__init__.py              0      0   100%
+app\flasksite\context.py               3      3     0%   4-6
+app\flasksite\css.py                   9      9     0%   2-21
+app\flasksite\site.py                 11     11     0%   1-31
+app\lib\__init__.py                    0      0   100%
+app\lib\ajax\__init__.py               0      0   100%
+app\lib\ajax\ajax_aux.py              29     29     0%   2-46
+app\lib\ajax\ajaxfactories.py         29     10    66%   8-13, 51-55
+app\lib\ajax\context.py                3      0   100%
+app\lib\context.py                     3      3     0%   4-6
+app\lib\htmlgenerator.py              13      4    69%   9-11, 18
+app\lib\model_adder.py                37     37     0%   3-92
+app\lib\sqlite\__init__.py             0      0   100%
+app\lib\sqlite\context.py              3      0   100%
+app\lib\sqlite\inmemorysqlite.py      70      6    91%   29-30, 41, 85, 107-108
+app\lib\sqlite\qy_factories.py        22      1    95%   40
+app\lib\sqlite\sqlite_api.py          41     41     0%   3-102
+app\lib\tools\__init__.py              0      0   100%
+app\lib\tools\context.py               3      3     0%   4-6
+app\lib\tools\generalreturn.py        16      4    75%   9, 12, 18, 21
+app\lib\tools\serverhelp.py           24      6    75%   7-15
+app\lib\tools\timer.py                70     70     0%   5-119
+app\lib\tools\tools.py                49      9    82%   21, 41, 50, 55-56, 61-62, 67-68
+app\lib\widgets\__init__.py            0      0   100%
+app\lib\widgets\context.py             3      0   100%
+app\lib\widgets\default_css.py        16     10    38%   6, 18, 25, 33, 50, 58-62
+app\lib\widgets\htmltags.py           62      3    95%   77-78, 100
+app\lib\widgets\htmlwidgets.py       110     25    77%   20, 24, 98-99, 129, 151, 163-176, 181-187, 243
+----------------------------------------------------------------
+TOTAL                                678    336    50%

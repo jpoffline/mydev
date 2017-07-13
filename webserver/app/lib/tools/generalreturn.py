@@ -5,6 +5,7 @@ class generalreturn(object):
         if message is not None:
             success = False
         self._success = success
+        
     def state(self):
         return self._success
 

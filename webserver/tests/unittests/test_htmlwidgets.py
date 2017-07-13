@@ -267,3 +267,13 @@ class TestHtmlwidgets(unittest.TestCase):
         expected = '<span id="ID"></span>'
         actual = htmlwidgets.htmloutput("ID")
         self.assertEqual(actual, expected)
+
+    def test_emptyID_with_opts_span(self):
+        expected = '<span thing="yup">TEXT</span>'
+        actual = htmlwidgets.span("", "TEXT", options={'thing': 'yup'})
+        self.assertEqual(actual, expected)
+
+    def test_withID_with_opts_span(self):
+        expected = '<span id="ID" thing="yup">TEXT</span>'
+        actual = htmlwidgets.span("ID", "TEXT", options={'thing': 'yup'})
+        self.assertEqual(actual, expected)

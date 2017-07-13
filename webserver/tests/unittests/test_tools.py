@@ -31,6 +31,22 @@ class TestTools(unittest.TestCase):
         expected = ''
         self.assertEqual(actual, expected)    
     
+    def test_collapse_css_ajax(self):
+        input_css = {
+            'h1': {
+                'color': 'blue',
+                'weight': 'bold'
+            },
+            'p': {
+                'color': 'red',
+                'weight': 'italic'
+            }
+        }
+        actual = tools.collapse_css_ajax(input_css)
+        expected = '"h1": "{\'color\': \'blue\', \'weight\': \'bold\'}", ' + \
+        '"p": "{\'color\': \'red\', \'weight\': \'italic\'}"'
+        self.assertEqual(actual, expected)   
+
 
 
     def test_collapse_css(self):
@@ -125,4 +141,9 @@ class TestTools(unittest.TestCase):
                 {'two': ([1, 2], [1, 3])}
             ]
         }
+        self.assertEqual(actual, expected)
+
+    def test_val_to_rgb(self):
+        actual = tools.val_to_rgb(123)
+        expected = 'rgb(123,127,127)'
         self.assertEqual(actual, expected)

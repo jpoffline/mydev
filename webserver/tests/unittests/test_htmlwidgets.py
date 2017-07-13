@@ -213,6 +213,18 @@ class TestHtmlwidgets(unittest.TestCase):
         expected = '<TT><th>id</th><th>a</th></TT>'
         self.assertEqual(actual, expected)
 
+    def test_sql_to_html(self):
+        cols = ['id', 'a']
+        data = [(0, 0), (1, 1)]
+        expected = '<table class="jp-table">' + \
+            '<tr><th>id</th><th>a</th></tr>' + \
+            '<tr><td>0</td><td>0</td></tr>' + \
+            '<tr><td>1</td><td>1</td></tr>' + \
+            '</table>'
+        actual = htmlwidgets.sql_to_html(cols, data)
+        self.assertEqual(actual, expected)
+
+
     def test_datatable(self):
         cols = ['id', 'a']
         data = [(0, 0), (1, 1)]
@@ -276,4 +288,9 @@ class TestHtmlwidgets(unittest.TestCase):
     def test_withID_with_opts_span(self):
         expected = '<span id="ID" thing="yup">TEXT</span>'
         actual = htmlwidgets.span("ID", "TEXT", options={'thing': 'yup'})
+        self.assertEqual(actual, expected)
+
+    def test_img(self):
+        expected = '<img src = "THE_URL">'
+        actual = htmlwidgets.img("THE_URL")
         self.assertEqual(actual, expected)

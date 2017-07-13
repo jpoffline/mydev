@@ -6,7 +6,7 @@
 import unittest
 from context import app
 
-import app.lib.sqlite.inmemorysqlite as mock_sqlite
+import app.lib.sqlite.inmemory.database as mock_sqlite
 from app.lib.tools.generalreturn import *
 
 

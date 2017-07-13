@@ -5,7 +5,7 @@ import lib.ajax.ajax_aux as ajax_aux
 import lib.tools.tools as tools
 import lib.widgets.htmlwidgets as htmlwidgets
 import lib.model_adder as modeladder
-import lib.sqlite.inmemorysqlite as ims
+import lib.sqlite.inmemory.database as ims
 import flasksite.site as site
 app = Flask(__name__)
 

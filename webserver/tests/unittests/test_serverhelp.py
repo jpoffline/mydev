@@ -90,4 +90,3 @@ class TestServerhelp(unittest.TestCase):
         actual = srv.read_form(form, key)
         expected = 'empty'
         self.assertEqual(actual, expected)
-        

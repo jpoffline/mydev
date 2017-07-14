@@ -54,9 +54,8 @@ class TestTimer(unittest.TestCase):
         timer.start()
         timer._time.cycle(2)
         timer.end()
-        actual = timer.elapsed_seconds()
-        expected = 3
-        self.assertEqual(actual, expected)
+        self.assertEqual(timer.elapsed_seconds(), 3)
+        self.assertEqual(timer.elapsed(), '3.0 secs')
 
     def test_TimerMS_simple(self):
         timer = Timer(self.time)
@@ -67,7 +66,7 @@ class TestTimer(unittest.TestCase):
         actual = timer._time.time()
         expected = 0.004
         self.assertEqual(actual, expected)
-
+        
     def test_Timersig(self):
         timer = Timer(self.time)
         timer.sig(2)
@@ -93,3 +92,87 @@ class TestTimer(unittest.TestCase):
 
 
 
+class TestLapTimer(unittest.TestCase):
+
+    def setUp(self):
+        self.time = mock_time()
+
+    def test_simpleLap(self):
+        timer = Timer(self.time)
+        timer.start()
+        timer._time.cycle(2)
+        timer.end()
+        timer.save('first lap')
+
+        expected_lap_data = [{'id': 'first lap', 'elapsed': 3.0}]
+
+        self.assertEqual(timer.elapsed_seconds(), 3.0)
+        self.assertEqual(timer.laps(sort=False), expected_lap_data)
+        timer.sort_laps()
+        self.assertEqual(timer.slowest(last_n=1), [{'id': 'first lap', 'elapsed': 3.0}])
+
+    def test_two_laps(self):
+        timer = Timer(self.time)
+        timer.start()
+        timer._time.cycle(2)
+        timer.end()
+        timer.save('first lap')
+        self.assertEqual(timer.elapsed_seconds(), 3.0)
+        timer.start()
+        timer._time.cycle(3)
+        timer.end()
+        timer.save('second lap')
+
+        expected_lap_data = [
+            {'id': 'first lap', 'elapsed': 3.0},
+            {'id': 'second lap', 'elapsed': 4.0}]
+
+        self.assertEqual(timer.elapsed_seconds(), 4.0)
+        self.assertEqual(timer.laps(sort=False), expected_lap_data)
+
+    def test_two_sorted_laps(self):
+        timer = Timer(self.time)
+
+        timer.start()
+        timer._time.cycle(5)
+        timer.end()
+        timer.save('first lap')
+        self.assertEqual(timer.elapsed_seconds(), 6.0)
+
+        timer.start()
+        timer._time.cycle(3)
+        timer.end()
+        timer.save('second lap')
+        self.assertEqual(timer.elapsed_seconds(), 4.0)
+
+        expected_lap_data = [
+            {'id': 'second lap', 'elapsed': 4.0},
+            {'id': 'first lap', 'elapsed': 6.0}]
+
+        
+        self.assertEqual(timer.laps(sort=True), expected_lap_data)
+
+
+    def test_twoLaps_getSlowest_laps(self):
+        timer = Timer(self.time)
+
+        timer.start()
+        timer._time.cycle(5)
+        timer.end()
+        timer.save('first lap')
+        self.assertEqual(timer.elapsed_seconds(), 6.0)
+
+        timer.start()
+        timer._time.cycle(3)
+        timer.end()
+        timer.save('second lap')
+        self.assertEqual(timer.elapsed_seconds(), 4.0)
+        
+        expected_lap_data = [
+            {'id': 'second lap', 'elapsed': 4.0},
+            {'id': 'first lap', 'elapsed': 6.0}]
+
+        
+        self.assertEqual(timer.laps(sort=True), expected_lap_data)
+        self.assertEqual(timer.slowest(last_n=1), [{'id': 'first lap', 'elapsed': 6.0}])
+        

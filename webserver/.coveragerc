@@ -13,3 +13,4 @@ exclude_lines =
 omit=
     app/*__init__.py
     app/*context.py
+    app/lib/services/*.py

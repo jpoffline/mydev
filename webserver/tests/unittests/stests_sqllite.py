@@ -109,3 +109,6 @@ class ServiceTestSQLite(unittest.TestCase):
         self.CLEANUP_service_sqlite(self.MOCK_CREATE_db)
 
         self.assertEqual(actual, expected)
+
+    def test_throw_err(self):
+        self.assertRaises(ValueError, sql.throw_sqlite_error, 'message')

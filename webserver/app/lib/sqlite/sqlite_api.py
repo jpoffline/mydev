@@ -7,6 +7,11 @@ import app.lib.sqlite.qy_factories as factories
 from app.lib.tools.generalreturn import *
 
 
+def throw_sqlite_error(message):
+    message = 'SQLITE: ' + message
+    raise ValueError(message)
+
+
 def create_connection(db_file):
     """ create a database connection to the SQLite database
         specified by db_file
@@ -36,11 +41,9 @@ def create_db(database, table, fields):
     """ Wrapper function for creating a SQL table """
     # create a database connection
     conn = create_connection(database)
-    if conn is not None:
-        # create projects table
-        create_table(conn, factories.create_db_qy(table, fields))
-    else:
-        print("Error! cannot create the database connection.")
+
+    # create projects table
+    create_table(conn, factories.create_db_qy(table, fields))
 
 
 def insert_into(db, tb, data):

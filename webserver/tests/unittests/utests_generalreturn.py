@@ -14,27 +14,27 @@ import unittest
 class TestGeneralReturn(unittest.TestCase):
 
     def test_init(self):
-        ret = gr.generalreturn()
+        ret = gr.gret()
         self.assertEqual(ret.state(), True)
         self.assertEqual(ret.message(), None)
         self.assertEqual(ret._serialise(), '<generalreturn\\ message:None success:True>')
 
     def test_equal_compare(self):
-        gr1 = gr.generalreturn()
-        gr2 = gr.generalreturn()
+        gr1 = gr.gret()
+        gr2 = gr.gret()
         self.assertEqual(gr1, gr2)
 
     def test_unequal_compare(self):
-        gr1 = gr.generalreturn()
-        gr2 = gr.generalreturn(message='MSG')
+        gr1 = gr.gret()
+        gr2 = gr.gret('MSG')
         self.assertNotEqual(gr1, gr2)
         self.assertEqual(gr1._serialise(), '<generalreturn\\ message:None success:True>')
         self.assertEqual(gr2._serialise(), '<generalreturn\\ message:MSG success:False>')
 
 
     def test_unequal_diff_msgs_compare(self):
-        gr1 = gr.generalreturn(message='MSG2')
-        gr2 = gr.generalreturn(message='MSG')
+        gr1 = gr.gret('MSG2')
+        gr2 = gr.gret('MSG')
         self.assertNotEqual(gr1, gr2)
         self.assertEqual(gr1._serialise(), '<generalreturn\\ message:MSG2 success:False>')
         self.assertEqual(gr2._serialise(), '<generalreturn\\ message:MSG success:False>')

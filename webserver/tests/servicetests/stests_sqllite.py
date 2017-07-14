@@ -52,7 +52,7 @@ class ServiceTestSQLite(unittest.TestCase):
         actual = sql.does_table_exist(
             self.MOCK_sql_database_not_exist,
             self.MOCK_sql_table)
-        expected = generalreturn('No database')
+        expected = gret('No database')
         self.assertEqual(actual, expected)
 
     def test_does_table_exist(self):

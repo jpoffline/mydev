@@ -51,7 +51,7 @@ class inmemorydb_tb(object):
             if len(row) == self.ncols():
                 self._rows.append(row)
             else:
-                return generalreturn('inmemorydb_tb ERROR<add_row>: unexpected number of elements')
+                return gret('inmemorydb_tb ERROR<add_row>: unexpected number of elements')
         return True
 
     def ncols(self):

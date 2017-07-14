@@ -118,7 +118,7 @@ class TestMockSqlite(unittest.TestCase):
         }
         sql.create_db(path, table, table_fields)
         actual = sql.insert_into(path, table, insert_data)
-        expected = generalreturn(
+        expected = gret(
             'inmemorydb_tb ERROR<add_row>: unexpected number of elements')
         self.assertEqual(actual, expected)
 

@@ -23,6 +23,13 @@ class TestAjaxFactories(unittest.TestCase):
         expected = """$('#RES').text(data.RES);"""
         self.assertEqual(actual, expected)
 
+    def test_howUnknown_ajax_placer(self):
+        res = 'RES'
+        opts = {'how': 'rows1'}
+        actual = ajaxfactories.ajax_placer(res, options=opts)
+        expected = False
+        self.assertEqual(actual, expected)
+
     def test_howrows_ajax_placer(self):
         res = 'RES'
         opts = {'how': 'rows', 'rows_meta': {'items': ['i1', 'i2']}}

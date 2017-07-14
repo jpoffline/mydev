@@ -1,9 +1,5 @@
-@Echo OFF
-echo =========================
-echo   Running testing suite
-echo =========================
-echo Service tests
-python -m tests.run_service_tests -quiet
-echo Unit tests
-python -m tests.run_unit_tests -quiet
-echo DONE
+@echo OFF
+echo * running unit tests
+python -m unittest discover %1 -p "utests_*.py"
+echo * running service tests
+python -m unittest discover %1 -p "stests_*.py"

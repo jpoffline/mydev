@@ -52,4 +52,5 @@ def ajax_placer(res, options=None):
         return ajax_placer_rows(input_id, res, options['rows_meta'])
     elif options['how'] == 'css-background':
         return ajax_placer_css(res)
+    return False
 

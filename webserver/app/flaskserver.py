@@ -5,15 +5,16 @@ import lib.ajax.ajax_aux as ajax_aux
 import lib.tools.tools as tools
 import lib.services.hostinfo as hosttools
 import lib.widgets.htmlwidgets as htmlwidgets
-import lib.model_adder as modeladder
+import lib.models.model_adder as modeladder
 import lib.sqlite.inmemory.database as ims
+import lib.sqlite.sqlite_api as sql
 import flasksite.site as site
 app = Flask(__name__)
 
 
 history = []
-model = modeladder.ModelAdder(hosttools)
-inmemorydb = modeladder.ModelAdder(hosttools, database=ims.inmemorydb())
+model = modeladder.ModelAdder(hosttools, sql)
+inmemorydb = modeladder.ModelAdder(hosttools, ims.inmemorydb())
 inmemorydb._create_db()
 
 @app.route('/_add_numbers')

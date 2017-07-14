@@ -1,7 +1,5 @@
 """ model adder module """
 
-import app.lib.sqlite.sqlite_api as sql
-
 import app.lib.widgets.htmlwidgets as htmlwidgets
 
 
@@ -13,7 +11,7 @@ class ModelAdder(object):
 
 
     """
-    def __init__(self, tools, database=sql):
+    def __init__(self, tools, database):
         self._tools = tools
         self._db_path = 'app/data/db/adder.db'
         self._table = 'history'

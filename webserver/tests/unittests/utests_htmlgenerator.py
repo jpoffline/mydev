@@ -5,7 +5,7 @@
 """ Import file paths correctly """
 import unittest
 from context import app
-import app.lib.htmlgenerator as htmlgenerator
+import app.lib.tools.htmlgenerator as htmlgenerator
 
 
 class TestHtmlgenerator(unittest.TestCase):

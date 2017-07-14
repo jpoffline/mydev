@@ -18,9 +18,6 @@ class TestMockSqlite(unittest.TestCase):
             {'name': 'person', 'type': 'text'},
             {'name': 'age', 'type': 'integer'}
         ]
-
-
-
         self.MOCK_db_name = 'PATH'
         self.MOCK_tb_name = 'TABLE'
         self.MOCK_insert_data = {
@@ -29,6 +26,42 @@ class TestMockSqlite(unittest.TestCase):
                 ('jonny', 29), ('iona', 26), ('thingy', 12)
             ]
         }
+
+    def test_createTBWithoutPK_inmemorydb(self):
+        table_fields = [
+            {'name': 'person', 'type': 'text'},
+            {'name': 'age', 'type': 'integer'}
+        ]
+        sql = mock_sqlite.inmemorydb()
+        path = self.MOCK_db_name
+        table = self.MOCK_tb_name
+        sql.create_db(path, table, table_fields)
+
+        self.assertEqual(sql.nrows(table), 0)
+        self.assertEqual(sql.ntables(), 1)
+        self.assertEqual(sql.ncols(table), 2)
+        self.assertEqual(sql.get_path(), path)
+
+    def test_createTBWithoutPK_insert_get_inmemorydb(self):
+        table_fields = [
+            {'name': 'person', 'type': 'text'},
+            {'name': 'age', 'type': 'integer'}
+        ]
+        sql = mock_sqlite.inmemorydb()
+        path = self.MOCK_db_name
+        table = self.MOCK_tb_name
+        sql.create_db(path, table, table_fields)
+
+        self.assertTrue(sql.insert_into(path, table, self.MOCK_insert_data))
+
+        self.assertEqual(sql.nrows(table), 3)
+        self.assertEqual(sql.ntables(), 1)
+        self.assertEqual(sql.ncols(table), 2)
+        self.assertEqual(sql.get_path(), path)
+        actual = sql.get_all_from_sql(path, table)
+        expected = [(u'jonny', 29), (u'iona', 26), (u'thingy', 12)]
+        self.assertEqual(actual, expected)
+
 
     def test_createTB_inmemorydb(self):
         table_fields = self.MOCK_tb_fields

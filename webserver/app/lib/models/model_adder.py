@@ -51,10 +51,14 @@ class ModelAdder(object):
             ]
 
     def _create_db(self):
-        """ Create the SQL tables """
+        """ Private: Create the SQL tables """
         self.database.create_db(self._db_path,
                                 self._table,
                                 self._db_history_fields())
+
+    def create_db(self):
+        """ Create the SQL tables """
+        self._create_db()
 
     def _insert(self, table, cols, data):
         """ Insert into the database """
@@ -82,15 +86,10 @@ class ModelAdder(object):
         """ Get all contents of the history table; store in memory. """
         self._retrieve()
         if returnit is True:
-            return self._history
+            return self._history, self._db_history_fields('col_names')
 
     def serialise_history(self):
         """
-        Serialise the history to HTML.
-
-        Returns a HTML-table.
+        Serialise the history.
         """
-        self.get_all_history()
-
-        return htmlwidgets.datatable(self._db_history_fields('col_names'),
-                                       self._history)
+        return self.get_all_history(returnit=True)

@@ -23,12 +23,13 @@ def add_numbers():
     b = request.args.get('b', 0, type=int)
     history.append({'a': a, 'b': b})
 
-    model._create_db()
+    model.create_db()
     model.add_history_item(a, b)
     inmemorydb.add_history_item(a, b)
-    print inmemorydb.get_all_history(returnit=True)
-
-    table_html = "<h2>All history</h2>" + model.serialise_history()
+    print inmemorydb.get_all_history(returnit=True)[0]
+    hist = model.serialise_history()
+    hist_dt = htmlwidgets.datatable(hist[1], hist[0])
+    table_html = "<h2>All history</h2>" + hist_dt
 
     return jsonify(
         result=a + b,

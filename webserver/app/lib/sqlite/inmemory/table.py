@@ -9,7 +9,7 @@ class inmemorydb_tb(object):
     def __init__(self, table_name, fields):
         self._col_fields = fields
         self._table_name = table_name
-        self._col_names, self._has_pk = self._set_col_names(self._col_fields)
+        self._col_names, self._pk_idx = self._set_col_names(self._col_fields)
 
         self._rows = []
         self._pk_count = 1
@@ -36,16 +36,16 @@ class inmemorydb_tb(object):
         -------
         True if there is a primary key, and False if not.
         """
-        if self._has_pk is not False:
+        if self._pk_idx is not False:
             return True
         return False
 
     def add_row(self, data):
         """ Add data to the table """
         for row in data['data']:
-            if self._has_pk is not False:
+            if self._pk_idx is not False:
                 dumm = list(row)
-                dumm.insert(self._has_pk, self._pk_count)
+                dumm.insert(self._pk_idx, self._pk_count)
                 row = tuple(dumm)
                 self._pk_count += 1
             if len(row) == self.ncols():

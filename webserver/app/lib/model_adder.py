@@ -54,7 +54,9 @@ class ModelAdder(object):
 
     def _create_db(self):
         """ Create the SQL tables """
-        self.database.create_db(self._db_path, self._table, self._db_history_fields())
+        self.database.create_db(self._db_path,
+                                self._table,
+                                self._db_history_fields())
 
     def _insert(self, table, cols, data):
         """ Insert into the database """
@@ -66,13 +68,16 @@ class ModelAdder(object):
         self.database.insert_into(self._db_path, table, insert_data)
 
     def _retrieve(self):
-        self._history = self.database.get_all_from_sql(self._db_path, self._table, order='id desc')
-
+        self._history = self.database.get_all_from_sql(
+            self._db_path,
+            self._table,
+            order='id desc')
 
     def add_history_item(self, a, b):
         """ Interface: method to data into the history table. """
+        the_time = self._tools.get_datetime()
         hist_cols = self._db_history_fields('insert_col_names')
-        hist_vals = [(a, b, self._user, self._machine, self._tools.get_datetime())]
+        hist_vals = [(a, b, self._user, self._machine, the_time)]
         self._insert(self._table, hist_cols, hist_vals)
 
     def get_all_history(self, returnit=False):

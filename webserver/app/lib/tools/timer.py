@@ -1,18 +1,17 @@
 """ Timer class """
 
 
-
 def pretty_time(input_time, sig=3):
     """
     Return a pretty-string version of
     an inputted time in seconds
     """
-    if input_time < 0.001:
+    if input_time <= 0.001:
         units = 'ms'
         input_time = input_time * 1000
     else:
         units = 'secs'
-        if input_time > 60:
+        if input_time >= 60:
             input_time = input_time / 60
             units = 'mins'
 

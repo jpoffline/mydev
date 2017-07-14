@@ -3,6 +3,7 @@
 from flask import Flask, jsonify, render_template, request
 import lib.ajax.ajax_aux as ajax_aux
 import lib.tools.tools as tools
+import lib.services.hostinfo as hosttools
 import lib.widgets.htmlwidgets as htmlwidgets
 import lib.model_adder as modeladder
 import lib.sqlite.inmemory.database as ims
@@ -11,8 +12,8 @@ app = Flask(__name__)
 
 
 history = []
-model = modeladder.ModelAdder(tools)
-inmemorydb = modeladder.ModelAdder(tools, database=ims.inmemorydb())
+model = modeladder.ModelAdder(hosttools)
+inmemorydb = modeladder.ModelAdder(hosttools, database=ims.inmemorydb())
 inmemorydb._create_db()
 
 @app.route('/_add_numbers')

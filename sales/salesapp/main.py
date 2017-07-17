@@ -1,6 +1,10 @@
 from flask import Flask, jsonify, render_template, request, url_for, redirect
 import config as config
 
+import lib.sales as sales
+
+sales = sales.Sales()
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -14,8 +18,8 @@ def logsale():
     title = request.form['sale-title']
     text = request.form['sale-description']
     amount = request.form['sale-amount']
-    print 'LOG', title, text
-    return render_template('index.html', logsale_title=title, logsale_text=text, logsale_amount=amount)
+    sales.add_sale(title, text, amount)
+    return render_template('index.html', logsale=sales.get_sales())
 
 
 @app.route('/add', methods=['POST'])

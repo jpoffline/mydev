@@ -18,8 +18,11 @@ This is JP content
         <div class="form-inline">
             <label for="sale-title">Title</label>
             <input type=text class="form-control" size=30 name="sale-title" id = "sale-title">
+
             <label for="sale-amount">Amount</label>
-            <input type=number class="form-control" size=30 name="sale-amount" id = "sale-amount">
+            <div class="input-group"> 
+            <span class="input-group-addon">£</span><input type=number class="form-control currency" size=30 name="sale-amount" id = "sale-amount" step="0.01" data-number-to-fixed="2">
+            </div>
         </div>
     </div>
     <div class="form-group">
@@ -30,30 +33,32 @@ This is JP content
 </form>
 
 
-{% if logsale_title %}
+{% if logsale %}
 
 <h3>You logged a sale!</h3>
 <div class="table-responsive">
+    <h3>Running total: {{logsale.running_total}}</h3>
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>Date</th>
                 <th>Title</th>
                 <th>Description</th>
                 <th>Amount</th>
             </tr>
         </thead>
         <tbody>
+            {% for sale in logsale.sales %}
             <tr>
-                <td>{{ logsale_title }}</td>
-                <td>{{ logsale_text }}</td>
-                <td>{{ logsale_amount }}</td>
+                <td> {{sale.date}} </td>
+                <td>{{ sale.title }}</td>
+                <td>{{ sale.description }}</td>
+                <td>£{{ sale.amount }}</td>
             </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
-
-
-
 
 {% endif %}
 

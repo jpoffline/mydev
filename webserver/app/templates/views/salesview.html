@@ -1,0 +1,25 @@
+<div class="table-responsive">
+    <h3>Running total: {{logsale.running_total}}</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Date</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sale in logsale.sales %}
+            <tr>
+                <td> {{sale.id}} </td>
+                <td> {{sale.date}} </td>
+                <td> {{ sale.title }} </td>
+                <td> {{ sale.description }} </td>
+                <td> {{ sale.amount_disp }} </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

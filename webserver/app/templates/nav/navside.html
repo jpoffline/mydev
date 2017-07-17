@@ -1,0 +1,18 @@
+<div class="col-sm-3 col-md-2 sidebar">
+    <ul class="nav nav-sidebar">
+        <li 
+            {% if request.path=='/' %}
+                class="active" 
+            {% endif %}
+        >
+            <a href="/">Home </a>
+        </li>
+        <li 
+            {% if request.path=='/analytics' %}
+                class="active" 
+            {% endif %}
+        >
+            <a href="/analytics">Analytics | {%if menuItems %}{{menuItems.n}}{%endif%}</a>
+        </li>
+    </ul>
+</div>

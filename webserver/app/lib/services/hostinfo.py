@@ -15,7 +15,11 @@ def get_hostname():
     return socket.gethostname()
 
 
-def get_datetime():
+def get_datetime(pretty=False):
     """ Get the current datetime stamp in YYYYMMDDHHMMSS-form """
     today = datetime.datetime.today()
-    return today.strftime('%Y%m%d%H%M%S')
+    if pretty is False:
+        chosen_format = '%Y%m%d%H%M%S'
+    else:
+        chosen_format = '%d/%m/%Y %H:%M:%S'
+    return today.strftime(chosen_format)

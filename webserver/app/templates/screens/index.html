@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block bappname %} {{ appname }} {% endblock %}
+
+
+{% block content %}
+
+{% if name %}
+  <h1>Hello {{ name }}!</h1>
+{% else %}
+  <h1>Hello, World!</h1>
+{% endif %}
+
+{% include 'forms/salelog.html' %}
+
+{% if logsale %}
+<h3>You logged a sale!</h3>
+{% include 'views/salesview.html' %}
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}Analytics{% endblock %}
+{% block bappname %} {{ appname }} {% endblock %}
+
+
+{% block content %}
+
+<h1>Analytics</h1>
+
+{% if logsale %}
+{% include 'views/salesview.html' %}
+{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,18 @@
+<h2>Log a sale</h2>
+<form action="{{ url_for('logsale') }}" method=post>
+    <div class="form-group">
+        <div class="form-inline">
+            <label for="sale-title">Title</label>
+            <input type=text class="form-control" size=30 name="sale-title" id = "sale-title">
+            <label for="sale-amount">Amount</label>
+            <div class="input-group"> 
+            <span class="input-group-addon">£</span><input type=number class="form-control currency" size=30 name="sale-amount" id = "sale-amount" step="0.01" data-number-to-fixed="2">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="sale-description">Description</label>
+        <textarea name="sale-description" rows=5 cols=40 class="form-control" id = "sale-description"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Log sale</button>
+</form>

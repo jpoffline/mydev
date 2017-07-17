@@ -1,14 +1,17 @@
 
 import app.lib.services.hostinfo as hostinfo
 import app.lib.tools.tools as tools
-
+import app.lib.sqlite.sqlite_api as sql
 
 class SalesData(object):
     def __init__(self):
         self._data = []
+        self._id = 0
 
     def add(self, data):
         """ Add data to the sales """
+        self._id += 1
+        data['id'] = self._id
         self._data.append(data)
 
     def get(self):
@@ -22,13 +25,81 @@ class SalesData(object):
     def len(self):
         return len(self._data)
 
+class SalesSQL(object):
+    def __init__(self):
+        self._database = sql
+        self._table = 'sales'
+        self._db_path = 'app/data/db/sales.db'
+        pass
+    def _schema(self):
+        return [
+                {'name': 'id', 'type': 'INTEGER primary key'},
+                {'name': 'submit_user', 'type': 'text'},
+                {'name': 'submit_machine', 'type': 'text'},
+                {'name': 'submit_time', 'type': 'text'},
+                {'name': 'title', 'type': 'text'},
+                {'name': 'description', 'type': 'text'},
+                {'name': 'full_desc', 'type': 'text'},
+                {'name': 'amount', 'type': 'numeric'},
+                {'name': 'amount_disp', 'type': 'text'}
+            ]
+
+    def _insert_col_names(self):
+        return[
+            'submit_user',
+            'submit_machine',
+            'submit_time',
+            'title',
+            'description',
+            'full_desc',
+            'amount',
+            'amount_disp'
+        ]
+
+    def _create(self):
+        self._database.create_db(self._db_path,
+                                 self._table,
+                                 self._schema())
+
+    def _insert(self, data):
+        insert_data = {
+            'cols': self._insert_col_names(),
+            'data': data
+        }
+        self._database.insert_into(self._db_path, self._table, insert_data)
+
+    def _retrieve(self):
+        return self._database.get_all_from_sql(
+            self._db_path,
+            self._table,
+            order='id desc')
+
+    
+    def get_sorted(self, key='id', desc=True):
+        """ Get the sales, sorted on a particular key in the data """
+        return self._retrieve()
+
+
+    def add(self, data):
+        data = [(
+            hostinfo.get_username(),
+            hostinfo.get_hostname(),
+            hostinfo.get_datetime(pretty=True),
+            data['title'],
+            data['description'],
+            data['full_desc'],
+            data['amount'], 
+            data['amount_disp']
+        )]
+        self._insert(data)
+
+
 
 class Sales(object):
     def __init__(self):
         self._sales = SalesData()
         self._total_income = 0
         self._short_desc_length = 25
-        self._transact_id = 0
         pass
 
     def _sanitise_desc(self, in_desc):
@@ -44,12 +115,10 @@ class Sales(object):
 
     def add_sale(self, sale_info):
         """ Add a sale to the log """
-        self._transact_id += 1
         amount = self._sanitise_amount(sale_info['amount'])
         description = sale_info['description']
         self._sales.add(
             {
-                'id': self._transact_id,
                 'date': hostinfo.get_datetime(pretty=True),
                 'title': sale_info['title'],
                 'description': self._sanitise_desc(description),

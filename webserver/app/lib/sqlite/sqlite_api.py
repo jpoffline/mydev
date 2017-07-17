@@ -102,6 +102,26 @@ def get_all_from_sql(database, table, order=None):
     conn.close()
     return v
 
+def count_nrows(database, table):
+    """
+    Wrapper function for counting the number of rows in a table
+
+    database: The database from which to select
+    table:    The table from which to count
+    """
+    conn = create_connection(database)
+    v = conn.execute(factories.count_nrows(table)).fetchall()
+    conn.close()
+    return v[0][0]
+
+
+def sum_col(database, table, col):
+    conn = create_connection(database)
+    v = conn.execute(factories.sum_col(table, col)).fetchall()
+    conn.close()
+    return v[0][0]
+
+
 """
 table_fields = [
     {'name' : 'id', 'type' : 'integer primary key'},

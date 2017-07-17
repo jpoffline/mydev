@@ -30,7 +30,9 @@ class SalesSQL(object):
         self._database = sql
         self._table = 'sales'
         self._db_path = 'app/data/db/sales.db'
+        self._create()
         pass
+
     def _schema(self):
         return [
                 {'name': 'id', 'type': 'INTEGER primary key'},
@@ -55,6 +57,7 @@ class SalesSQL(object):
             'amount',
             'amount_disp'
         ]
+    
 
     def _create(self):
         self._database.create_db(self._db_path,
@@ -77,7 +80,19 @@ class SalesSQL(object):
     
     def get_sorted(self, key='id', desc=True):
         """ Get the sales, sorted on a particular key in the data """
-        return self._retrieve()
+        data = self._retrieve()
+        to_plop = []
+        for item in data:
+            to_plop.append({
+                'id': item[0],
+                'date': item[3],
+                'title': item[4],
+                'description': item[5],
+                'amount_disp': item[8],
+                'amount': item[7],
+                'full_desc': item[6]
+            })
+        return to_plop
 
 
     def add(self, data):
@@ -93,12 +108,21 @@ class SalesSQL(object):
         )]
         self._insert(data)
 
+    def len(self):
+        """ Return the number of rows """
+        return self._database.count_nrows(self._db_path, self._table)
+
+    def sum_amount(self):
+        """ Return the sum of the amount column """
+        return self._database.sum_col(self._db_path, self._table, 'amount')
+        
+        
 
 
 class Sales(object):
     def __init__(self):
-        self._sales = SalesData()
-        self._total_income = 0
+        #self._sales = SalesData()
+        self._sales = SalesSQL()
         self._short_desc_length = 25
         pass
 
@@ -127,13 +151,12 @@ class Sales(object):
                 'full_desc': description
             }
         )
-        self._total_income += amount
 
     def get_sales(self):
         """ Get a meta-heavy copy of the sales data """
         return {
             'sales': self._sales.get_sorted(),
-            'running_total': self._monetise_amount(self._total_income)
+            'running_total': self._monetise_amount(self._sales.sum_amount())
         }
 
     def get_nsales(self):

@@ -39,3 +39,9 @@ def create_db_qy(table_name, fields):
 
 def select_table_name_from_db_qy(database, table):
     return "SELECT name FROM sqlite_master WHERE type='table' AND name='"+ table+"' LIMIT 1;"
+
+def count_nrows(table):
+    return "SELECT Count(*) FROM " + table + ";"
+
+def sum_col(table, col):
+    return "SELECT SUM(" + col + ") FROM " + table + ";"

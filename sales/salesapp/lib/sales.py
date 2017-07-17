@@ -20,6 +20,9 @@ class Sales(object):
     def _sanitise_amount(self, amount):
         return float(amount)
 
+    def _monetise_amount(self, amount):
+        return "%.2f" % amount
+
     def add_sale(self, title, desc, amount):
         amount = self._sanitise_amount(amount)
         self._sales.append(
@@ -27,6 +30,7 @@ class Sales(object):
                 'date': get_datetime(),
                 'title': title,
                 'description': self._sanitise_desc(desc),
+                'amount_disp': self._monetise_amount(amount),
                 'amount': amount,
                 'full_desc': desc
             }
@@ -36,5 +40,5 @@ class Sales(object):
     def get_sales(self):
         return {
             'sales': self._sales,
-            'running_total': "%.2f" % self._total_income
+            'running_total': self._monetise_amount(self._total_income)
         }

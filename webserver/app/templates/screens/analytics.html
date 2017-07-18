@@ -7,12 +7,14 @@
 
 <h1>Analytics</h1>
 
+{% if plotamts %}
+{{ plotamts|safe }}
+{% endif %}
+
 {% if logsale %}
 {% include 'views/salesview.html' %}
 {% endif %}
 
-{% if plotamts %}
-{{ plotamts|safe }}
-{% endif %}
+
 
 {% endblock %}

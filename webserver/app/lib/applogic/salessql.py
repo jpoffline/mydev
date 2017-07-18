@@ -78,10 +78,12 @@ class SalesSQL(object):
         data = self._retrieve(order='asc')
         amount = []
         date = []
+        id = []
         for item in data:
             amount.append(item[7])
             date.append(item[3])
-        results = {'amount': amount, 'date': date}
+            id.append(item[0])
+        results = {'amount': amount, 'date': date, 'id': id}
         hourly = self.get_sales_byhour()
         results.update(hourly)
         return results

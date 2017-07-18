@@ -1,3 +1,4 @@
+""" Module containing the sales class """
 
 import app.lib.services.hostinfo as hostinfo
 import app.lib.tools.tools as tools
@@ -5,11 +6,11 @@ import app.lib.tools.tools as tools
 
 import app.lib.applogic.salessql as salessql
 
-from plotly import tools as plytools
-import plotly
-import plotly.graph_objs as go
+import aux_sales.plotting as plotting
+
 
 class Sales(object):
+    """ The sales class """
     def __init__(self):
         self._sales = salessql.SalesSQL()
         self._short_desc_length = 25
@@ -69,38 +70,4 @@ class Sales(object):
 
     def plot_sales(self):
         """ Get a plot of the sales """
-        sales_data = self._sales.get_amounts_plottable()
-
-        trace0 = go.Scatter(
-            x=sales_data['times'],
-            y=sales_data['sales'],
-            text=sales_data['counts'],
-            name='By hour')
-
-        trace1 = go.Scatter(
-            x=sales_data['date'],
-            y=sales_data['amount'],
-            xaxis='x2',
-            yaxis='y2',
-            name='Raw')
-
-        graph = plytools.make_subplots(rows=1,
-                                       cols=2,
-                                       subplot_titles=('By hour', 'Raw'))
-
-        graph.append_trace(trace0, 1,1)
-        graph.append_trace(trace1, 1,2)
-
-        graph['layout']['xaxis1'].update(title='Time')
-        graph['layout']['xaxis2'].update(title='Date')
-        graph['layout']['yaxis1'].update(title='Amount')
-        graph['layout']['yaxis2'].update(title='Amount')
-        graph['layout'].update(showlegend=False, title='Sales summary')
-
-        div = plotly.offline.plot(graph,
-                                  show_link=False,
-                                  output_type="div",
-                                  include_plotlyjs=False)
-
-        return div
-
+        return plotting.plot_sales(self._sales.get_amounts_plottable())

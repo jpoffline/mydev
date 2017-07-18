@@ -15,7 +15,10 @@ def get_menuItems():
 @app.route('/')
 @app.route('/hello/<name>')
 def index(name=config.OWNER):
-    return render_template('screens/index.html', menuItems=get_menuItems(), name=name, appname=config.APPNAME)
+    return render_template('screens/index.html',
+                           menuItems=get_menuItems(),
+                           name=name,
+                           appname=config.APPNAME)
 
 
 @app.route('/logsale', methods=['POST'])
@@ -26,7 +29,10 @@ def logsale():
         'amount': request.form['sale-amount']
     }
     sales.add_sale(sale_info)
-    return render_template('screens/index.html', menuItems=get_menuItems(),logsale=sales.get_sales(), appname=config.APPNAME)
+    return render_template('screens/index.html',
+                           menuItems=get_menuItems(),
+                           logsale=sales.get_sales(),
+                           appname=config.APPNAME)
 
 
 @app.route('/about')
@@ -41,7 +47,9 @@ def contact():
 
 @app.route('/analytics')
 def analytics():
-    return render_template('screens/analytics.html', menuItems=get_menuItems(), logsale=sales.get_sales())
+    return render_template('screens/analytics.html',
+                           menuItems=get_menuItems(),
+                           logsale=sales.get_sales())
 
 
 

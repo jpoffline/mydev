@@ -15,7 +15,9 @@ class SQL(object):
     
     def create_db(self, database, table, fields):
         """ Create a table in the database """
-        pass
+        c = self._connection.cursor()
+        qy = factories.create_db_qy(table, fields)
+        c.execute(qy)
 
     def connect(self, database=None):
         """ Connect to the database """

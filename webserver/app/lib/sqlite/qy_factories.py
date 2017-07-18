@@ -18,7 +18,7 @@ def cat_from_tb(table):
     return 'FROM ' + table
 
 def insert_into_qy(table, names):
-    """ SQL-factory: Inserting data to a table """
+    """ SQL-factory: inserting data to a table """
     # HAS_UNIT_TESTS
     string = "INSERT INTO " + table + " (" + ','.join(names) + ") VALUES ("
     zipped = ','.join("?" * len(names))
@@ -27,7 +27,7 @@ def insert_into_qy(table, names):
 
 
 def create_db_qy(table_name, fields):
-    """ SQL-factory: Create a table if not exists """
+    """ SQL-factory: create a table if not exists """
     # HAS_UNIT_TESTS
     zipped_fields = []
     for field in fields:
@@ -38,10 +38,16 @@ def create_db_qy(table_name, fields):
 
 
 def select_table_name_from_db_qy(database, table):
-    return "SELECT name FROM sqlite_master WHERE type='table' AND name='"+ table+"' LIMIT 1;"
+    """ SQL-factory: select a particular table name from the database """
+    return "SELECT name FROM sqlite_master " + \
+        "WHERE type='table' AND name='" + table + "' LIMIT 1;"
+
 
 def count_nrows(table):
-    return "SELECT Count(*) FROM " + table + ";"
+    """ SQL-factory: count the number of rows in a table """
+    return "SELECT Count(*) " + cat_from_tb(table) + ";"
+
 
 def sum_col(table, col):
-    return "SELECT SUM(" + col + ") FROM " + table + ";"
+    """ SQL-factory: sum a particular column in a table """
+    return "SELECT SUM(" + col + ") " + cat_from_tb(table) + ";"

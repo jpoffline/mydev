@@ -91,8 +91,12 @@ def diff_dict(dict1, dict2):
         returns['vals'] = True
     return returns
 
+
 def truncate_string(in_str, mlen=25):
     return (in_str[:mlen] + '...') if len(in_str) > mlen else in_str
 
+
 def append_gbp(in_str):
+    if in_str is None:
+        in_str = 0
     return u"\xA3" + "%.2f" % in_str

@@ -108,6 +108,10 @@ class ServiceTestSQLite(unittest.TestCase):
         sql.insert_into(self.MOCK_CREATE_db, self.MOCK_CREATE_tb, insert_data)
         actual = sql.get_all_from_sql(self.MOCK_CREATE_db, self.MOCK_CREATE_tb)
         expected = [(1, u'jonny', 29), (2, u'iona', 26), (3, u'thingy', 12)]
+        nrows = sql.count_nrows(self.MOCK_CREATE_db, self.MOCK_CREATE_tb)
+        self.assertEqual(nrows, 3)
+        sumage = sql.sum_col(self.MOCK_CREATE_db, self.MOCK_CREATE_tb, 'age')
+        self.assertEqual(sumage, 29+26+12)
         self.CLEANUP_service_sqlite(self.MOCK_CREATE_db)
 
         self.assertEqual(actual, expected)

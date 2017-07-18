@@ -22,4 +22,5 @@ def get_datetime(pretty=False):
         chosen_format = '%Y%m%d%H%M%S'
     else:
         chosen_format = '%d/%m/%Y %H:%M:%S'
+        chosen_format = '%Y-%m-%d %H:%M:%S'
     return today.strftime(chosen_format)

@@ -11,5 +11,8 @@
 {% include 'views/salesview.html' %}
 {% endif %}
 
+{% if plotamts %}
+{{ plotamts|safe }}
+{% endif %}
 
 {% endblock %}

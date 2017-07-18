@@ -37,19 +37,22 @@ def logsale():
 
 @app.route('/about')
 def about():
-    return render_template('screens/about.html', menuItems=get_menuItems())
+    return render_template('screens/about.html',
+                           menuItems=get_menuItems())
 
 
 @app.route('/contact')
 def contact():
-    return render_template('screens/contact.html', menuItems=get_menuItems())
+    return render_template('screens/contact.html',
+                           menuItems=get_menuItems())
 
 
 @app.route('/analytics')
 def analytics():
     return render_template('screens/analytics.html',
                            menuItems=get_menuItems(),
-                           logsale=sales.get_sales())
+                           logsale=sales.get_sales(), 
+                           plotamts=sales.plot_sales())
 
 
 

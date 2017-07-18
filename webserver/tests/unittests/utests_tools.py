@@ -147,3 +147,30 @@ class TestTools(unittest.TestCase):
         actual = tools.val_to_rgb(123)
         expected = 'rgb(123,127,127)'
         self.assertEqual(actual, expected)
+
+    def test_NOChange_truncate_string(self):
+        string = 'hello'
+        actual = tools.truncate_string(string)
+        expected = 'hello'
+        self.assertEqual(actual, expected)
+
+    def test_withChange_truncate_string(self):
+        string = 'hello'
+        actual = tools.truncate_string(string, mlen=2)
+        expected = 'he...'
+        self.assertEqual(actual, expected)
+
+    def test_longerChange_truncate_string(self):
+        string = 'hello'
+        actual = tools.truncate_string(string, mlen=5)
+        expected = 'hello'
+        self.assertEqual(actual, expected)
+
+    def test_append_gbp(self):
+        input = 5
+        expected = u"\xA3" + '5.00'
+        self.assertEqual(tools.append_gbp(input), expected)
+
+        input = None
+        expected = u"\xA3" + '0.00'
+        self.assertEqual(tools.append_gbp(input), expected)

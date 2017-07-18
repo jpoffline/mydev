@@ -82,3 +82,13 @@ class TestQyFactories(unittest.TestCase):
         actual = qy_factories.select_table_name_from_db_qy(db, tb)
         expected = "SELECT name FROM sqlite_master WHERE type='table' AND name='TB' LIMIT 1;"
         self.assertEqual(actual, expected)
+
+    def test_count_nrows(self):
+        actual = qy_factories.count_nrows("TB")
+        expected = "SELECT Count(*) FROM TB;"
+        self.assertEqual(actual, expected)
+
+    def test_sum_col(self):
+        actual = qy_factories.sum_col("TB", "COL")
+        expected = "SELECT SUM(COL) FROM TB;"
+        self.assertEqual(actual, expected)

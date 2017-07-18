@@ -84,11 +84,13 @@ def does_table_exist(database, table):
     else:
         return False
 
+
 def does_database_exist(database):
     """ Check whether or not a SQL-lite database file exists 
     """
     # HAS_SERVICE_TESTS
     return os.path.isfile(database)
+
 
 def get_all_from_sql(database, table, order=None):
     """

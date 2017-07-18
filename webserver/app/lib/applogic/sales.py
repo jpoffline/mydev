@@ -1,7 +1,10 @@
 
 import app.lib.services.hostinfo as hostinfo
 import app.lib.tools.tools as tools
-import app.lib.sqlite.sqlite_api as sql
+#import app.lib.sqlite.sqlite_api as sql
+import app.lib.sqlite.sql as sql
+
+
 
 class SalesData(object):
     def __init__(self):
@@ -25,11 +28,14 @@ class SalesData(object):
     def len(self):
         return len(self._data)
 
+
 class SalesSQL(object):
+
     def __init__(self):
-        self._database = sql
+        
         self._table = 'sales'
         self._db_path = 'app/data/db/sales.db'
+        self._database = sql.SQL(database=self._db_path)
         self._create()
         pass
 
@@ -69,13 +75,10 @@ class SalesSQL(object):
             'cols': self._insert_col_names(),
             'data': data
         }
-        self._database.insert_into(self._db_path, self._table, insert_data)
+        self._database.insert_many(self._table, insert_data)
 
     def _retrieve(self):
-        return self._database.get_all_from_sql(
-            self._db_path,
-            self._table,
-            order='id desc')
+        return self._database.get_many(self._table, order='id desc')
 
     
     def get_sorted(self, key='id', desc=True):
@@ -110,20 +113,22 @@ class SalesSQL(object):
 
     def len(self):
         """ Return the number of rows """
-        return self._database.count_nrows(self._db_path, self._table)
+        return self._database.count_nrows(self._table)
 
     def sum_amount(self):
         """ Return the sum of the amount column """
-        return self._database.sum_col(self._db_path, self._table, 'amount')
+        return self._database.sum_col(self._table, 'amount')
         
         
 
 
 class Sales(object):
     def __init__(self):
-        #self._sales = SalesData()
         self._sales = SalesSQL()
         self._short_desc_length = 25
+        self._cache_valid = False
+        self._cached = None
+        self._cache_nsales = None
         pass
 
     def _sanitise_desc(self, in_desc):
@@ -136,6 +141,18 @@ class Sales(object):
     def _monetise_amount(self, amount):
         """ Turn a value string into GBP """
         return tools.append_gbp(amount)
+
+    def _cache(self):
+        self._cached = {
+            'sales': self._sales.get_sorted(),
+            'running_total': self._monetise_amount(self._sales.sum_amount())
+        }
+        self._cache_nsales = len(self._cached['sales'])
+        self._cache_valid = True
+
+    def _check_cache(self):
+        if self._cache_valid is False:
+            self._cache()
 
     def add_sale(self, sale_info):
         """ Add a sale to the log """
@@ -151,14 +168,14 @@ class Sales(object):
                 'full_desc': description
             }
         )
+        self._cache_valid = False
 
     def get_sales(self):
         """ Get a meta-heavy copy of the sales data """
-        return {
-            'sales': self._sales.get_sorted(),
-            'running_total': self._monetise_amount(self._sales.sum_amount())
-        }
+        self._check_cache()
+        return self._cached
 
     def get_nsales(self):
         """ Get the current number of sales """
-        return self._sales.len()
+        self._check_cache()
+        return self._cache_nsales

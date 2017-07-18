@@ -13,9 +13,11 @@ def get_all_from_sql_qy(table, order=None, topn=None):
         select += ' LIMIT ' + str(topn)
     return select
 
+
 def cat_from_tb(table):
     """ Prepend FROM onto the table. """
     return 'FROM ' + table
+
 
 def insert_into_qy(table, names):
     """ SQL-factory: inserting data to a table """
@@ -51,3 +53,16 @@ def count_nrows(table):
 def sum_col(table, col):
     """ SQL-factory: sum a particular column in a table """
     return "SELECT SUM(" + col + ") " + cat_from_tb(table) + ";"
+
+
+def strftime(time_res, time_col):
+    return "strftime('" + time_res + "', " + time_col + ")"
+
+
+def select_groupby_time(table, meta):
+    time_res = meta['fmt']
+    timecol = meta['timecol']
+    others = meta['others']
+    return "SELECT " + strftime(time_res, timecol) + ", " + \
+        others + " FROM " + \
+        table + " GROUP BY " + strftime(time_res, timecol) +";"

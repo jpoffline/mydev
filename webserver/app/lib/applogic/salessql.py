@@ -1,13 +1,14 @@
 
 import app.lib.sqlite.sql as sql
 import app.lib.services.hostinfo as hostinfo
+import app.config as config
 
 class SalesSQL(object):
 
     def __init__(self):
         
-        self._table = 'sales'
-        self._db_path = 'app/data/db/sales.db'
+        self._table = config.SALES_tb
+        self._db_path = config.SALES_db
         self._database = sql.SQL(database=self._db_path)
         self._create()
         pass
@@ -80,7 +81,28 @@ class SalesSQL(object):
         for item in data:
             amount.append(item[7])
             date.append(item[3])
-        return {'amount': amount, 'date': date}
+        results = {'amount': amount, 'date': date}
+        hourly = self.get_sales_byhour()
+        results.update(hourly)
+        return results
+
+    def get_sales_byhour(self):
+        """ Get the sales data, aggregated by the hour """
+        meta = {}
+        meta['timecol'] = 'submit_time'
+        meta['fmt'] = '%Y-%m-%d %H'
+        meta['others'] = "count(*), sum(amount)"
+        data = self._database.select_groupby_time(self._table, meta)
+
+        counts = []
+        times = []
+        sales = []
+        for item in data:
+            times.append(item[0])
+            counts.append(item[1])
+            sales.append(item[2])
+
+        return {'counts': counts, 'times': times, 'sales': sales}
 
     def add(self, data):
         """ Add data to the sales """
@@ -91,7 +113,7 @@ class SalesSQL(object):
             data['title'],
             data['description'],
             data['full_desc'],
-            data['amount'], 
+            data['amount'],
             data['amount_disp']
         )]
         self._insert(data)

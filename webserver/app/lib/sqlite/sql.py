@@ -49,3 +49,7 @@ class SQL(object):
         """ Sum the particular column in the table """
         v = self._connection.execute(factories.sum_col(table, col)).fetchall()
         return v[0][0]
+
+    def select_groupby_time(self, table, meta):
+        query = factories.select_groupby_time(table, meta)
+        return self._connection.execute(query).fetchall()

@@ -56,10 +56,18 @@ def sum_col(table, col):
 
 
 def strftime(time_res, time_col):
+    """
+    SQL-factory: convert a particular column
+    into a time-object, with a particular format.
+    """
     return "strftime('" + time_res + "', " + time_col + ")"
 
 
 def select_groupby_time(table, meta):
+    """
+    SQL-factory: Select from a table, grouping
+    by a time-like column.
+    """
     time_res = meta['fmt']
     timecol = meta['timecol']
     others = meta['others']

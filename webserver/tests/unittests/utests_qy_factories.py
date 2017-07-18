@@ -92,3 +92,8 @@ class TestQyFactories(unittest.TestCase):
         actual = qy_factories.sum_col("TB", "COL")
         expected = "SELECT SUM(COL) FROM TB;"
         self.assertEqual(actual, expected)
+
+    def test_strftime(self):
+        actual = qy_factories.strftime("%H", "COL")
+        expected = "strftime('%H', COL)"
+        self.assertEqual(actual, expected)

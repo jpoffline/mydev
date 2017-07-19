@@ -1,10 +1,5 @@
 
-class SingleUser(object):
-    def __init__(self):
-        self._username = None
-        self._realname = None
-        pass
-
+from userssql import UsersSQL
 
 class UsersDB(object):
 
@@ -12,6 +7,7 @@ class UsersDB(object):
         self._users_meta = {}
         self._distinct_usernames = []
         self._users_loggedin = []
+        self._usersdb = UsersSQL()
 
     def _add_user(self, meta):
         """ Checks to see if the current
@@ -19,9 +15,9 @@ class UsersDB(object):
         if not, add their data to the DB.
         """
         username = meta['username']
-        if username not in self._distinct_usernames:
-            self._distinct_usernames.append(username)
+        if username not in self._usersdb.get_distinct_usernames():
             self._users_meta[username] = meta
+            self._usersdb.add(meta)
 
     def _log_user_in(self, meta):
         """ Log a particular user in.
@@ -38,7 +34,7 @@ class UsersDB(object):
 
     def get_usernames(self):
         """ Get a list of usernames """
-        return self._distinct_usernames
+        return self._usersdb.get_distinct_usernames()
 
     def get_loggedin_users(self):
         """ Get a list of the user names logged in """
@@ -46,4 +42,4 @@ class UsersDB(object):
 
     def get_usersmeta_for_username(self, username):
         """ Get the users meta data for a given username """
-        return self._users_meta[username]
+        return self._usersdb.get_username_meta(username)

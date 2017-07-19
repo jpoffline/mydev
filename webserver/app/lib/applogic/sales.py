@@ -48,6 +48,7 @@ class Sales(object):
         description = sale_info['description']
         self._sales.add(
             {
+                'user': sale_info['user'],
                 'date': hostinfo.get_datetime(pretty=True),
                 'title': sale_info['title'],
                 'description': self._sanitise_desc(description),

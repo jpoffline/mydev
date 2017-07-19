@@ -14,5 +14,6 @@
         >
             <a href="/analytics">Analytics | {%if menuItems %}{{menuItems.n}}{%endif%}</a>
         </li>
+        {%if menuItems %}<li><a>{{menuItems.username}}</a></li>{%endif%}
     </ul>
 </div>

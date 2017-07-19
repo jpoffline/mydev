@@ -99,17 +99,21 @@ class SalesSQL(object):
         counts = []
         times = []
         sales = []
+        cumulative = []
+        sum = 0.0
         for item in data:
             times.append(item[0])
             counts.append(item[1])
             sales.append(item[2])
+            sum += item[2]
+            cumulative.append(sum)
 
-        return {'counts': counts, 'times': times, 'sales': sales}
+        return {'counts': counts, 'times': times, 'sales': sales, 'cumulative': cumulative}
 
     def add(self, data):
         """ Add data to the sales """
         data = [(
-            hostinfo.get_username(),
+            data['user'],
             hostinfo.get_hostname(),
             hostinfo.get_datetime(pretty=True),
             data['title'],

@@ -30,6 +30,10 @@ class SQL(object):
         query = factories.get_all_from_sql_qy(table, order)
         return self._connection.execute(query).fetchall()
 
+    def get_many_general(self, query):
+        """ Wrapper to execute a general SQL query """
+        return self._connection.execute(query).fetchall()
+
     def insert_many(self, table, data):
         """ Wrapper to insert many values into a table in the database """
         qy = factories.insert_into_qy(table, data['cols'])

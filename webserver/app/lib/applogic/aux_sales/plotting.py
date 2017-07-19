@@ -23,13 +23,20 @@ def plot_sales(sales_data):
         name='Raw',
         text=sales_data['date'])
 
-    graph = plytools.make_subplots(rows=1,
+    trace2 = go.Scatter(
+        x=sales_data['times'],
+        y=sales_data['cumulative'],
+        name='Cumulative',
+        text=sales_data['date'])
+
+    graph = plytools.make_subplots(rows=2,
                                    cols=2,
-                                   subplot_titles=('By hour', 'Raw'),
+                                   subplot_titles=('By hour', 'Raw', 'Cumulative'),
                                    print_grid=False)
 
     graph.append_trace(trace0, 1, 1)
     graph.append_trace(trace1, 1, 2)
+    graph.append_trace(trace2, 2, 1)
 
     graph['layout']['xaxis1'].update(title='Time')
     graph['layout']['xaxis2'].update(title='Transaction ID')

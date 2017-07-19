@@ -1,15 +1,45 @@
-from flask import Flask, jsonify, render_template, request, url_for, redirect
+from flask import Flask, jsonify, render_template, request, url_for, redirect, session
 import config as config
-
+import os
 import lib.applogic.sales as sales
-
+import lib.applogic.usermanagement.users as users
 sales = sales.Sales()
+users = users.UsersDB()
 
 app = Flask(__name__)
 
 def get_menuItems():
-    menuItems = {'n': sales.get_nsales()}
-    return menuItems
+    """ Get items to be rendered into the LHS-menu """
+    return {'n': sales.get_nsales()}
+
+
+@app.route('/login')
+def login():
+    return render_template('screens/login.html',
+                           existingusers=users.get_usernames())
+
+
+@app.route('/submituserlogin', methods=['POST'])
+def submituserlogin():
+    this_key = os.urandom(12)
+
+    if request.form['username-select-existing'] != '-':
+        meta = users.get_usersmeta_for_username(
+                request.form['username-select-existing']
+            )
+        users.log_user_in(
+            meta
+        )
+        realname = meta['realname']
+    else:
+        username = request.form['username']
+        realname = request.form['realname']
+        users.log_user_in({
+            'username': username,
+            'realname': realname})
+    print users.get_usernames()
+    print users.get_loggedin_users()
+    return redirect('/hello/' + realname)
 
 
 @app.route('/')

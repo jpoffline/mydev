@@ -1,0 +1,10 @@
+<div class="form-group row">
+    <div class="col-sm-6 col-md-4">
+        <select class="form-control" name="username-select-existing">
+            <option value="-">-</option>
+            {% for username in existingusers %}
+                <option value={{username}}>{{username}}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>

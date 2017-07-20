@@ -12,7 +12,7 @@
                 class="active" 
             {% endif %}
         >
-            <a href="/analytics">Analytics | {%if menuItems %}{{menuItems.n}}{%endif%}</a>
+            <a href="/analytics"><span class="glyphicon glyphicon-stats"></span> Analytics {%if menuItems %}<span class="badge badge-info">{{menuItems.n}}</span>{%endif%}</a>
         </li>
         {%if menuItems %}<li><a>{{menuItems.username}}</a></li>{%endif%}
     </ul>

@@ -10,6 +10,7 @@ class SalesSQL(AppSQL):
         pass
 
     def _schema(self):
+        """ The table schema """
         return [
                 {'name': 'id', 'type': 'INTEGER primary key'},
                 {'name': 'submit_user', 'type': 'text'},
@@ -22,6 +23,7 @@ class SalesSQL(AppSQL):
             ]
 
     def _insert_col_names(self):
+        """ On insertion, the ordering of the entries """
         return[
             'submit_user',
             'submit_machine',
@@ -31,7 +33,6 @@ class SalesSQL(AppSQL):
             'full_desc',
             'amount'
         ]
-
 
     def get_sorted(self, key='id', desc=True):
         """ Get the sales, sorted on a particular key in the data """

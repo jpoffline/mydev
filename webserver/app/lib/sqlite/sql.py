@@ -25,9 +25,9 @@ class SQL(object):
             self._database = database
         self._connection = sqlite3.connect(self._database)
 
-    def get_many(self, table, order=None):
-        """ Wrapper to SELECT * from the table """
-        query = factories.get_all_from_sql_qy(table, order)
+    def get_many(self, table, order=None, what=None):
+        """ Wrapper to SELECT WHAT from the table """
+        query = factories.get_all_from_sql_qy(table, order, what=what)
         return self._connection.execute(query).fetchall()
 
     def get_many_general(self, query):

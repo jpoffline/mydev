@@ -97,3 +97,22 @@ class TestQyFactories(unittest.TestCase):
         actual = qy_factories.strftime("%H", "COL")
         expected = "strftime('%H', COL)"
         self.assertEqual(actual, expected)
+
+    def test_What_get_all_from_sql_qy(self):
+        table = "TABLE"
+        what = ["COL1", "COL2"]
+        actual = qy_factories.get_all_from_sql_qy(table, what=what)
+        expected = "SELECT COL1, COL2 FROM TABLE"
+        self.assertEqual(actual, expected)
+
+    def test_select_groupby_time(self):
+        table = "TABLE"
+        meta = {
+            'fmt': "FMT",
+            'timecol': "TIMECOL",
+            'others': 'col2, col3'
+        }
+        actual = qy_factories.select_groupby_time(table, meta)
+        expected = "SELECT strftime('FMT', TIMECOL), col2, col3 FROM TABLE" +\
+            " GROUP BY strftime('FMT', TIMECOL);"
+        self.assertEqual(actual, expected)

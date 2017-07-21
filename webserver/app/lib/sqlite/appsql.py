@@ -17,7 +17,12 @@ class AppSQL(object):
     def _retrieve(self, order='desc'):
         """ Internal method: retreive all data from SQL """
         ord = 'id ' + order
-        return self._database.get_many(self._table, order=ord)
+        # Get the schema
+        schema = self._schema()
+        # From the schema, construct a list of
+        # column names
+        what = [k['name'] for k in schema]
+        return self._database.get_many(self._table, order=ord, what=what)
 
     def _create(self):
         """ Internal method: create the DB-TB """

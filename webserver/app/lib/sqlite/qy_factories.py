@@ -1,16 +1,23 @@
 """ SQL query factories """
 
 
-def get_all_from_sql_qy(table, order=None, topn=None):
+def get_all_from_sql_qy(table, order=None, topn=None, what=None):
     """ SQL-factory: Select all data from a table """
     # HAS_UNIT_TESTS
-    select = 'SELECT * ' + cat_from_tb(table)
+
+    if what is None:
+        what = '*'
+    else:
+        what = ', '.join(what)
+
+    select = 'SELECT ' + what + ' ' + cat_from_tb(table)
 
     if order is not None:
-        select +=  ' ORDER BY ' + order
+        select += ' ORDER BY ' + order
 
     if topn is not None:
         select += ' LIMIT ' + str(topn)
+        
     return select
 
 
@@ -73,4 +80,4 @@ def select_groupby_time(table, meta):
     others = meta['others']
     return "SELECT " + strftime(time_res, timecol) + ", " + \
         others + " FROM " + \
-        table + " GROUP BY " + strftime(time_res, timecol) +";"
+        table + " GROUP BY " + strftime(time_res, timecol) + ";"

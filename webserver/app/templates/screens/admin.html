@@ -7,9 +7,14 @@
 
 <h1>Admin</h1>
 
+<h2>All registered users</h2>
 {% if args.userinfo %}
 {{ args.userinfo|safe }}
 {% endif %}
 
+<h2>All sales data</h2>
+{% if args.salesinfo %}
+{{ args.salesinfo|safe }}
+{% endif %}
 
 {% endblock %}

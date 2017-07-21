@@ -97,7 +97,10 @@ def admin():
 
     return render_template('screens/admin.html',
                            menuItems=get_menuItems(),
-                           args={'userinfo': users_html_tbl})
+                           args={
+                               'userinfo': users_html_tbl,
+                               'salesinfo': sales._sales.all_to_bstable()
+                            })
 
 
 @app.route('/analytics')

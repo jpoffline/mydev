@@ -52,7 +52,6 @@ class Sales(object):
                 'date': hostinfo.get_datetime(pretty=True),
                 'title': sale_info['title'],
                 'description': self._sanitise_desc(description),
-                'amount_disp': self._monetise_amount(amount),
                 'amount': amount,
                 'full_desc': description
             }

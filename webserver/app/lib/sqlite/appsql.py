@@ -38,18 +38,28 @@ class AppSQL(object):
         """ Get all """
         return self._retrieve()
 
+    def sanitise(self, element):
+        """ Sanitise an element to a string """
+        if type(element) is int or float or long:
+            return str(element)
+        return element
+
     def all_to_bstable(self):
-        html = "<div class=\"table-responsive\"><table class=\"table table-striped table-hover\">"
+        """ Returns the contents of the SQL table as
+        a bootstrap-format HTML-table """
+        html = "<div class=\"table-responsive\">"
+        table = "<table class=\"table table-striped table-hover\">"
         header = "<thead><tr>"
         for item in self._schema():
             header += "<th>" + item['name'] + "</th>"
         header += "</tr></thead>"
         body = "<tbody>"
-        for user in self.getall():
+        for row in self.getall():
             user_html = "<tr>"
-            for item in user:
-                user_html += "<td>" + str(item) + "</td>"
+            for element in row:
+                user_html += "<td>" + self.sanitise(element) + "</td>"
             body += user_html + "</td>"
         body += "</tbody>"
-        html += header + body + "</table></div>"
+        table += header + body + "</table>"
+        html += table + "</div>"
         return html

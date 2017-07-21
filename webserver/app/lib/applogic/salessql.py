@@ -18,8 +18,7 @@ class SalesSQL(AppSQL):
                 {'name': 'title', 'type': 'text'},
                 {'name': 'description', 'type': 'text'},
                 {'name': 'full_desc', 'type': 'text'},
-                {'name': 'amount', 'type': 'numeric'},
-                {'name': 'amount_disp', 'type': 'text'}
+                {'name': 'amount', 'type': 'numeric'}
             ]
 
     def _insert_col_names(self):
@@ -30,8 +29,7 @@ class SalesSQL(AppSQL):
             'title',
             'description',
             'full_desc',
-            'amount',
-            'amount_disp'
+            'amount'
         ]
 
 
@@ -45,7 +43,6 @@ class SalesSQL(AppSQL):
                 'date': item[3],
                 'title': item[4],
                 'description': item[5],
-                'amount_disp': item[8],
                 'amount': item[7],
                 'full_desc': item[6]
             })
@@ -97,8 +94,7 @@ class SalesSQL(AppSQL):
             data['title'],
             data['description'],
             data['full_desc'],
-            data['amount'],
-            data['amount_disp']
+            data['amount']
         )]
         self._insert(data)
 

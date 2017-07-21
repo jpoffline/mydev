@@ -5,7 +5,7 @@ import lib.applogic.sales as sales
 import lib.applogic.usermanagement.users as users
 sales = sales.Sales()
 users = users.UsersDB()
-
+import lib.widgets.bswidgets as bswidgets
 app = Flask(__name__)
 
 
@@ -53,7 +53,8 @@ def index(name=config.OWNER):
     return render_template('screens/index.html',
                            menuItems=get_menuItems(),
                            name=session['username'],
-                           appname=config.APPNAME)
+                           appname=config.APPNAME,
+                           args={'html1':bswidgets.bsValueBox()})
 
 
 @app.route('/logsale', methods=['POST'])
@@ -75,8 +76,6 @@ def logsale():
 def about():
     if not session.get('logged_in'):
         return redirect('/login')
-
-
     return render_template('screens/about.html',
                            menuItems=get_menuItems())
 
@@ -87,6 +86,7 @@ def contact():
         return redirect('/login')
     return render_template('screens/contact.html',
                            menuItems=get_menuItems())
+
 
 @app.route('/admin')
 def admin():
@@ -100,7 +100,7 @@ def admin():
                            args={
                                'userinfo': users_html_tbl,
                                'salesinfo': sales._sales.all_to_bstable()
-                            })
+                           })
 
 
 @app.route('/analytics')
@@ -111,9 +111,6 @@ def analytics():
                            menuItems=get_menuItems(),
                            logsale=sales.get_sales(),
                            plotamts=sales.plot_sales())
-
-
-
 
 
 if __name__ == '__main__':

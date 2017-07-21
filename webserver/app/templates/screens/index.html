@@ -10,6 +10,11 @@
 {% else %}
   <h1>Hello, World!</h1>
 {% endif %}
+
+{% if args %}
+{{args.html1| safe}}
+{% endif %}
+
 {% include 'forms/salelog.html' %}
 
 {% if logsale %}

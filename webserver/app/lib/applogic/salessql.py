@@ -3,24 +3,26 @@ import app.lib.sqlite.sql as sql
 import app.lib.services.hostinfo as hostinfo
 import app.config as config
 
+
 class SalesSQL(AppSQL):
 
     def __init__(self):
-        super(SalesSQL, self).__init__(database=config.SALES_db, table=config.SALES_tb)
+        super(SalesSQL, self).__init__(database=config.SALES_db,
+                                       table=config.SALES_tb)
         pass
 
     def _schema(self):
         """ The table schema """
         return [
-                {'name': 'id', 'type': 'INTEGER primary key'},
-                {'name': 'submit_user', 'type': 'text'},
-                {'name': 'submit_machine', 'type': 'text'},
-                {'name': 'submit_time', 'type': 'text'},
-                {'name': 'title', 'type': 'text'},
-                {'name': 'description', 'type': 'text'},
-                {'name': 'full_desc', 'type': 'text'},
-                {'name': 'amount', 'type': 'numeric'}
-            ]
+            {'name': 'id', 'type': 'INTEGER primary key'},
+            {'name': 'submit_user', 'type': 'text'},
+            {'name': 'submit_machine', 'type': 'text'},
+            {'name': 'submit_time', 'type': 'text'},
+            {'name': 'title', 'type': 'text'},
+            {'name': 'description', 'type': 'text'},
+            {'name': 'full_desc', 'type': 'text'},
+            {'name': 'amount', 'type': 'numeric'}
+        ]
 
     def _insert_col_names(self):
         """ On insertion, the ordering of the entries """
@@ -84,7 +86,11 @@ class SalesSQL(AppSQL):
             sum += item[2]
             cumulative.append(sum)
 
-        return {'counts': counts, 'times': times, 'sales': sales, 'cumulative': cumulative}
+        return {
+            'counts': counts,
+            'times': times,
+            'sales': sales,
+            'cumulative': cumulative}
 
     def add(self, data):
         """ Add data to the sales """
@@ -106,4 +112,3 @@ class SalesSQL(AppSQL):
     def sum_amount(self):
         """ Return the sum of the amount column """
         return self._database.sum_col(self._table, 'amount')
-        

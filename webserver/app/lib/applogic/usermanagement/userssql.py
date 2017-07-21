@@ -1,14 +1,12 @@
-import app.lib.sqlite.sql as sql
+
+from app.lib.sqlite.appsql import AppSQL
 import app.config as config
 import app.lib.services.hostinfo as hostinfo
 import users_qyfacs as qyfacs
 
-class UsersSQL(object):
+class UsersSQL(AppSQL):
     def __init__(self):
-        self._table = config.USERS_tb
-        self._db_path = config.USERS_db
-        self._database = sql.SQL(database=self._db_path)
-        self._create()
+        super(UsersSQL, self).__init__(database=config.USERS_db, table=config.USERS_tb)
 
     def _schema(self):
         return [
@@ -18,32 +16,12 @@ class UsersSQL(object):
                 {'name': 'regdate', 'type': 'text'},
                 {'name': 'meta', 'type': 'text'}
             ]
-    
-    def _retrieve(self, order='desc'):
-        """ Internal method: retreive all sales data from SQL """
-        ord = 'id ' + order
-        return self._database.get_many(self._table, order=ord)
-
-    def _create(self):
-        """ Internal method: create the users DB-TB """
-        self._database.create_db(self._db_path,
-                                 self._table,
-                                 self._schema())
 
     def _insert_col_names(self):
         """ The column names for inserting """
         return[
             'username', 'realname', 'regdate'
         ]
-
-    def _insert(self, data):
-        """ Internal method: insert user data to SQL """
-
-        insert_data = {
-            'cols': self._insert_col_names(),
-            'data': data
-        }
-        self._database.insert_many(self._table, insert_data)
 
     def add(self, data):
         """
@@ -60,10 +38,6 @@ class UsersSQL(object):
             hostinfo.get_datetime(pretty=True)
         )]
         self._insert(data)
-
-    def getall(self):
-        """ Get all users """
-        return self._retrieve()
 
     def get_distinct_usernames(self):
         """ Get a list of the distinct usernames """

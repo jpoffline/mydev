@@ -12,7 +12,7 @@ app = Flask(__name__)
 def get_menuItems():
     """ Get items to be rendered into the LHS-menu """
     return {
-        'n': sales.get_nsales(),
+        'nsales': sales.get_nsales(),
         'username': session.get('username', 'anon')
     }
 
@@ -40,11 +40,9 @@ def submituserlogin():
         users.log_user_in({
             'username': username,
             'realname': realname})
-    print 'All usernames: ', users.get_usernames()
-    print 'Logged in users: ', users.get_loggedin_users()
     session['username'] = username
     session['logged_in'] = True
-    return redirect('/hello/' + realname)
+    return redirect('/hello/' + username)
 
 
 @app.route('/')
@@ -77,6 +75,8 @@ def logsale():
 def about():
     if not session.get('logged_in'):
         return redirect('/login')
+
+
     return render_template('screens/about.html',
                            menuItems=get_menuItems())
 
@@ -87,6 +87,17 @@ def contact():
         return redirect('/login')
     return render_template('screens/contact.html',
                            menuItems=get_menuItems())
+
+@app.route('/admin')
+def admin():
+    if not session.get('logged_in'):
+        return redirect('/login')
+
+    users_html_tbl = users.user_to_table()
+
+    return render_template('screens/admin.html',
+                           menuItems=get_menuItems(),
+                           args={'userinfo': users_html_tbl})
 
 
 @app.route('/analytics')

@@ -1,9 +1,12 @@
 
+
 from userssql import UsersSQL
+
 
 class UsersDB(object):
 
     def __init__(self):
+
         self._users_meta = {}
         self._distinct_usernames = []
         self._users_loggedin = []
@@ -43,3 +46,13 @@ class UsersDB(object):
     def get_usersmeta_for_username(self, username):
         """ Get the users meta data for a given username """
         return self._usersdb.get_username_meta(username)
+
+    def get_all_users_info(self):
+        """ Get all data from the users table """
+        return self._usersdb.getall()
+
+    def user_to_table(self):
+        """ Get the raw users data, return in a
+        bootstrap-format table """
+        return self._usersdb.all_to_bstable()
+

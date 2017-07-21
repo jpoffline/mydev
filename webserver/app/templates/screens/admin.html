@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}Admin{% endblock %}
+{% block bappname %} {{ appname }} {% endblock %}
+
+
+{% block content %}
+
+<h1>Admin</h1>
+
+{% if args.userinfo %}
+{{ args.userinfo|safe }}
+{% endif %}
+
+
+{% endblock %}

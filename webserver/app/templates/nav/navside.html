@@ -1,19 +1,14 @@
 <div class="col-sm-3 col-md-2 sidebar">
     <ul class="nav nav-sidebar">
-        <li 
-            {% if request.path=='/' %}
-                class="active" 
-            {% endif %}
-        >
-            <a href="/">Home </a>
+        <li {% if request.path=='/' %} class="active" {% endif %} >
+            <a href="/"><span class="glyphicon glyphicon-home"></span> Home </a>
         </li>
-        <li 
-            {% if request.path=='/analytics' %}
-                class="active" 
-            {% endif %}
-        >
-            <a href="/analytics"><span class="glyphicon glyphicon-stats"></span> Analytics {%if menuItems %}<span class="badge badge-info">{{menuItems.n}}</span>{%endif%}</a>
+        <li {% if request.path=='/analytics' %} class="active" {% endif %} >
+            <a href="/analytics"><span class="glyphicon glyphicon-stats"></span> Analytics {%if menuItems %}<span class="badge badge-info">{{menuItems.nsales}}</span>{%endif%}</a>
         </li>
-        {%if menuItems %}<li><a>{{menuItems.username}}</a></li>{%endif%}
+        <li {% if request.path=='/admin' %} class="active" {% endif %} >
+            <a href="/admin"><span class="glyphicon glyphicon-star"></span> Admin</a>
+        </li>
+        {%if menuItems %}<li><a><span class="glyphicon glyphicon-user"></span> {{menuItems.username}}</a></li>{%endif%}
     </ul>
 </div>

@@ -1,16 +1,12 @@
-
+from app.lib.sqlite.appsql import AppSQL
 import app.lib.sqlite.sql as sql
 import app.lib.services.hostinfo as hostinfo
 import app.config as config
 
-class SalesSQL(object):
+class SalesSQL(AppSQL):
 
     def __init__(self):
-        
-        self._table = config.SALES_tb
-        self._db_path = config.SALES_db
-        self._database = sql.SQL(database=self._db_path)
-        self._create()
+        super(SalesSQL, self).__init__(database=config.SALES_db, table=config.SALES_tb)
         pass
 
     def _schema(self):
@@ -38,24 +34,6 @@ class SalesSQL(object):
             'amount_disp'
         ]
 
-    def _create(self):
-        """ Internal method: create the sales DB-TB """
-        self._database.create_db(self._db_path,
-                                 self._table,
-                                 self._schema())
-
-    def _insert(self, data):
-        """ Internal method: insert sales data to SQL """
-        insert_data = {
-            'cols': self._insert_col_names(),
-            'data': data
-        }
-        self._database.insert_many(self._table, insert_data)
-
-    def _retrieve(self, order='desc'):
-        """ Internal method: retreive all sales data from SQL """
-        ord = 'id ' + order
-        return self._database.get_many(self._table, order=ord)
 
     def get_sorted(self, key='id', desc=True):
         """ Get the sales, sorted on a particular key in the data """

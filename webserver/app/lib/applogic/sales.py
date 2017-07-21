@@ -34,11 +34,15 @@ class Sales(object):
 
     def _cache(self):
         if self.loggedin():
+            sales = self._sales.get_sorted()
+            total = self._sales.sum_amount()
+            number = len(sales)
             self._cached = {
-                'sales': self._sales.get_sorted(),
-                'running_total': self._monetise_amount(self._sales.sum_amount())
+                'sales': sales,
+                'running_total': total,
+                'average': round(total / number, 2)
             }
-            self._cache_nsales = len(self._cached['sales'])
+            self._cache_nsales = number
             self._cache_valid = True
         else:
             self._cached = {
@@ -50,7 +54,7 @@ class Sales(object):
                     'amount':'-',
                     'full_desc': '-'
                 }],
-                'running_total': self._monetise_amount(0)
+                'running_total': 0
             }
             self._cache_nsales = 0
 
@@ -59,6 +63,7 @@ class Sales(object):
             self._cache()
 
     def set_username(self, user):
+        """ Set the username """
         self._username = user
 
     def add_sale(self, sale_info):
@@ -86,6 +91,15 @@ class Sales(object):
         """ Get the current number of sales """
         self._check_cache()
         return self._cache_nsales
+
+    def get_totalsales(self):
+        """ Get the total amount in sales """
+        self._check_cache()
+        return self._cached['running_total']
+
+    def get_average_sale(self):
+        self._check_cache()
+        return self._cached['average']
 
     def plot_sales(self):
         """ Get a plot of the sales """

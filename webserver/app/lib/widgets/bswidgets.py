@@ -1,6 +1,13 @@
 from app.lib.widgets.htmltags import *
 import app.lib.tools.tools as tools
 
+
+def bsValueBox_collection(meta):
+    html = """<div class="row">"""
+    for item in meta:
+        html += bsValueBox(item)
+    return html + """</div>"""
+
 def bsValueBox(meta):
     boxtype = meta['boxtype']
     icon = meta['icon']
@@ -21,7 +28,7 @@ def bsValueBox(meta):
         boxlink_html = """"""
 
     return """
-<div class="row">
+
   <div class="col-lg-3 col-md-6">
     <div class="panel panel-""" + boxtype + """">
       <div class="panel-heading">
@@ -38,5 +45,5 @@ def bsValueBox(meta):
       """ + boxlink_html + """
     </div>
   </div>
-</div>
+
 """

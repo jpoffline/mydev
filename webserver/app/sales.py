@@ -2,6 +2,7 @@ from flask import Flask, jsonify, render_template, request, url_for, redirect, s
 import config as config
 import os
 import lib.applogic.sales as sales
+import lib.tools.tools as tools
 import lib.applogic.usermanagement.users as users
 sales = sales.Sales()
 users = users.UsersDB()
@@ -51,17 +52,36 @@ def submituserlogin():
 def index(name=config.OWNER):
     if not session.get('logged_in'):
         return redirect('/login')
+
     vbmeta = {
         'boxtype' : 'primary',
-        'icon' : 'comment',
-        'boxtext': 'New comments',
-        'boxvalue': 26
+        'icon' : 'gbp',
+        'boxtext': 'Total sales',
+        'boxvalue': sales.get_totalsales()
     }
+
+    vbmeta2 = {
+        'boxtype' : 'info',
+        'icon' : 'pencil',
+        'boxtext': 'Number of sales',
+        'boxvalue': sales.get_nsales()
+    }
+
+    bmeta3 = {
+        'boxtype' : 'danger',
+        'icon' : 'gbp',
+        'boxtext': 'Average per sale',
+        'boxvalue': sales.get_average_sale()
+    }
+
+    
+
+    html1 = bswidgets.bsValueBox_collection([vbmeta,vbmeta2, bmeta3])
     return render_template('screens/index.html',
                            menuItems=get_menuItems(),
                            name=session['username'],
                            appname=config.APPNAME,
-                           args={'html1': bswidgets.bsValueBox(vbmeta)})
+                           args={'html1': html1})
 
 
 @app.route('/logsale', methods=['POST'])

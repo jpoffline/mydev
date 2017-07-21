@@ -1,7 +1,7 @@
 """ General host info services """
 import time
 import datetime
-
+import os
 
 def get_username():
     """ Get the current user name """
@@ -24,3 +24,12 @@ def get_datetime(pretty=False):
         chosen_format = '%d/%m/%Y %H:%M:%S'
         chosen_format = '%Y-%m-%d %H:%M:%S'
     return today.strftime(chosen_format)
+
+def check_and_create_path(path):
+    """ Check the existence of a path,
+    and create if not exists """
+    try: 
+        os.makedirs(path)
+    except OSError:
+        if not os.path.isdir(path):
+            raise

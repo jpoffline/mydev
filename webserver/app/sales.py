@@ -42,19 +42,26 @@ def submituserlogin():
             'realname': realname})
     session['username'] = username
     session['logged_in'] = True
-    return redirect('/hello/' + username)
+    sales.log_user_in(username)
+    return redirect('/welcome/' + username)
 
 
 @app.route('/')
-@app.route('/hello/<name>')
+@app.route('/welcome/<name>')
 def index(name=config.OWNER):
     if not session.get('logged_in'):
         return redirect('/login')
+    vbmeta = {
+        'boxtype' : 'primary',
+        'icon' : 'comment',
+        'boxtext': 'New comments',
+        'boxvalue': 26
+    }
     return render_template('screens/index.html',
                            menuItems=get_menuItems(),
                            name=session['username'],
                            appname=config.APPNAME,
-                           args={'html1':bswidgets.bsValueBox()})
+                           args={'html1': bswidgets.bsValueBox(vbmeta)})
 
 
 @app.route('/logsale', methods=['POST'])
@@ -68,6 +75,7 @@ def logsale():
     sales.add_sale(sale_info)
     return render_template('screens/index.html',
                            menuItems=get_menuItems(),
+                           name=session['username'],
                            logsale=sales.get_sales(),
                            appname=config.APPNAME)
 

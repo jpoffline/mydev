@@ -3,12 +3,19 @@ import app.lib.sqlite.sql as sql
 import app.lib.services.hostinfo as hostinfo
 import app.config as config
 
+import os
 
 class SalesSQL(AppSQL):
 
-    def __init__(self):
-        super(SalesSQL, self).__init__(database=config.SALES_db,
+    def __init__(self, user):
+        db_path = config.SALES_db_root + user +'/'
+        database = db_path + config.SALES_db_file
+        hostinfo.check_and_create_path(db_path)
+
+
+        super(SalesSQL, self).__init__(database=database,
                                        table=config.SALES_tb)
+        self._username = user
         pass
 
     def _schema(self):

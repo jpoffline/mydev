@@ -11,12 +11,14 @@ import aux_sales.plotting as plotting
 
 class Sales(object):
     """ The sales class """
-    def __init__(self):
-        self._sales = salessql.SalesSQL()
+    def __init__(self, user=None):
+        self._username = user
+        self._sales = None
         self._short_desc_length = 25
         self._cache_valid = False
         self._cached = None
         self._cache_nsales = None
+        self._loggedin = False
         pass
 
     def _sanitise_desc(self, in_desc):
@@ -31,16 +33,33 @@ class Sales(object):
         return tools.append_gbp(amount)
 
     def _cache(self):
-        self._cached = {
-            'sales': self._sales.get_sorted(),
-            'running_total': self._monetise_amount(self._sales.sum_amount())
-        }
-        self._cache_nsales = len(self._cached['sales'])
-        self._cache_valid = True
+        if self.loggedin():
+            self._cached = {
+                'sales': self._sales.get_sorted(),
+                'running_total': self._monetise_amount(self._sales.sum_amount())
+            }
+            self._cache_nsales = len(self._cached['sales'])
+            self._cache_valid = True
+        else:
+            self._cached = {
+                'sales': [{
+                    'id': '-',
+                    'date':'-',
+                    'title': '-',
+                    'description':'-',
+                    'amount':'-',
+                    'full_desc': '-'
+                }],
+                'running_total': self._monetise_amount(0)
+            }
+            self._cache_nsales = 0
 
     def _check_cache(self):
         if self._cache_valid is False:
             self._cache()
+
+    def set_username(self, user):
+        self._username = user
 
     def add_sale(self, sale_info):
         """ Add a sale to the log """
@@ -71,3 +90,16 @@ class Sales(object):
     def plot_sales(self):
         """ Get a plot of the sales """
         return plotting.plot_sales(self._sales.get_amounts_plottable())
+
+    def loggedin(self):
+        """ Returns whether or not the user
+        has logged in yet """
+        return self._loggedin
+
+
+    def log_user_in(self, user):
+        """ Log a user in """
+        self.set_username(user)
+        self._loggedin = True
+        self._sales = salessql.SalesSQL(user)
+        print 'Logged in', user

@@ -81,7 +81,7 @@ class SalesSQL(AppSQL):
         meta['timecol'] = 'submit_time'
         meta['fmt'] = '%Y-%m-%d %H'
         meta['others'] = ["count(*)", "sum(amount)"]
-        data = self._database.select_groupby_time(self._table, meta, where=self._whereuser)
+        data = self._database.select_groupby_time(self._table, meta)
 
         counts = []
         times = []
@@ -116,8 +116,8 @@ class SalesSQL(AppSQL):
 
     def len(self):
         """ Return the number of rows """
-        return self._database.count_nrows(self._table, where=self._whereuser)
+        return self._database.count_nrows(self._table)
 
     def sum_amount(self):
         """ Return the sum of the amount column """
-        return self._database.sum_col(self._table, 'amount', where=self._whereuser)
+        return self._database.sum_col(self._table, 'amount')

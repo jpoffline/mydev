@@ -110,7 +110,7 @@ class TestQyFactories(unittest.TestCase):
         meta = {
             'fmt': "FMT",
             'timecol': "TIMECOL",
-            'others': 'col2, col3'
+            'others': ['col2', 'col3']
         }
         actual = qy_factories.select_groupby_time(table, meta)
         expected = "SELECT strftime('FMT', TIMECOL), col2, col3 FROM TABLE" +\

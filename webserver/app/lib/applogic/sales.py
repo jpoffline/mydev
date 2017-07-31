@@ -37,10 +37,14 @@ class Sales(object):
             sales = self._sales.get_sorted()
             total = self._sales.sum_amount()
             number = len(sales)
+            if number > 0:
+                average = round(total / number, 2)
+            else:
+                average = 'NA'
             self._cached = {
                 'sales': sales,
                 'running_total': total,
-                'average': round(total / number, 2)
+                'average': average
             }
             self._cache_nsales = number
             self._cache_valid = True

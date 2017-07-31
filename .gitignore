@@ -7,3 +7,6 @@ R/lib/
 webserver/docs/coverage
 
 .coverage
+
+
+webserver/data/db/*.db

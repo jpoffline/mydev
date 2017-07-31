@@ -1,7 +1,8 @@
 import app.lib.sqlite.sql as sql
 
 class AppSQL(object):
-    def __init__(self, database=None, table=None):
+    def __init__(self, user=None, database=None, table=None):
+        self._user=user
         self._table = table
         self._db_path = database
         self._database = sql.SQL(database=self._db_path)

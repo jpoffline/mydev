@@ -13,9 +13,11 @@ class SalesSQL(AppSQL):
         hostinfo.check_and_create_path(db_path)
 
 
-        super(SalesSQL, self).__init__(database=database,
+        super(SalesSQL, self).__init__(user=user,
+                                       database=database,
                                        table=config.SALES_tb)
         self._username = user
+        self._whereuser ='submit_user = ' + user
         pass
 
     def _schema(self):
@@ -78,8 +80,8 @@ class SalesSQL(AppSQL):
         meta = {}
         meta['timecol'] = 'submit_time'
         meta['fmt'] = '%Y-%m-%d %H'
-        meta['others'] = "count(*), sum(amount)"
-        data = self._database.select_groupby_time(self._table, meta)
+        meta['others'] = ["count(*)", "sum(amount)"]
+        data = self._database.select_groupby_time(self._table, meta, where=self._whereuser)
 
         counts = []
         times = []
@@ -114,8 +116,8 @@ class SalesSQL(AppSQL):
 
     def len(self):
         """ Return the number of rows """
-        return self._database.count_nrows(self._table)
+        return self._database.count_nrows(self._table, where=self._whereuser)
 
     def sum_amount(self):
         """ Return the sum of the amount column """
-        return self._database.sum_col(self._table, 'amount')
+        return self._database.sum_col(self._table, 'amount', where=self._whereuser)

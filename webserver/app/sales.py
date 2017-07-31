@@ -74,14 +74,13 @@ def index(name=config.OWNER):
         'boxvalue': sales.get_average_sale()
     }
 
+    salessummary = bswidgets.bsValueBox_collection([vbmeta,vbmeta2, bmeta3])
     
-
-    html1 = bswidgets.bsValueBox_collection([vbmeta,vbmeta2, bmeta3])
     return render_template('screens/index.html',
                            menuItems=get_menuItems(),
                            name=session['username'],
                            appname=config.APPNAME,
-                           args={'html1': html1})
+                           args={'salessummary': salessummary})
 
 
 @app.route('/logsale', methods=['POST'])

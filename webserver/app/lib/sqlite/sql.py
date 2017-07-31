@@ -8,6 +8,7 @@ from app.lib.tools.generalreturn import *
 class SQL(object):
     def __init__(self, database=None):
         self._connection = None
+        self._cursor = None
         self._database = database
         if self._database is not None:
             self.connect()
@@ -24,6 +25,7 @@ class SQL(object):
         if database is not None:
             self._database = database
         self._connection = sqlite3.connect(self._database)
+        self._cursor = self._connection.cursor()
 
     def get_many(self, table, order=None, what=None):
         """ Wrapper to SELECT WHAT from the table """
@@ -44,16 +46,16 @@ class SQL(object):
         """ Close the SQL connection """
         self._connection.close()
 
-    def count_nrows(self, table):
+    def count_nrows(self, table, where=None):
         """ return the number of rows in a given table """
-        v = self._connection.execute(factories.count_nrows(table)).fetchall()
+        v = self._connection.execute(factories.count_nrows(table, where)).fetchall()
         return v[0][0]
 
-    def sum_col(self, table, col):
+    def sum_col(self, table, col, where=None):
         """ Sum the particular column in the table """
-        v = self._connection.execute(factories.sum_col(table, col)).fetchall()
+        v = self._connection.execute(factories.sum_col(table, col, where)).fetchall()
         return v[0][0]
 
-    def select_groupby_time(self, table, meta):
-        query = factories.select_groupby_time(table, meta)
+    def select_groupby_time(self, table, meta, where=None):
+        query = factories.select_groupby_time(table, meta, where)
         return self._connection.execute(query).fetchall()

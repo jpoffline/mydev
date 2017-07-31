@@ -52,14 +52,19 @@ def select_table_name_from_db_qy(database, table):
         "WHERE type='table' AND name='" + table + "' LIMIT 1;"
 
 
-def count_nrows(table):
+def count_nrows(table, where=None):
     """ SQL-factory: count the number of rows in a table """
-    return "SELECT Count(*) " + cat_from_tb(table) + ";"
+    count_qy = "SELECT Count(*) " + cat_from_tb(table)
+    if where is not None:
+        count_qy += ' WHERE ' + where 
+    return count_qy + ";"
 
-
-def sum_col(table, col):
+def sum_col(table, col, where=None):
     """ SQL-factory: sum a particular column in a table """
-    return "SELECT SUM(" + col + ") " + cat_from_tb(table) + ";"
+    sum_qy = "SELECT SUM(" + col + ") " + cat_from_tb(table) 
+    if where is not None:
+        sum_qy += ' WHERE ' + where 
+    return sum_qy + ";"
 
 
 def strftime(time_res, time_col):
@@ -70,14 +75,17 @@ def strftime(time_res, time_col):
     return "strftime('" + time_res + "', " + time_col + ")"
 
 
-def select_groupby_time(table, meta):
+def select_groupby_time(table, meta, where=None):
     """
     SQL-factory: Select from a table, grouping
     by a time-like column.
     """
     time_res = meta['fmt']
     timecol = meta['timecol']
-    others = meta['others']
-    return "SELECT " + strftime(time_res, timecol) + ", " + \
+    others = ', '.join(meta['others'])
+    qy = "SELECT " + strftime(time_res, timecol) + ", " + \
         others + " FROM " + \
-        table + " GROUP BY " + strftime(time_res, timecol) + ";"
+        table + " GROUP BY " + strftime(time_res, timecol)
+    if where is not None:
+        qy += ' WHERE ' + where
+    return qy + ";"

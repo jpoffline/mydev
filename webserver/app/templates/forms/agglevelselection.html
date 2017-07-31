@@ -1,10 +1,16 @@
-<h2>Aggregation level</h2>
-<div class="form-group row">
-    <div class="col-sm-6 col-md-4">
-        <select class="form-control" name="sales-agg-level-selection">
+
+<div class="container">
+    <h2>Aggregation level</h2>
+    <form action="{{ url_for('submitagglevelchange') }}" method=post>
+        <div class="form-group row">
+            <div class="col-sm-6 col-md-4">
+                <select class="form-control" name="sales-agg-level-selection">
             {% for agglevel in args.agglevels %}
-                <option value={{agglevel}}>{{agglevel}}</option>
+                <option value={{agglevel}} {%if agglevel==args.selectedagglevel%}selected{%endif%}>{{agglevel}}</option>
             {% endfor %}
         </select>
-    </div>
+            </div>
+        </div>
+         <button type="submit" class="btn btn-primary">Use aggregation level</button>
+    </form>
 </div>

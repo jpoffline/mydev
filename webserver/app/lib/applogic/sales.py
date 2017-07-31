@@ -11,6 +11,7 @@ import aux_sales.plotting as plotting
 
 class Sales(object):
     """ The sales class """
+
     def __init__(self, user=None):
         self._username = user
         self._sales = None
@@ -52,10 +53,10 @@ class Sales(object):
             self._cached = {
                 'sales': [{
                     'id': '-',
-                    'date':'-',
+                    'date': '-',
                     'title': '-',
-                    'description':'-',
-                    'amount':'-',
+                    'description': '-',
+                    'amount': '-',
                     'full_desc': '-'
                 }],
                 'running_total': 0
@@ -106,15 +107,17 @@ class Sales(object):
         self._check_cache()
         return self._cached['average']
 
-    def plot_sales(self,agglevel='day'):
+    def plot_sales(self, agglevel='day'):
         """ Get a plot of the sales """
-        return plotting.plot_sales(self._sales.get_amounts_plottable(agglevel=agglevel))
+        return plotting.plot_sales(
+            self._sales.get_amounts_plottable(agglevel=agglevel),
+            meta={'agglevel': agglevel}
+        )
 
     def loggedin(self):
         """ Returns whether or not the user
         has logged in yet """
         return self._loggedin
-
 
     def log_user_in(self, user):
         """ Log a user in """

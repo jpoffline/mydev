@@ -5,14 +5,15 @@ import plotly
 import plotly.graph_objs as go
 
 
-def plot_sales(sales_data):
+def plot_sales(sales_data, meta=None):
     """ Plot the sales data """
+    aggplot_label = 'By '+ meta['agglevel']
     # Construct the aggregated-sales plot
     trace0 = go.Scatter(
         x=sales_data['times'],
         y=sales_data['sales'],
         text=sales_data['counts'],
-        name='By hour')
+        name=aggplot_label)
 
     # Construct the raw sales plot
     trace1 = go.Scatter(
@@ -31,7 +32,7 @@ def plot_sales(sales_data):
 
     graph = plytools.make_subplots(rows=2,
                                    cols=2,
-                                   subplot_titles=('By hour', 'Raw', 'Cumulative'),
+                                   subplot_titles=(aggplot_label, 'Raw', 'Cumulative'),
                                    print_grid=False)
 
     graph.append_trace(trace0, 1, 1)

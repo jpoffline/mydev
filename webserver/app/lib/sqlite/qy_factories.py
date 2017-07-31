@@ -89,3 +89,19 @@ def select_groupby_time(table, meta, where=None):
     if where is not None:
         qy += ' WHERE ' + where
     return qy + ";"
+
+def allowed_agg_levels():
+    return ['year','month','day','hour','minute']
+
+def agglevel_to_format(agglevel):
+    """ Aggregate level to format string """
+    if agglevel == 'hour':
+        return '%Y-%m-%d %H'
+    elif agglevel == 'minute':
+        return '%Y-%m-%d %H:%M'
+    elif agglevel == 'year':
+        return '%Y'
+    elif agglevel == 'month':
+        return '%Y-%m'
+    elif agglevel == 'day':
+        return '%Y-%m-%d'

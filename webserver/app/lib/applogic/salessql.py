@@ -2,7 +2,7 @@ from app.lib.sqlite.appsql import AppSQL
 import app.lib.sqlite.sql as sql
 import app.lib.services.hostinfo as hostinfo
 import app.config as config
-
+import app.lib.sqlite.qy_factories as qyfacs
 import os
 
 class SalesSQL(AppSQL):
@@ -75,25 +75,11 @@ class SalesSQL(AppSQL):
         results.update(hourly)
         return results
 
-    def agglevel_to_format(self, agglevel):
-        """ Aggregate level to format string """
-        if agglevel == 'hour':
-            return '%Y-%m-%d %H'
-        elif agglevel == 'minute':
-            return '%Y-%m-%d %H:%M'
-        elif agglevel == 'year':
-            return '%Y'
-        elif agglevel == 'month':
-            return '%Y-%m'
-        elif agglevel == 'day':
-            return '%Y-%m-%d'
-
-
     def get_sales_byhour(self,agglevel):
         """ Get the sales data, aggregated by the hour """
         meta = {}
         meta['timecol'] = 'submit_time'
-        meta['fmt'] = self.agglevel_to_format(agglevel)
+        meta['fmt'] = qyfacs.agglevel_to_format(agglevel)
         meta['others'] = ["count(*)", "sum(amount)"]
         data = self._database.select_groupby_time(self._table, meta)
 

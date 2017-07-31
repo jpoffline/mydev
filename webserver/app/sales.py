@@ -5,6 +5,7 @@ import lib.applogic.sales as sales
 import lib.tools.tools as tools
 import lib.applogic.usermanagement.users as users
 import lib.services.hostinfo as hostinfo
+import lib.sqlite.qy_factories as qyfacs
 sales = sales.Sales()
 users = users.UsersDB()
 import lib.widgets.bswidgets as bswidgets
@@ -55,34 +56,34 @@ def index(name=config.OWNER):
         return redirect('/login')
 
     vbmeta = {
-        'boxtype' : 'primary',
-        'icon' : 'gbp',
+        'boxtype': 'primary',
+        'icon': 'gbp',
         'boxtext': 'Total sales',
         'boxvalue': sales.get_totalsales()
     }
 
     vbmeta2 = {
-        'boxtype' : 'info',
-        'icon' : 'pencil',
+        'boxtype': 'info',
+        'icon': 'pencil',
         'boxtext': 'Number of sales',
         'boxvalue': sales.get_nsales()
     }
 
     bmeta3 = {
-        'boxtype' : 'danger',
-        'icon' : 'gbp',
+        'boxtype': 'danger',
+        'icon': 'gbp',
         'boxtext': 'Average per sale',
         'boxvalue': sales.get_average_sale()
     }
 
-    salessummary = bswidgets.bsValueBox_collection([vbmeta,vbmeta2, bmeta3])
+    salessummary = bswidgets.bsValueBox_collection([vbmeta, vbmeta2, bmeta3])
 
     return render_template('screens/index.html',
                            menuItems=get_menuItems(),
                            name=session['username'],
                            appname=config.APPNAME,
                            args={'salessummary': salessummary,
-                           'datetime':hostinfo.get_datetime(pretty=True)})
+                                 'datetime': hostinfo.get_datetime(pretty=True)})
 
 
 @app.route('/logsale', methods=['POST'])
@@ -140,17 +141,27 @@ def admin():
                            })
 
 
+@app.route('/submitagglevelchange', methods=['POST'])
+def submitagglevelchange():
+    agglevel = request.form['sales-agg-level-selection']
+    return redirect('/analytics/agglevel/' + agglevel)
+
+
+@app.route('/analytics/agglevel/<agglevel>')
 @app.route('/analytics')
-def analytics():
+def analytics(agglevel=None):
     if not session.get('logged_in'):
         return redirect('/login')
-    agglevel = 'day'#request.form['sales-agg-level-selection']
+    if agglevel is None:
+        agglevel = 'day'
+
     return render_template('screens/analytics.html',
                            menuItems=get_menuItems(),
                            logsale=sales.get_sales(),
                            plotamts=sales.plot_sales(agglevel=agglevel),
                            args={
-                               'agglevels' : ['year', 'month', 'day']
+                               'agglevels': qyfacs.allowed_agg_levels(),
+                               'selectedagglevel': agglevel
                            })
 
 

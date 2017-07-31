@@ -1,4 +1,5 @@
 <h2>Log a sale</h2>
+
 <form action="{{ url_for('logsale') }}" method=post>
     <div class="form-group">
         <div class="form-inline">
@@ -8,6 +9,8 @@
             <div class="input-group"> 
             <span class="input-group-addon">£</span><input type=number class="form-control currency" size=30 name="sale-amount" id = "sale-amount" step="0.01" data-number-to-fixed="2">
             </div>
+            <label for="sale-time">Time</label>
+            <textarea class="form-control" rows=1 cols=20 name="sale-time" id = "sale-time">{% if args %}{{ args.datetime }}{% endif %}</textarea>
         </div>
     </div>
     <div class="form-group">

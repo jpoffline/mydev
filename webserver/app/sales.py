@@ -4,6 +4,7 @@ import os
 import lib.applogic.sales as sales
 import lib.tools.tools as tools
 import lib.applogic.usermanagement.users as users
+import lib.services.hostinfo as hostinfo
 sales = sales.Sales()
 users = users.UsersDB()
 import lib.widgets.bswidgets as bswidgets
@@ -75,21 +76,27 @@ def index(name=config.OWNER):
     }
 
     salessummary = bswidgets.bsValueBox_collection([vbmeta,vbmeta2, bmeta3])
-    
+
     return render_template('screens/index.html',
                            menuItems=get_menuItems(),
                            name=session['username'],
                            appname=config.APPNAME,
-                           args={'salessummary': salessummary})
+                           args={'salessummary': salessummary,
+                           'datetime':hostinfo.get_datetime(pretty=True)})
 
 
 @app.route('/logsale', methods=['POST'])
 def logsale():
+    pulled_date = request.form['sale-time']
+    if hostinfo.is_string_a_datetime(pulled_date) is not True:
+        print "ERROR: invalid datetime"
+        return False
     sale_info = {
         'user': session['username'],
         'title': request.form['sale-title'],
         'description': request.form['sale-description'],
-        'amount': request.form['sale-amount']
+        'amount': request.form['sale-amount'],
+        'datetime': pulled_date
     }
     sales.add_sale(sale_info)
     return render_template('screens/index.html',

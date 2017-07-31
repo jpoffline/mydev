@@ -82,7 +82,8 @@ class Sales(object):
                 'description': self._sanitise_desc(description),
                 'amount': amount,
                 'full_desc': description
-            }
+            },
+            saletime=sale_info['datetime']
         )
         self._cache_valid = False
 

@@ -101,12 +101,12 @@ class SalesSQL(AppSQL):
             'sales': sales,
             'cumulative': cumulative}
 
-    def add(self, data):
+    def add(self, data, saletime=hostinfo.get_datetime(pretty=True)):
         """ Add data to the sales """
         data = [(
             data['user'],
             hostinfo.get_hostname(),
-            hostinfo.get_datetime(pretty=True),
+            saletime,
             data['title'],
             data['description'],
             data['full_desc'],

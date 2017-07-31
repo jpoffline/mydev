@@ -9,4 +9,4 @@ webserver/docs/coverage
 .coverage
 
 
-webserver/data/db/*.db
+webserver/data/*.db

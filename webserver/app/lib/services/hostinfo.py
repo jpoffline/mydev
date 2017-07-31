@@ -17,9 +17,17 @@ def get_hostname():
 
 
 def pretty_datetime_format():
+    """ Get the datetime format
+    string for a pretty looking date:
+    YYY-MM-DD HH:MM:SS
+    """
     return '%Y-%m-%d %H:%M:%S'
 
 def compact_datetime_format():
+    """ Get the datetime format
+    string for a compact looking date:
+    YYYYMMDDHHMMSS
+    """
     return '%Y%m%d%H%M%S'
 
 def get_datetime(pretty=False):

@@ -10,9 +10,7 @@ from context import app
 import app.lib.services.hostinfo as hostinfo
 
 
-
 class ServiceTestHostInfo(unittest.TestCase):
-
 
     def test_compact_datetime_format(self):
         actual = hostinfo.compact_datetime_format()
@@ -26,7 +24,8 @@ class ServiceTestHostInfo(unittest.TestCase):
 
     def test_TrueCustom_is_string_a_datetime(self):
         tmp = '20170901125412'
-        actual = hostinfo.is_string_a_datetime(tmp, fmt=hostinfo.compact_datetime_format())
+        actual = hostinfo.is_string_a_datetime(
+            tmp, fmt=hostinfo.compact_datetime_format())
         expected = True
         self.assertEqual(actual, expected)
 
@@ -44,6 +43,7 @@ class ServiceTestHostInfo(unittest.TestCase):
 
     def test_FalseCustom_is_string_a_datetime(self):
         tmp = '2010901125412'
-        actual = hostinfo.is_string_a_datetime(tmp, fmt=hostinfo.compact_datetime_format())
+        actual = hostinfo.is_string_a_datetime(
+            tmp, fmt=hostinfo.compact_datetime_format())
         expected = False
         self.assertEqual(actual, expected)

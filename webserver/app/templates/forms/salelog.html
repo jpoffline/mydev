@@ -4,13 +4,20 @@
     <div class="form-group">
         <div class="form-inline">
             <label for="sale-title">Title</label>
-            <input type=text class="form-control" size=30 name="sale-title" id = "sale-title">
+            <div class="input-group"> 
+                <span class="input-group-addon"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></span>
+                <input type=text class="form-control" size=30 name="sale-title" id = "sale-title">
+            </div>
             <label for="sale-amount">Amount</label>
             <div class="input-group"> 
-            <span class="input-group-addon">£</span><input type=number class="form-control currency" size=30 name="sale-amount" id = "sale-amount" step="0.01" data-number-to-fixed="2">
+                <span class="input-group-addon">£</span>
+                <input type=number class="form-control currency" size=30 name="sale-amount" id = "sale-amount" step="0.01" data-number-to-fixed="2">
             </div>
             <label for="sale-time">Time</label>
-            <textarea class="form-control" rows=1 cols=20 name="sale-time" id = "sale-time">{% if args %}{{ args.datetime }}{% endif %}</textarea>
+            <div class="input-group"> 
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></span>
+                <textarea class="form-control" rows=1 cols=20 name="sale-time" id = "sale-time">{% if args %}{{ args.datetime }}{% endif %}</textarea>
+            </div>
         </div>
     </div>
     <div class="form-group">

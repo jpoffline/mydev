@@ -1,0 +1,10 @@
+<h2>Aggregation level</h2>
+<div class="form-group row">
+    <div class="col-sm-6 col-md-4">
+        <select class="form-control" name="sales-agg-level-selection">
+            {% for agglevel in args.agglevels %}
+                <option value={{agglevel}}>{{agglevel}}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>

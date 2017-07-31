@@ -8,6 +8,7 @@ def bsValueBox_collection(meta):
         html += bsValueBox(item)
     return html + """</div>"""
 
+
 def bsValueBox(meta):
     boxtype = meta['boxtype']
     icon = meta['icon']
@@ -47,3 +48,18 @@ def bsValueBox(meta):
   </div>
 
 """
+
+
+def bsLabelInput(meta):
+    icon = meta['icon']
+    label = meta['label']
+    id = meta['id']
+    return """
+            <label for="""""+id+""""">""" + label + """</label>
+            <div class="input-group"> 
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-""" + icon + """" aria-hidden="true"></span>
+                </span>
+                <input type=text class="form-control" size=30 name="""""+id+""""" id = """""+id+""""">
+            </div>
+            """

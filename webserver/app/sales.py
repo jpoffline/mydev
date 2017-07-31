@@ -111,7 +111,10 @@ def about():
     if not session.get('logged_in'):
         return redirect('/login')
     return render_template('screens/about.html',
-                           menuItems=get_menuItems())
+                           menuItems=get_menuItems(),
+                           args={
+                               'codeversion': config.VERSION
+                           })
 
 
 @app.route('/contact')
@@ -141,10 +144,14 @@ def admin():
 def analytics():
     if not session.get('logged_in'):
         return redirect('/login')
+    agglevel = 'day'#request.form['sales-agg-level-selection']
     return render_template('screens/analytics.html',
                            menuItems=get_menuItems(),
                            logsale=sales.get_sales(),
-                           plotamts=sales.plot_sales())
+                           plotamts=sales.plot_sales(agglevel=agglevel),
+                           args={
+                               'agglevels' : ['year', 'month', 'day']
+                           })
 
 
 if __name__ == '__main__':

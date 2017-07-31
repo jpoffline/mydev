@@ -106,9 +106,9 @@ class Sales(object):
         self._check_cache()
         return self._cached['average']
 
-    def plot_sales(self):
+    def plot_sales(self,agglevel='day'):
         """ Get a plot of the sales """
-        return plotting.plot_sales(self._sales.get_amounts_plottable())
+        return plotting.plot_sales(self._sales.get_amounts_plottable(agglevel=agglevel))
 
     def loggedin(self):
         """ Returns whether or not the user

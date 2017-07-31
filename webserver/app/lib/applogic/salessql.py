@@ -60,7 +60,7 @@ class SalesSQL(AppSQL):
             })
         return to_plop
 
-    def get_amounts_plottable(self):
+    def get_amounts_plottable(self,agglevel='hour'):
         """ Get the sales data in a plottable format """
         data = self._retrieve(order='asc')
         amount = []
@@ -71,15 +71,29 @@ class SalesSQL(AppSQL):
             date.append(item[3])
             id.append(item[0])
         results = {'amount': amount, 'date': date, 'id': id}
-        hourly = self.get_sales_byhour()
+        hourly = self.get_sales_byhour(agglevel)
         results.update(hourly)
         return results
 
-    def get_sales_byhour(self):
+    def agglevel_to_format(self, agglevel):
+        """ Aggregate level to format string """
+        if agglevel == 'hour':
+            return '%Y-%m-%d %H'
+        elif agglevel == 'minute':
+            return '%Y-%m-%d %H:%M'
+        elif agglevel == 'year':
+            return '%Y'
+        elif agglevel == 'month':
+            return '%Y-%m'
+        elif agglevel == 'day':
+            return '%Y-%m-%d'
+
+
+    def get_sales_byhour(self,agglevel):
         """ Get the sales data, aggregated by the hour """
         meta = {}
         meta['timecol'] = 'submit_time'
-        meta['fmt'] = '%Y-%m-%d %H'
+        meta['fmt'] = self.agglevel_to_format(agglevel)
         meta['others'] = ["count(*)", "sum(amount)"]
         data = self._database.select_groupby_time(self._table, meta)
 

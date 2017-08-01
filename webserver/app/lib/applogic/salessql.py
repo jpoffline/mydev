@@ -89,7 +89,6 @@ class SalesSQL(AppSQL):
         cumulative = []
         total = 0.0
         for item in data:
-            print item[0]
             times.append(item[0])
             counts.append(item[1])
             sales.append(item[2])

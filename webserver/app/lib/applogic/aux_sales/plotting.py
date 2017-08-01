@@ -5,9 +5,29 @@ import plotly
 import plotly.graph_objs as go
 
 
+def plot_box(data, meta):
+
+    trace = go.Scatter(
+        x=data['x'],
+        y=data['y'],
+        text=data['text']
+    )
+
+    div = plotly.offline.plot({
+        "data": [trace],
+        "layout": go.Layout(title=meta.get('title', 'data'))
+    },
+        show_link=False,
+        output_type="div",
+        include_plotlyjs=False)
+        
+    return """<div class="well">""" +div +  """</div>"""
+
+
 def plot_sales(sales_data, meta=None):
     """ Plot the sales data """
-    aggplot_label = 'By '+ meta['agglevel']
+    return plot_box({'x': sales_data['times'], 'y': sales_data['sales']},None)
+    aggplot_label = 'By ' + meta['agglevel']
     # Construct the aggregated-sales plot
     trace0 = go.Scatter(
         x=sales_data['times'],
@@ -32,7 +52,8 @@ def plot_sales(sales_data, meta=None):
 
     graph = plytools.make_subplots(rows=2,
                                    cols=2,
-                                   subplot_titles=(aggplot_label, 'Raw', 'Cumulative'),
+                                   subplot_titles=(
+                                       aggplot_label, 'Raw', 'Cumulative'),
                                    print_grid=False)
 
     graph.append_trace(trace0, 1, 1)

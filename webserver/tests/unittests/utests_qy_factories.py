@@ -117,6 +117,18 @@ class TestQyFactories(unittest.TestCase):
             " GROUP BY strftime('FMT', TIMECOL);"
         self.assertEqual(actual, expected)
 
+    def test_noOthersselect_groupby_time(self):
+        table = "TABLE"
+        meta = {
+            'fmt': "FMT",
+            'timecol': "TIMECOL"
+        }
+        actual = qy_factories.select_groupby_time(table, meta)
+        expected = "SELECT strftime('FMT', TIMECOL) FROM TABLE" +\
+            " GROUP BY strftime('FMT', TIMECOL);"
+        self.assertEqual(actual, expected)
+
+
 
     def test_allowedAggLevels(self):
         self.assertEqual(qy_factories.allowed_agg_levels(), ['year','month','day','hour','minute'])
@@ -133,3 +145,29 @@ class TestQyFactories(unittest.TestCase):
 
         for item in qy_factories.allowed_agg_levels():
             self.assertIsNot(qy_factories.agglevel_to_format(item), False)
+
+    def test_select_distinct_months(self):
+        actual = qy_factories.select_distinct_months('TB','DATE')
+        expected = "SELECT DISTINCT strftime('%Y-%m', DATE) FROM TB;"
+        self.assertEqual(actual, expected)
+
+
+    def test_withoutOthers_select_distinct_dates(self):
+        meta = {'fmt':'%Y-%m','timecol':'DATE'}
+        actual = qy_factories.select_distinct_dates('TB',meta)
+        expected = "SELECT DISTINCT strftime('%Y-%m', DATE) FROM TB;"
+        self.assertEqual(actual, expected)
+
+
+    def test_withOthers_select_distinct_dates(self):
+        meta = {'fmt':'%Y-%m','timecol':'DATE','others':['one']}
+        actual = qy_factories.select_distinct_dates('TB',meta)
+        expected = "SELECT DISTINCT strftime('%Y-%m', DATE), one FROM TB;"
+        self.assertEqual(actual, expected)
+
+    
+    def test_select_in_datetime(self):
+        meta = {'fmt':'%Y-%m','timecol':'DATE', 'what':['c1','c2']}
+        actual = qy_factories.select_in_datetime('TB',meta, '2017-05')
+        expected = "SELECT c1, c2 FROM TB WHERE strftime('%Y-%m', DATE) = '2017-05';"
+        self.assertEqual(actual, expected)

@@ -4,6 +4,7 @@ import app.lib.services.hostinfo as hostinfo
 import app.lib.tools.tools as tools
 import app.lib.applogic.salessql as salessql
 import aux_sales.plotting as plotting
+import app.lib.widgets.bswidgets as bswidgets
 
 
 class Sales(object):
@@ -76,7 +77,7 @@ class Sales(object):
         self._sales.add(
             {
                 'user': sale_info['user'],
-                'date': sale_info.get('datetime',hostinfo.get_datetime(pretty=True)),
+                'date': sale_info.get('datetime', hostinfo.get_datetime(pretty=True)),
                 'title': sale_info['title'],
                 'description': self._sanitise_desc(description),
                 'amount': amount,
@@ -105,42 +106,43 @@ class Sales(object):
         self._check_cache()
         return self._cached['average']
 
-
     def agg_sales_stats(self, data):
+        """ Generate a text string per
+        item for the sales data """
         mean = sum(data['sales']) / len(data['sales'])
         maxdata = max(data['sales'])
         meta = []
         for idx, point in enumerate(data['sales']):
-            dev = round(point - mean,2)
-            frc = round(point / mean,2)
-            fmx = round(point / maxdata * 100,2)
+            dev = round(point - mean, 2)
+            frc = round(point / mean, 2)
+            fmx = round(point / maxdata * 100, 2)
             text = data['times'][idx] + "<br>" + \
-            'Number of sales: ' + str(data['counts'][idx]) + '<br>' + \
-            'Deviation from average: ' + str(dev) + '<br>' +\
-            'Fraction of average: ' + str(frc) + '%' + '<br>' +\
-            'Fraction of maximum: ' + str(fmx) + '%''<br>' 
+                'Number of sales: ' + str(data['counts'][idx]) + '<br>' + \
+                'Deviation from average: ' + str(dev) + '<br>' +\
+                'Fraction of average: ' + str(frc) + '%' + '<br>' +\
+                'Fraction of maximum: ' + str(fmx) + '%''<br>'
             meta.append(text)
         return meta
-
-
 
     def plot_sales(self, agglevel='day'):
         """ Get a plot of the sales """
         data = self._sales.get_amounts_plottable(agglevel=agglevel)
-        text = ['Number of sales: '+ str(d) for d in data['counts']]
+        text = ['Number of sales: ' + str(d) for d in data['counts']]
         text = self.agg_sales_stats(data)
-        return plotting.plot_box(
+        plot = plotting.plot_box(
             {
-                'x': data['times'], 
+                'x': data['times'],
                 'y': data['sales'],
                 'text': text
             },
             meta={'title': 'Sales by ' + agglevel}
         )
-        return plotting.plot_sales(
-            data,
-            meta={'agglevel': agglevel}
-        )
+
+        return bswidgets.inWell().get(plot)
+        #return plotting.plot_sales(
+        #    data,
+        #    meta={'agglevel': agglevel}
+        #)
 
     def loggedin(self):
         """ Returns whether or not the user

@@ -75,6 +75,7 @@ def strftime(time_res, time_col):
     return "strftime('" + time_res + "', " + time_col + ")"
 
 
+
 def select_groupby_time(table, meta, where=None):
     """
     SQL-factory: Select from a table, grouping
@@ -82,18 +83,39 @@ def select_groupby_time(table, meta, where=None):
     """
     time_res = meta['fmt']
     timecol = meta['timecol']
-    others = ', '.join(meta['others'])
-    qy = "SELECT " + strftime(time_res, timecol) + ", " + \
-        others + " FROM " + \
-        table + " GROUP BY " + strftime(time_res, timecol)
+    others = ', '.join(meta.get('others',''))
+    qy = "SELECT " + strftime(time_res, timecol)
+    if others is not '':
+        qy += ', ' + others
+    qy += " FROM "
+    qy += table + " GROUP BY " + strftime(time_res, timecol)
     if where is not None:
         qy += ' WHERE ' + where
     return qy + ";"
+
+def select_distinct_dates(table, meta):
+    """ SQL factory: select the distinct dates from a table.
+    """
+    others = ', '.join(meta.get('others',''))
+    qy = "SELECT DISTINCT " + strftime(meta['fmt'], meta['timecol'])
+    if others is not '':
+        qy += ', ' + others
+    qy += ' FROM ' + table
+    return qy + ';'
+
+def select_distinct_months(table, timecol):
+    return select_distinct_dates(table, {'timecol': timecol, 'fmt': agglevel_to_format('month')})
 
 def allowed_agg_levels():
     """ Return a list of the allowed
     aggregation levels for datetimes """
     return ['year','month','day','hour','minute']
+
+def select_in_datetime(table, meta, datewanted):
+    what = ', '.join(meta['what'])
+    qy = "SELECT " + what + " FROM " + table 
+    qy += " WHERE " + strftime(meta['fmt'], meta['timecol']) + " = '" + datewanted + "'"
+    return qy + ";"
 
 def agglevel_to_format(agglevel):
     """ Aggregate level to format string """

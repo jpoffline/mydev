@@ -6,7 +6,7 @@ import plotly.graph_objs as go
 
 
 def plot_box(data, meta):
-
+    """ Put a plot into a bootstrap well """
     trace = go.Scatter(
         x=data['x'],
         y=data['y'],
@@ -21,7 +21,7 @@ def plot_box(data, meta):
         output_type="div",
         include_plotlyjs=False)
         
-    return """<div class="well">""" +div +  """</div>"""
+    return div
 
 
 def plot_sales(sales_data, meta=None):

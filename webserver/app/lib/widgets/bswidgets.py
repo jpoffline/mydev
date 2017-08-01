@@ -1,8 +1,25 @@
 from app.lib.widgets.htmltags import *
 import app.lib.tools.tools as tools
 
+class inWell(object):
+    def __init__(self, html=None):
+        self._html = html
+        
+    def content(self, html):
+        self._html = html
+
+    def get(self, html=None):
+        if html is not None:
+            self.content(html)
+
+        if self._html is not None:
+            return """<div class="well">""" + self._html +  """</div>"""
+        return False
+
 
 class bsValueBox(object):
+    """ Class to create a bootstrap
+    value in a box """
     def __init__(self, boxes=None):
         
         self._boxes = []

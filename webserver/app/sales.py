@@ -152,6 +152,7 @@ def submitagglevelchange():
 def analytics(agglevel=None):
     if not session.get('logged_in'):
         return redirect('/login')
+    
     if agglevel is None:
         agglevel = 'day'
 

@@ -91,6 +91,8 @@ def select_groupby_time(table, meta, where=None):
     return qy + ";"
 
 def allowed_agg_levels():
+    """ Return a list of the allowed
+    aggregation levels for datetimes """
     return ['year','month','day','hour','minute']
 
 def agglevel_to_format(agglevel):

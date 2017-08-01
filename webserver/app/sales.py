@@ -55,34 +55,34 @@ def index(name=config.OWNER):
     if not session.get('logged_in'):
         return redirect('/login')
 
-    vbmeta = {
+    box_total_sales = {
         'boxtype': 'primary',
         'icon': 'gbp',
         'boxtext': 'Total sales',
         'boxvalue': sales.get_totalsales()
     }
 
-    vbmeta2 = {
+    box_nsales = {
         'boxtype': 'info',
         'icon': 'pencil',
         'boxtext': 'Number of sales',
         'boxvalue': sales.get_nsales()
     }
 
-    bmeta3 = {
+    box_average = {
         'boxtype': 'danger',
         'icon': 'gbp',
         'boxtext': 'Average per sale',
         'boxvalue': sales.get_average_sale()
     }
 
-    salessummary = bswidgets.bsValueBox_collection([vbmeta, vbmeta2, bmeta3])
+    salessummary = bswidgets.bsValueBox([box_total_sales, box_nsales, box_average])
 
     return render_template('screens/index.html',
                            menuItems=get_menuItems(),
                            name=session['username'],
                            appname=config.APPNAME,
-                           args={'salessummary': salessummary,
+                           args={'salessummary': salessummary.get(),
                                  'datetime': hostinfo.get_datetime(pretty=True)})
 
 

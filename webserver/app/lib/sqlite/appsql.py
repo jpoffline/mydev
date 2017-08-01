@@ -15,6 +15,14 @@ class AppSQL(object):
     def _insert_col_names(self):
         pass
 
+    def delete_db(self, doit=False):
+        if doit:
+            import os
+            try:
+                os.remove(self._db_path)
+            except OSError:
+                pass
+
     def _retrieve(self, order='desc'):
         """ Internal method: retreive all data from SQL """
         ord = 'id ' + order

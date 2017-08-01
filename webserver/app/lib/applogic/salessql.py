@@ -71,12 +71,12 @@ class SalesSQL(AppSQL):
             date.append(item[3])
             id.append(item[0])
         results = {'amount': amount, 'date': date, 'id': id}
-        hourly = self.get_sales_byhour(agglevel)
+        hourly = self.get_sales_aggregated(agglevel)
         results.update(hourly)
         return results
 
-    def get_sales_byhour(self,agglevel):
-        """ Get the sales data, aggregated by the hour """
+    def get_sales_aggregated(self,agglevel):
+        """ Get the sales data, aggregated """
         meta = {}
         meta['timecol'] = 'submit_time'
         meta['fmt'] = qyfacs.agglevel_to_format(agglevel)
@@ -87,13 +87,14 @@ class SalesSQL(AppSQL):
         times = []
         sales = []
         cumulative = []
-        sum = 0.0
+        total = 0.0
         for item in data:
+            print item[0]
             times.append(item[0])
             counts.append(item[1])
             sales.append(item[2])
-            sum += item[2]
-            cumulative.append(sum)
+            total += item[2]
+            cumulative.append(total)
 
         return {
             'counts': counts,
@@ -101,12 +102,12 @@ class SalesSQL(AppSQL):
             'sales': sales,
             'cumulative': cumulative}
 
-    def add(self, data, saletime=hostinfo.get_datetime(pretty=True)):
+    def add(self, data):
         """ Add data to the sales """
         data = [(
             data['user'],
-            hostinfo.get_hostname(),
-            saletime,
+            data['submit_machine'],
+            data['date'],
             data['title'],
             data['description'],
             data['full_desc'],

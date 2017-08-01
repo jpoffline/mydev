@@ -2,10 +2,7 @@
 
 import app.lib.services.hostinfo as hostinfo
 import app.lib.tools.tools as tools
-
-
 import app.lib.applogic.salessql as salessql
-
 import aux_sales.plotting as plotting
 
 
@@ -59,7 +56,8 @@ class Sales(object):
                     'amount': '-',
                     'full_desc': '-'
                 }],
-                'running_total': 0
+                'running_total': 0,
+                'average': 'NA'
             }
             self._cache_nsales = 0
 
@@ -78,13 +76,13 @@ class Sales(object):
         self._sales.add(
             {
                 'user': sale_info['user'],
-                'date': hostinfo.get_datetime(pretty=True),
+                'date': sale_info.get('datetime',hostinfo.get_datetime(pretty=True)),
                 'title': sale_info['title'],
                 'description': self._sanitise_desc(description),
                 'amount': amount,
-                'full_desc': description
-            },
-            saletime=sale_info['datetime']
+                'full_desc': description,
+                'submit_machine': sale_info.get('submit_machine', hostinfo.get_hostname())
+            }
         )
         self._cache_valid = False
 
@@ -124,4 +122,9 @@ class Sales(object):
         self.set_username(user)
         self._loggedin = True
         self._sales = salessql.SalesSQL(user)
-        print 'Logged in', user
+
+    def delete_users_sales_record(self, doit=False):
+        """ Delete a users sales record.
+        Will delete the SQLite db file """
+        if self.loggedin():
+            self._sales.delete_db(doit=doit)

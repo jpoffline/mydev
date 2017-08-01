@@ -116,3 +116,20 @@ class TestQyFactories(unittest.TestCase):
         expected = "SELECT strftime('FMT', TIMECOL), col2, col3 FROM TABLE" +\
             " GROUP BY strftime('FMT', TIMECOL);"
         self.assertEqual(actual, expected)
+
+
+    def test_allowedAggLevels(self):
+        self.assertEqual(qy_factories.allowed_agg_levels(), ['year','month','day','hour','minute'])
+
+
+    def test_agglevels_to_formats(self):
+        self.assertEqual(qy_factories.agglevel_to_format('BLAH'), False)
+        self.assertEqual(qy_factories.agglevel_to_format('hour'), '%Y-%m-%d %H')
+        self.assertEqual(qy_factories.agglevel_to_format('minute'), '%Y-%m-%d %H:%M')
+        self.assertEqual(qy_factories.agglevel_to_format('year'), '%Y')
+        self.assertEqual(qy_factories.agglevel_to_format('month'), '%Y-%m')
+        self.assertEqual(qy_factories.agglevel_to_format('day'), '%Y-%m-%d')
+
+
+        for item in qy_factories.allowed_agg_levels():
+            self.assertIsNot(qy_factories.agglevel_to_format(item), False)

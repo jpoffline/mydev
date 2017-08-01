@@ -2,53 +2,74 @@ from app.lib.widgets.htmltags import *
 import app.lib.tools.tools as tools
 
 
-def bsValueBox_collection(meta):
-    html = """<div class="row">"""
-    for item in meta:
-        html += bsValueBox(item)
-    return html + """</div>"""
+class bsValueBox(object):
+    def __init__(self, boxes=None):
+        
+        self._boxes = []
+        if boxes is not None:
+            self.add_boxes(boxes)
 
+    def add_boxes(self, boxes):
+        for box in boxes:
+            self.add_box(box)
 
-def bsValueBox(meta):
-    boxtype = meta['boxtype']
-    icon = meta['icon']
-    boxtext = meta['boxtext']
-    boxvalue = str(meta['boxvalue'])
-    boxlink = meta.get('boxlink', False)
-    if boxlink is True:
-        boxlink_html = """
-        <a href="#">
-            <div class="panel-footer">
-            <span class="pull-left">View Details</span>
-            <span class="pull-right"><i class="glyphicon glyphicon-circle-arrow-right"></i></span>
-            <div class="clearfix"></div>
+    def add_box(self, box_meta):
+        self._boxes.append(box_meta)
+
+    def get(self):
+        return self.bsValueBox_collection()
+        
+    def bsValueBox_collection(self):
+        html = """<div class="row">"""
+        for item in self._boxes:
+            html += self.bsValueBox(item)
+        return html + """</div>"""
+
+    def _link_html(self, linkmeta):
+        link = linkmeta['url']
+        text = linkmeta['text']
+        icon = linkmeta['icon']
+        return """
+            <a href=""""" + link + """"">
+                <div class="panel-footer">
+                <span class="pull-left">""" + text + """</span>
+                <span class="pull-right"><i class="glyphicon glyphicon-""" + icon + """"></i></span>
+                <div class="clearfix"></div>
+                </div>
+            </a>
+            """
+
+    def bsValueBox(self, meta):
+        boxtype = meta['boxtype']
+        icon = meta['icon']
+        boxtext = meta['boxtext']
+        boxvalue = str(meta['boxvalue'])
+        boxlink = meta.get('boxlink', False)
+        if boxlink is True:
+            boxlink_html = self._link_html(boxlink)
+        else:
+            boxlink_html = """"""
+
+        return """
+
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-""" + boxtype + """">
+        <div class="panel-heading">
+            <div class="row">
+            <div class="col-xs-3">
+                <i class="glyphicon glyphicon-""" + icon + """" style="font-size:50px;"></i>
             </div>
-        </a>
-        """
-    else:
-        boxlink_html = """"""
-
-    return """
-
-  <div class="col-lg-3 col-md-6">
-    <div class="panel panel-""" + boxtype + """">
-      <div class="panel-heading">
-        <div class="row">
-          <div class="col-xs-3">
-            <i class="glyphicon glyphicon-""" + icon + """" style="font-size:50px;"></i>
-          </div>
-          <div class="col-xs-9 text-right">
-            <div style="font-size:40px;">""" + boxvalue + """</div>
-            <div>""" + boxtext + """</div>
-          </div>
+            <div class="col-xs-9 text-right">
+                <div style="font-size:40px;">""" + boxvalue + """</div>
+                <div>""" + boxtext + """</div>
+            </div>
+            </div>
         </div>
-      </div>
-      """ + boxlink_html + """
+        """ + boxlink_html + """
+        </div>
     </div>
-  </div>
 
-"""
-
+    """
 
 def bsLabelInput(meta):
     icon = meta['icon']

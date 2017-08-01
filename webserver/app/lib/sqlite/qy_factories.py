@@ -107,3 +107,5 @@ def agglevel_to_format(agglevel):
         return '%Y-%m'
     elif agglevel == 'day':
         return '%Y-%m-%d'
+    else:
+        return False

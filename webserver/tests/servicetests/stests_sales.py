@@ -57,7 +57,7 @@ class ServiceTestSales(unittest.TestCase):
             'datetime': 'NOW',
             'submit_machine': 'TOY'
         }
-        
+
         dummy_sale2 = {
             'amount': 12.21,
             'description': 'DESC2',
@@ -96,3 +96,45 @@ class ServiceTestSales(unittest.TestCase):
         self.assertEqual(self.sales.get_sales(), expected_sales)
         self.assertEqual(self.sales.get_nsales(), 2)
         #self.assertEqual(self.sales._sales.getall(), False)
+
+    def test_distinctDates(self):
+        self.assertEqual(self.sales.loggedin(), False)
+        self.sales.log_user_in(self._dummy_username)
+        self.assertEqual(self.sales.loggedin(), True)
+
+        dummy_sale = {
+            'amount': 12.21,
+            'description': 'DESC',
+            'user': self._dummy_username,
+            'title': 'TITLE',
+            'datetime': '2017-05-01',
+            'submit_machine': 'TOY'
+        }
+        self.sales.add_sale(dummy_sale)
+
+        self.assertEqual(self.sales.get_nsales(), 1)
+        self.assertEqual(self.sales._sales.get_distinct_dates(), ['2017-05'])
+
+        dummy_sale2 = {
+            'amount': 12.21,
+            'description': 'DESC',
+            'user': self._dummy_username,
+            'title': 'TITLE',
+            'datetime': '2017-04-01',
+            'submit_machine': 'TOY'
+        }
+        self.sales.add_sale(dummy_sale2)
+        self.assertEqual(self.sales.get_nsales(), 2)
+        self.assertEqual(self.sales._sales.get_distinct_dates(), ['2017-04','2017-05'])
+
+        dummy_sale3 = {
+            'amount': 12.21,
+            'description': 'DESC',
+            'user': self._dummy_username,
+            'title': 'TITLE',
+            'datetime': '2012-04-01',
+            'submit_machine': 'TOY'
+        }
+        self.sales.add_sale(dummy_sale3)
+        self.assertEqual(self.sales.get_nsales(), 3)
+        self.assertEqual(self.sales._sales.get_distinct_dates(), ['2012-04','2017-04','2017-05'])

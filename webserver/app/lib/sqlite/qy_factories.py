@@ -101,6 +101,7 @@ def select_distinct_dates(table, meta):
     if others is not '':
         qy += ', ' + others
     qy += ' FROM ' + table
+    qy += ' ORDER BY ' + strftime(meta['fmt'], meta['timecol']) + ' ASC'
     return qy + ';'
 
 def select_distinct_months(table, timecol):
@@ -112,6 +113,7 @@ def allowed_agg_levels():
     return ['year','month','day','hour','minute']
 
 def select_in_datetime(table, meta, datewanted):
+    """ Select columns when a time col matches a particular time frame """
     what = ', '.join(meta['what'])
     qy = "SELECT " + what + " FROM " + table 
     qy += " WHERE " + strftime(meta['fmt'], meta['timecol']) + " = '" + datewanted + "'"

@@ -121,3 +121,14 @@ class SalesSQL(AppSQL):
     def sum_amount(self):
         """ Return the sum of the amount column """
         return self._database.sum_col(self._table, 'amount')
+
+    def get_distinct_dates(self, agglevel='month'):
+        meta = {}
+        meta['fmt'] = qyfacs.agglevel_to_format(agglevel)
+        meta['timecol'] = 'submit_time'
+        qy = qyfacs.select_distinct_dates(self._table, meta)
+        res = self._database.get_many_general(qy)
+        dates = []
+        for date in res:
+            dates.append(date[0])
+        return dates

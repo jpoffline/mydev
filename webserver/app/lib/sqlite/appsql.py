@@ -52,6 +52,10 @@ class AppSQL(object):
         """ Get all """
         return self._retrieve()
 
+    def getgeneral(self, query):
+        """ Execute a particular query """
+        return self._database.get_many_general(query)
+
     def sanitise(self, element):
         """ Sanitise an element to a string """
         if type(element) is int or float or long:

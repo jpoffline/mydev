@@ -148,21 +148,21 @@ class TestQyFactories(unittest.TestCase):
 
     def test_select_distinct_months(self):
         actual = qy_factories.select_distinct_months('TB','DATE')
-        expected = "SELECT DISTINCT strftime('%Y-%m', DATE) FROM TB;"
+        expected = "SELECT DISTINCT strftime('%Y-%m', DATE) FROM TB ORDER BY strftime('%Y-%m', DATE) ASC;"
         self.assertEqual(actual, expected)
 
 
     def test_withoutOthers_select_distinct_dates(self):
         meta = {'fmt':'%Y-%m','timecol':'DATE'}
         actual = qy_factories.select_distinct_dates('TB',meta)
-        expected = "SELECT DISTINCT strftime('%Y-%m', DATE) FROM TB;"
+        expected = "SELECT DISTINCT strftime('%Y-%m', DATE) FROM TB ORDER BY strftime('%Y-%m', DATE) ASC;"
         self.assertEqual(actual, expected)
 
 
     def test_withOthers_select_distinct_dates(self):
         meta = {'fmt':'%Y-%m','timecol':'DATE','others':['one']}
         actual = qy_factories.select_distinct_dates('TB',meta)
-        expected = "SELECT DISTINCT strftime('%Y-%m', DATE), one FROM TB;"
+        expected = "SELECT DISTINCT strftime('%Y-%m', DATE), one FROM TB ORDER BY strftime('%Y-%m', DATE) ASC;"
         self.assertEqual(actual, expected)
 
     

@@ -175,12 +175,12 @@ class SalesSQL(AppSQL):
         Get all sales data aggregated.
         """
         dates = self.get_distinct_dates()
+        
         results = []
         for date in dates:
             results.append({
                 'date': date,
                 'sales': self.get_sales_for_date(date)
             })
-
 
         return results

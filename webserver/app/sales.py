@@ -159,10 +159,13 @@ def analytics(agglevel=None):
     return render_template('screens/analytics.html',
                            menuItems=get_menuItems(),
                            logsale=sales.get_sales(),
-                           plotamts=sales.plot_sales(agglevel=agglevel),
                            args={
                                'agglevels': qyfacs.allowed_agg_levels(),
-                               'selectedagglevel': agglevel
+                               'selectedagglevel': agglevel,
+                               'plots': {
+                                   'aggregate': sales.plot_sales(agglevel=agglevel),
+                                   'compare': sales.plot_compare_sales()
+                               }
                            })
 
 

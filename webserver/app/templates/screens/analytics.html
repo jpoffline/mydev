@@ -7,11 +7,15 @@
 
 <h1>Analytics</h1>
 
-{%include 'forms/agglevelselection.html'%}
-
-{% if plotamts %}
-{{ plotamts|safe }}
-{% endif %}
+{%if args%}
+<div>
+    {%include 'forms/agglevelselection.html'%}
+    {{ args.plots.aggregate|safe }}
+</div>
+<div>
+    {{ args.plots.compare|safe }}
+</div>
+{%endif%}
 
 {% if logsale %}
 {% include 'views/salesview.html' %}

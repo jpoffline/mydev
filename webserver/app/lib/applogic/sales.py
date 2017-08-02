@@ -106,29 +106,13 @@ class Sales(object):
         self._check_cache()
         return self._cached['average']
 
-    def agg_sales_stats(self, data):
-        """ Generate a text string per
-        item for the sales data """
-        mean = sum(data['sales']) / len(data['sales'])
-        maxdata = max(data['sales'])
-        meta = []
-        for idx, point in enumerate(data['sales']):
-            dev = round(point - mean, 2)
-            frc = round(point / mean, 2)
-            fmx = round(point / maxdata * 100, 2)
-            text = data['times'][idx] + "<br>" + \
-                'Number of sales: ' + str(data['counts'][idx]) + '<br>' + \
-                'Deviation from average: ' + str(dev) + '<br>' +\
-                'Fraction of average: ' + str(frc) + '%' + '<br>' +\
-                'Fraction of maximum: ' + str(fmx) + '%''<br>'
-            meta.append(text)
-        return meta
+
 
     def plot_sales(self, agglevel='day'):
         """ Get a plot of the sales """
         data = self._sales.get_amounts_plottable(agglevel=agglevel)
         text = ['Number of sales: ' + str(d) for d in data['counts']]
-        text = self.agg_sales_stats(data)
+        text = plotting.agg_sales_stats(data)
         plot = plotting.plot_box(
             {
                 'x': data['times'],
@@ -140,13 +124,19 @@ class Sales(object):
 
         return bswidgets.inWell().get(plot)
 
+    def plot_compare_sales(self):
+        data = self.compare_sales()
+        meta = {
+            'title': 'Sales comparisons',
+            'xlabel': 'Day of the month',
+            'ylabel': 'Amount sold'
+        }
+        plot = plotting.plot_comparisons(data, meta)
+        return bswidgets.inWell().get(plot)
+
     def compare_sales(self):
         comparison_data = self._sales.get_agg_sales_for_all_dates()
-        for data in comparison_data:
-            date = data['date']
-            amounts = data['sales']['amounts']
-            counts = data['sales']['counts']
-            days = data['sales']['dates']
+        return comparison_data
 
 
 

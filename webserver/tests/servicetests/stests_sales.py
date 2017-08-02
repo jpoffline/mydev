@@ -8,7 +8,7 @@ from context import app
 
 
 import app.lib.applogic.sales as sales
-
+import app.lib.tools.tools as tools
 
 class ServiceTestSales(unittest.TestCase):
 
@@ -142,19 +142,14 @@ class ServiceTestSales(unittest.TestCase):
         self.assertEqual(self.sales._sales.get_distinct_dates(), [
                          '2012-04', '2017-04', '2017-05'])
 
-    def sanity_digit(self, digit):
-        if digit > 9:
-            return str(digit)
-        return '0' + str(digit)
-
     def crank_and_add_sale_over_datetime(self, saleMeta):
         for month in xrange(1, 5):
-            month = self.sanity_digit(month)
+            month = tools.digit_to_time(month)
             for day in xrange(1, 6):
                 for hour in xrange(0, 5):
                     saleMeta['datetime'] = '2012-' + month + '-' + \
-                        self.sanity_digit(day) + ' ' + \
-                        self.sanity_digit(hour) + ':21:31'
+                        tools.digit_to_time(day) + ' ' + \
+                        tools.digit_to_time(hour) + ':21:31'
                     self.sales.add_sale(saleMeta)
 
     def test_GetDataInDate_distinctDates(self):
@@ -198,6 +193,12 @@ class ServiceTestSales(unittest.TestCase):
 
         ss = self.sales._sales.get_agg_sales_for_all_dates()
         self.assertEqual(len(ss), 4)
+
+        self.assertEqual(ss[0]['date'],'2012-01')
+        self.assertEqual(ss[1]['date'],'2012-02')
+        self.assertEqual(ss[2]['date'],'2012-03')
+        self.assertEqual(ss[3]['date'],'2012-04')
+
         for item in ss:
             self.assertEqual(len(item['sales']['amounts']), 5)
             self.assertEqual(len(item['sales']['counts']), 5)

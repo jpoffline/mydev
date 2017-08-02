@@ -139,10 +139,16 @@ class Sales(object):
         )
 
         return bswidgets.inWell().get(plot)
-        #return plotting.plot_sales(
-        #    data,
-        #    meta={'agglevel': agglevel}
-        #)
+
+    def compare_sales(self):
+        comparison_data = self._sales.get_agg_sales_for_all_dates()
+        for data in comparison_data:
+            date = data['date']
+            amounts = data['sales']['amounts']
+            counts = data['sales']['counts']
+            days = data['sales']['dates']
+
+
 
     def loggedin(self):
         """ Returns whether or not the user

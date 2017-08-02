@@ -102,3 +102,8 @@ def append_gbp(in_str):
     if in_str is None:
         in_str = 0
     return u"\xA3" + "%.2f" % in_str
+
+def digit_to_time(digit):
+    if digit > 9:
+        return str(digit)
+    return '0' + str(digit)

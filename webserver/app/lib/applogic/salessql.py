@@ -3,8 +3,10 @@ import app.lib.sqlite.sql as sql
 import app.lib.services.hostinfo as hostinfo
 import app.config as config
 import app.lib.sqlite.qy_factories as qyfacs
+import app.lib.tools.tools as tools
 import os
 import datetime
+
 
 class SalesSQL(AppSQL):
 
@@ -155,25 +157,23 @@ class SalesSQL(AppSQL):
         dates = []
         amounts = []
         for re in res:
-            counts.append(re[1])
             amounts.append(re[0])
-            day =re[2]
-            dd= datetime.datetime.strptime(day,qyfacs.agglevel_to_format('day'))
-            day = dd.day
-            day = self.sanity_digit(day)
+            counts.append(re[1])
+            day = re[2]
+            dd = datetime.datetime.strptime(
+                day, qyfacs.agglevel_to_format(subagg))
+            day = dd.day # this needs to be generalised
+            day = tools.digit_to_time(day)
             dates.append(day)
         return {
             'counts': counts,
             'amounts': amounts,
             'dates': dates}
 
-
-    def sanity_digit(self, digit):
-        if digit > 9:
-            return str(digit)
-        return '0' + str(digit)
-
     def get_agg_sales_for_all_dates(self):
+        """
+        Get all sales data aggregated.
+        """
         dates = self.get_distinct_dates()
         results = []
         for date in dates:
@@ -181,5 +181,6 @@ class SalesSQL(AppSQL):
                 'date': date,
                 'sales': self.get_sales_for_date(date)
             })
+
 
         return results

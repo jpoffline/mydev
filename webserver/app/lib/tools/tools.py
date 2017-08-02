@@ -101,9 +101,19 @@ def append_gbp(in_str):
     """ Append a number with the GBP-symbol """
     if in_str is None:
         in_str = 0
-    return u"\xA3" + "%.2f" % in_str
+    if in_str < 0:
+        in_str = - in_str
+        sign = '-'
+    else:
+        sign = ''
+    return sign + u"\xA3" + "%.2f" % in_str
 
 def digit_to_time(digit):
     if digit > 9:
         return str(digit)
     return '0' + str(digit)
+
+def to_pctg(numerator, denominator):
+    if denominator != 0:
+        return round(numerator / denominator * 100, 2)
+    return False

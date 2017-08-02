@@ -60,3 +60,11 @@ def is_string_a_datetime(date_text, fmt=pretty_datetime_format()):
         return True
     except ValueError:
         return False
+
+def reformat_date(date, orig_fmt, new_fmt):
+    """ Reformat a datetime string """
+    return datetime.datetime.strptime(
+                date, orig_fmt).strftime(new_fmt)
+
+def datef_ym_to_BY(date):
+    return reformat_date(date, '%Y-%m', '%B %Y')

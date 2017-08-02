@@ -3,7 +3,9 @@
 from plotly import tools as plytools
 import plotly
 import plotly.graph_objs as go
-import datetime
+import app.lib.services.hostinfo as hostinfo
+import app.lib.tools.tools as tools
+
 
 def plot_box(data, meta):
     """ Put a plot into a bootstrap well """
@@ -16,7 +18,11 @@ def plot_box(data, meta):
     div = plotly.offline.plot({
         "data": [trace],
         "layout": go.Layout(
-            title=meta.get('title', 'data')
+            title=meta.get('title', 'data'),
+            yaxis=dict(
+                title=meta.get('ylabel', 'y'),
+                tickprefix=u"\xA3"
+            )
         )
     },
         show_link=False,
@@ -24,6 +30,7 @@ def plot_box(data, meta):
         include_plotlyjs=False)
 
     return div
+
 
 def agg_sales_stats(data):
     """ Generate a text string per
@@ -33,30 +40,31 @@ def agg_sales_stats(data):
     meta = []
     for idx, point in enumerate(data['sales']):
         dev = round(point - mean, 2)
-        frc = round(point / mean * 100, 2)
-        fmx = round(point / maxdata * 100, 2)
+        frc = tools.to_pctg(point, mean)
+        fmx = tools.to_pctg(point, maxdata)
         text = data['times'][idx] + "<br>" + \
             'Number of sales: ' + str(data['counts'][idx]) + '<br>' + \
-            'Deviation from average: ' + str(dev) + '<br>' +\
+            'Deviation from average: ' + tools.append_gbp(dev) + '<br>' +\
             'Fraction of average: ' + str(frc) + '%' + '<br>' +\
             'Fraction of maximum: ' + str(fmx) + '%'
         meta.append(text)
     return meta
 
-def comparisons_point_label(data):
+
+def point_label_comparisons(data):
     meta = []
-    date = datetime.datetime.strptime(
-                data['date'], '%Y-%m').strftime('%B %Y')
+    date = hostinfo.datef_ym_to_BY(data['date'])
 
     maxamt = max(data['sales']['amounts'])
     for idx, point in enumerate(data['sales']['amounts']):
-        frcmx = round(point / maxamt * 100, 2)
+        frcmx = tools.to_pctg(point,maxamt)
         text = data['sales']['dates'][idx] + \
-        ' ' + date + "<br>" + \
-        'Number of sales: ' + str(data['sales']['counts'][idx]) + '<br>' + \
-        'Fraction of maximum: ' + str(frcmx) + '%'
+            ' ' + date + "<br>" + \
+            'Number of sales: ' + str(data['sales']['counts'][idx]) + '<br>' + \
+            'Fraction of maximum: ' + str(frcmx) + '%'
         meta.append(text)
     return meta
+
 
 def plot_comparisons(comparison_data, meta):
     traces = []
@@ -68,8 +76,8 @@ def plot_comparisons(comparison_data, meta):
         trace = go.Scatter(
             x=days,
             y=amounts,
-            name=date,
-            text=comparisons_point_label(data)
+            name=hostinfo.datef_ym_to_BY(date),
+            text=point_label_comparisons(data)
         )
         traces.append(trace)
     div = plotly.offline.plot({
@@ -79,9 +87,10 @@ def plot_comparisons(comparison_data, meta):
             title=meta.get('xlabel', 'x')
         ),
             yaxis=dict(
-                title=meta.get('ylabel', 'y')
-        ))
-
+                title=meta.get('ylabel', 'y'),
+                tickprefix=u"\xA3"
+        )
+        )
     },
         show_link=False,
         output_type="div",

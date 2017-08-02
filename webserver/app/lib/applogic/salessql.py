@@ -4,8 +4,6 @@ import app.lib.services.hostinfo as hostinfo
 import app.config as config
 import app.lib.sqlite.qy_factories as qyfacs
 import app.lib.tools.tools as tools
-import os
-import datetime
 
 
 class SalesSQL(AppSQL):
@@ -21,6 +19,9 @@ class SalesSQL(AppSQL):
         self._username = user
         self._whereuser = 'submit_user = ' + user
         pass
+
+    def _submit_time(self):
+        return 'submit_time'
 
     def _schema(self):
         """ The table schema """
@@ -80,7 +81,7 @@ class SalesSQL(AppSQL):
     def get_sales_aggregated(self, agglevel, fordate=None):
         """ Get the sales data, aggregated """
         meta = {}
-        meta['timecol'] = 'submit_time'
+        meta['timecol'] = self._submit_time()
         meta['fmt'] = qyfacs.agglevel_to_format(agglevel)
         meta['others'] = ["count(*)", "sum(amount)"]
 
@@ -135,7 +136,7 @@ class SalesSQL(AppSQL):
         to some inputted aggregation level """
         meta = {}
         meta['fmt'] = qyfacs.agglevel_to_format(agglevel)
-        meta['timecol'] = 'submit_time'
+        meta['timecol'] = self._submit_time()
         qy = qyfacs.select_distinct_dates(self._table, meta)
         res = self._database.get_many_general(qy)
         dates = []
@@ -148,7 +149,7 @@ class SalesSQL(AppSQL):
         level, and sum the sub dates to a sub-aggregation level """
         meta = {}
         meta['fmt'] = qyfacs.agglevel_to_format(agglevel)
-        meta['timecol'] = 'submit_time'
+        meta['timecol'] = self._submit_time()
         meta['what'] = ['sum(amount)', 'count(*)',
                         qyfacs.strftime(qyfacs.agglevel_to_format(subagg), 'submit_time')]
         qy = qyfacs.select_in_datetime(self._table, meta, date, subagg)
@@ -160,9 +161,7 @@ class SalesSQL(AppSQL):
             amounts.append(re[0])
             counts.append(re[1])
             day = re[2]
-            dd = datetime.datetime.strptime(
-                day, qyfacs.agglevel_to_format(subagg))
-            day = dd.day # this needs to be generalised
+            day = hostinfo.reformat_date(day, qyfacs.agglevel_to_format(subagg),'%d')
             day = tools.digit_to_time(day)
             dates.append(day)
         return {

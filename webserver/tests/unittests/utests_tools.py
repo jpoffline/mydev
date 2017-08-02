@@ -174,3 +174,14 @@ class TestTools(unittest.TestCase):
         input = None
         expected = u"\xA3" + '0.00'
         self.assertEqual(tools.append_gbp(input), expected)
+
+        input = -5
+        expected = "-" + u"\xA3" + '5.00'
+        
+        self.assertEqual(tools.append_gbp(input), expected)
+
+
+    def test_to_pctg(self):
+        self.assertEqual(tools.to_pctg(1,1),100)
+        self.assertEqual(tools.to_pctg(1,0.5),200)
+        self.assertEqual(tools.to_pctg(1,0),False)

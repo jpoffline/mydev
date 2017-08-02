@@ -4,20 +4,20 @@ import app.lib.services.hostinfo as hostinfo
 import app.config as config
 import app.lib.sqlite.qy_factories as qyfacs
 import os
+import datetime
 
 class SalesSQL(AppSQL):
 
     def __init__(self, user):
-        db_path = config.SALES_db_root + user +'/'
+        db_path = config.SALES_db_root + user + '/'
         database = db_path + config.SALES_db_file
         hostinfo.check_and_create_path(db_path)
-
 
         super(SalesSQL, self).__init__(user=user,
                                        database=database,
                                        table=config.SALES_tb)
         self._username = user
-        self._whereuser ='submit_user = ' + user
+        self._whereuser = 'submit_user = ' + user
         pass
 
     def _schema(self):
@@ -60,7 +60,7 @@ class SalesSQL(AppSQL):
             })
         return to_plop
 
-    def get_amounts_plottable(self,agglevel='hour'):
+    def get_amounts_plottable(self, agglevel='hour'):
         """ Get the sales data in a plottable format """
         data = self._retrieve(order='asc')
         amount = []
@@ -75,13 +75,19 @@ class SalesSQL(AppSQL):
         results.update(hourly)
         return results
 
-    def get_sales_aggregated(self,agglevel):
+    def get_sales_aggregated(self, agglevel, fordate=None):
         """ Get the sales data, aggregated """
         meta = {}
         meta['timecol'] = 'submit_time'
         meta['fmt'] = qyfacs.agglevel_to_format(agglevel)
         meta['others'] = ["count(*)", "sum(amount)"]
-        data = self._database.select_groupby_time(self._table, meta)
+
+        if fordate is not None:
+            fordate = qyfacs.strftime(
+                meta['fmt'], meta['timecol']) + " = '" + fordate + "'"
+
+        data = self._database.select_groupby_time(
+            self._table, meta, where=fordate)
 
         counts = []
         times = []
@@ -123,6 +129,8 @@ class SalesSQL(AppSQL):
         return self._database.sum_col(self._table, 'amount')
 
     def get_distinct_dates(self, agglevel='month'):
+        """ Get a list of distinct dates
+        to some inputted aggregation level """
         meta = {}
         meta['fmt'] = qyfacs.agglevel_to_format(agglevel)
         meta['timecol'] = 'submit_time'
@@ -132,3 +140,46 @@ class SalesSQL(AppSQL):
         for date in res:
             dates.append(date[0])
         return dates
+
+    def get_sales_for_date(self, date, agglevel='month', subagg='day'):
+        """ Get the sales for a given date which is at a given aggregation
+        level, and sum the sub dates to a sub-aggregation level """
+        meta = {}
+        meta['fmt'] = qyfacs.agglevel_to_format(agglevel)
+        meta['timecol'] = 'submit_time'
+        meta['what'] = ['sum(amount)', 'count(*)',
+                        qyfacs.strftime(qyfacs.agglevel_to_format(subagg), 'submit_time')]
+        qy = qyfacs.select_in_datetime(self._table, meta, date, subagg)
+        res = self._database.get_many_general(qy)
+        counts = []
+        dates = []
+        amounts = []
+        for re in res:
+            counts.append(re[1])
+            amounts.append(re[0])
+            day =re[2]
+            dd= datetime.datetime.strptime(day,qyfacs.agglevel_to_format('day'))
+            day = dd.day
+            day = self.sanity_digit(day)
+            dates.append(day)
+        return {
+            'counts': counts,
+            'amounts': amounts,
+            'dates': dates}
+
+
+    def sanity_digit(self, digit):
+        if digit > 9:
+            return str(digit)
+        return '0' + str(digit)
+
+    def get_agg_sales_for_all_dates(self):
+        dates = self.get_distinct_dates()
+        results = []
+        for date in dates:
+            results.append({
+                'date': date,
+                'sales': self.get_sales_for_date(date)
+            })
+
+        return results

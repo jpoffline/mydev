@@ -91,6 +91,7 @@ def select_groupby_time(table, meta, where=None):
     qy += table + " GROUP BY " + strftime(time_res, timecol)
     if where is not None:
         qy += ' WHERE ' + where
+    
     return qy + ";"
 
 def select_distinct_dates(table, meta):
@@ -112,11 +113,13 @@ def allowed_agg_levels():
     aggregation levels for datetimes """
     return ['year','month','day','hour','minute']
 
-def select_in_datetime(table, meta, datewanted):
+def select_in_datetime(table, meta, datewanted,subagg=None):
     """ Select columns when a time col matches a particular time frame """
     what = ', '.join(meta['what'])
     qy = "SELECT " + what + " FROM " + table 
     qy += " WHERE " + strftime(meta['fmt'], meta['timecol']) + " = '" + datewanted + "'"
+    if subagg is not None:
+        qy += " GROUP BY " + strftime(agglevel_to_format(subagg), meta['timecol'])
     return qy + ";"
 
 def agglevel_to_format(agglevel):

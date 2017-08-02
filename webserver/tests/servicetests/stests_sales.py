@@ -125,7 +125,8 @@ class ServiceTestSales(unittest.TestCase):
         }
         self.sales.add_sale(dummy_sale2)
         self.assertEqual(self.sales.get_nsales(), 2)
-        self.assertEqual(self.sales._sales.get_distinct_dates(), ['2017-04','2017-05'])
+        self.assertEqual(self.sales._sales.get_distinct_dates(), [
+                         '2017-04', '2017-05'])
 
         dummy_sale3 = {
             'amount': 12.21,
@@ -136,5 +137,68 @@ class ServiceTestSales(unittest.TestCase):
             'submit_machine': 'TOY'
         }
         self.sales.add_sale(dummy_sale3)
+
         self.assertEqual(self.sales.get_nsales(), 3)
-        self.assertEqual(self.sales._sales.get_distinct_dates(), ['2012-04','2017-04','2017-05'])
+        self.assertEqual(self.sales._sales.get_distinct_dates(), [
+                         '2012-04', '2017-04', '2017-05'])
+
+    def sanity_digit(self, digit):
+        if digit > 9:
+            return str(digit)
+        return '0' + str(digit)
+
+    def crank_and_add_sale_over_datetime(self, saleMeta):
+        for month in xrange(1, 5):
+            month = self.sanity_digit(month)
+            for day in xrange(1, 6):
+                for hour in xrange(0, 5):
+                    saleMeta['datetime'] = '2012-' + month + '-' + \
+                        self.sanity_digit(day) + ' ' + \
+                        self.sanity_digit(hour) + ':21:31'
+                    self.sales.add_sale(saleMeta)
+
+    def test_GetDataInDate_distinctDates(self):
+        self.assertEqual(self.sales.loggedin(), False)
+        self.sales.log_user_in(self._dummy_username)
+        self.assertEqual(self.sales.loggedin(), True)
+        dummy_sale3 = {
+            'amount': 12.21,
+            'description': 'DESC',
+            'user': self._dummy_username,
+            'title': 'TITLE',
+            'datetime': '2012-04-01',
+            'submit_machine': 'TOY'
+        }
+        self.sales.add_sale(dummy_sale3)
+
+        self.assertEqual(self.sales.get_nsales(), 1)
+
+        self.crank_and_add_sale_over_datetime(dummy_sale3)
+
+        ss = self.sales._sales.get_sales_for_date('2012-02', agglevel='month')
+        self.assertEqual(len(ss['amounts']), 5)
+        self.assertEqual(len(ss['counts']), 5)
+        self.assertEqual(len(ss['dates']), 5)
+        self.assertEqual(ss['dates'], ['01','02', '03', '04','05'])
+
+    def test_GetAllDataForTime_distinctDates(self):
+        self.assertEqual(self.sales.loggedin(), False)
+        self.sales.log_user_in(self._dummy_username)
+        self.assertEqual(self.sales.loggedin(), True)
+        dummy_sale3 = {
+            'amount': 12.21,
+            'description': 'DESC',
+            'user': self._dummy_username,
+            'title': 'TITLE',
+            'datetime': '2012-04-01',
+            'submit_machine': 'TOY'
+        }
+        self.sales.add_sale(dummy_sale3)
+        self.crank_and_add_sale_over_datetime(dummy_sale3)
+
+        ss = self.sales._sales.get_agg_sales_for_all_dates()
+        self.assertEqual(len(ss), 4)
+        for item in ss:
+            self.assertEqual(len(item['sales']['amounts']), 5)
+            self.assertEqual(len(item['sales']['counts']), 5)
+            self.assertEqual(len(item['sales']['dates']), 5)

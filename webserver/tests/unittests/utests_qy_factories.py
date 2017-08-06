@@ -79,7 +79,7 @@ class TestQyFactories(unittest.TestCase):
     def test_select_table_name_from_db_qy(self):
         db = 'DB'
         tb = 'TB'
-        actual = qy_factories.select_table_name_from_db_qy(db, tb)
+        actual = qy_factories.select_table_name_from_db_qy(tb)
         expected = "SELECT name FROM sqlite_master WHERE type='table' AND name='TB' LIMIT 1;"
         self.assertEqual(actual, expected)
 
@@ -88,9 +88,17 @@ class TestQyFactories(unittest.TestCase):
         expected = "SELECT Count(*) FROM TB;"
         self.assertEqual(actual, expected)
 
+        actual = qy_factories.count_nrows("TB", where='VAL=1')
+        expected = "SELECT Count(*) FROM TB WHERE VAL=1;"
+        self.assertEqual(actual, expected)
+
+
     def test_sum_col(self):
         actual = qy_factories.sum_col("TB", "COL")
         expected = "SELECT SUM(COL) FROM TB;"
+        self.assertEqual(actual, expected)
+        actual = qy_factories.sum_col("TB", "COL", where='VAL=1')
+        expected = "SELECT SUM(COL) FROM TB WHERE VAL=1;"
         self.assertEqual(actual, expected)
 
     def test_strftime(self):
@@ -115,6 +123,11 @@ class TestQyFactories(unittest.TestCase):
         actual = qy_factories.select_groupby_time(table, meta)
         expected = "SELECT strftime('FMT', TIMECOL), col2, col3 FROM TABLE" +\
             " GROUP BY strftime('FMT', TIMECOL);"
+        self.assertEqual(actual, expected)
+
+        actual = qy_factories.select_groupby_time(table, meta,where='VAL=1')
+        expected = "SELECT strftime('FMT', TIMECOL), col2, col3 FROM TABLE" +\
+            " GROUP BY strftime('FMT', TIMECOL) WHERE VAL=1;"
         self.assertEqual(actual, expected)
 
     def test_noOthersselect_groupby_time(self):

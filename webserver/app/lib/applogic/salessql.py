@@ -4,6 +4,7 @@ import app.lib.services.hostinfo as hostinfo
 import app.config as config
 import app.lib.sqlite.qy_factories as qyfacs
 import app.lib.tools.tools as tools
+import app.lib.tools.datetimetools as dtools
 
 
 class SalesSQL(AppSQL):
@@ -21,6 +22,7 @@ class SalesSQL(AppSQL):
         pass
 
     def _submit_time(self):
+        """ The name of the time column to be aggregated over """
         return 'submit_time'
 
     def _schema(self):
@@ -29,7 +31,7 @@ class SalesSQL(AppSQL):
             {'name': 'id', 'type': 'INTEGER primary key'},
             {'name': 'submit_user', 'type': 'text'},
             {'name': 'submit_machine', 'type': 'text'},
-            {'name': 'submit_time', 'type': 'text'},
+            {'name': self._submit_time(), 'type': 'text'},
             {'name': 'title', 'type': 'text'},
             {'name': 'description', 'type': 'text'},
             {'name': 'full_desc', 'type': 'text'},
@@ -41,7 +43,7 @@ class SalesSQL(AppSQL):
         return[
             'submit_user',
             'submit_machine',
-            'submit_time',
+            self._submit_time(),
             'title',
             'description',
             'full_desc',
@@ -151,9 +153,13 @@ class SalesSQL(AppSQL):
         meta['fmt'] = qyfacs.agglevel_to_format(agglevel)
         meta['timecol'] = self._submit_time()
         meta['what'] = ['sum(amount)', 'count(*)',
-                        qyfacs.strftime(qyfacs.agglevel_to_format(subagg), 'submit_time')]
+                        qyfacs.strftime(qyfacs.agglevel_to_format(subagg), self._submit_time())]
         qy = qyfacs.select_in_datetime(self._table, meta, date, subagg)
+        
         res = self._database.get_many_general(qy)
+        return self.collect_split_sales(res, subagg)
+
+    def collect_split_sales(self, res, subagg):
         counts = []
         dates = []
         amounts = []
@@ -161,7 +167,8 @@ class SalesSQL(AppSQL):
             amounts.append(re[0])
             counts.append(re[1])
             day = re[2]
-            day = hostinfo.reformat_date(day, qyfacs.agglevel_to_format(subagg),'%d')
+            day = hostinfo.reformat_date(
+                day, qyfacs.agglevel_to_format(subagg), dtools.to_fmt(subagg))
             day = tools.digit_to_time(day)
             dates.append(day)
         return {
@@ -169,17 +176,16 @@ class SalesSQL(AppSQL):
             'amounts': amounts,
             'dates': dates}
 
-    def get_agg_sales_for_all_dates(self):
+    def get_agg_sales_for_all_dates(self, agglevel='month', subagg='day'):
         """
         Get all sales data aggregated.
         """
-        dates = self.get_distinct_dates()
-        
+        dates = self.get_distinct_dates(agglevel=agglevel)
         results = []
         for date in dates:
             results.append({
                 'date': date,
-                'sales': self.get_sales_for_date(date)
+                'sales': self.get_sales_for_date(date, agglevel=agglevel, subagg=subagg)
             })
 
         return results

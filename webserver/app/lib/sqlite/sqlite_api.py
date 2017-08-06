@@ -76,7 +76,7 @@ def does_table_exist(database, table):
     if not does_database_exist(database):
         return gret('No database')
     conn = create_connection(database)
-    data = conn.execute(factories.select_table_name_from_db_qy(database,table)).fetchall()
+    data = conn.execute(factories.select_table_name_from_db_qy(table)).fetchall()
     conn.close()
     nresults = len(data)
     if nresults > 0:

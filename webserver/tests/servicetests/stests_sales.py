@@ -142,12 +142,12 @@ class ServiceTestSales(unittest.TestCase):
         self.assertEqual(self.sales._sales.get_distinct_dates(), [
                          '2012-04', '2017-04', '2017-05'])
 
-    def crank_and_add_sale_over_datetime(self, saleMeta):
-        for month in xrange(1, 5):
+    def crank_and_add_sale_over_datetime(self,saleMeta, year='2012',nmonths=5,ndays=6,nhours=5):
+        for month in xrange(1, nmonths):
             month = tools.digit_to_time(month)
-            for day in xrange(1, 6):
-                for hour in xrange(0, 5):
-                    saleMeta['datetime'] = '2012-' + month + '-' + \
+            for day in xrange(1, ndays):
+                for hour in xrange(0, nhours):
+                    saleMeta['datetime'] = year + '-' + month + '-' + \
                         tools.digit_to_time(day) + ' ' + \
                         tools.digit_to_time(hour) + ':21:31'
                     self.sales.add_sale(saleMeta)
@@ -190,9 +190,10 @@ class ServiceTestSales(unittest.TestCase):
         }
         self.sales.add_sale(dummy_sale3)
         self.crank_and_add_sale_over_datetime(dummy_sale3)
+        self.crank_and_add_sale_over_datetime(dummy_sale3, year='2015')
 
         ss = self.sales._sales.get_agg_sales_for_all_dates()
-        self.assertEqual(len(ss), 4)
+        self.assertEqual(len(ss), 8)
 
         self.assertEqual(ss[0]['date'],'2012-01')
         self.assertEqual(ss[1]['date'],'2012-02')
@@ -203,3 +204,7 @@ class ServiceTestSales(unittest.TestCase):
             self.assertEqual(len(item['sales']['amounts']), 5)
             self.assertEqual(len(item['sales']['counts']), 5)
             self.assertEqual(len(item['sales']['dates']), 5)
+
+
+        ss = self.sales._sales.get_agg_sales_for_all_dates( agglevel='year', subagg='month')
+        self.assertEqual(len(ss), 2)

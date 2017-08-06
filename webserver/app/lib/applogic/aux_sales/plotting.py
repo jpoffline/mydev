@@ -5,6 +5,7 @@ import plotly
 import plotly.graph_objs as go
 import app.lib.services.hostinfo as hostinfo
 import app.lib.tools.tools as tools
+import app.lib.jpplotly.plotlyapi as ptapi
 
 
 def plot_box(data, meta):
@@ -15,21 +16,16 @@ def plot_box(data, meta):
         text=data['text']
     )
 
-    div = plotly.offline.plot({
-        "data": [trace],
-        "layout": go.Layout(
-            title=meta.get('title', 'data'),
-            yaxis=dict(
-                title=meta.get('ylabel', 'y'),
-                tickprefix=u"\xA3"
-            )
+    traces = [trace]
+    layout = go.Layout(
+        title=meta.get('title', 'data'),
+        yaxis=dict(
+            title=meta.get('ylabel', 'y'),
+            tickprefix=u"\xA3"
         )
-    },
-        show_link=False,
-        output_type="div",
-        include_plotlyjs=False)
+    )
 
-    return div
+    return ptapi.traces_layout_to_div(traces, layout)
 
 
 def agg_sales_stats(data):
@@ -51,13 +47,15 @@ def agg_sales_stats(data):
     return meta
 
 
-def point_label_comparisons(data):
+def point_label_comparisons(data,inmeta=None):
     meta = []
-    date = hostinfo.datef_ym_to_BY(data['date'])
+    date = hostinfo.datef_re(data['date'], inmeta['aggtype'])
 
     maxamt = max(data['sales']['amounts'])
     for idx, point in enumerate(data['sales']['amounts']):
-        frcmx = tools.to_pctg(point,maxamt)
+        frcmx = tools.to_pctg(point, maxamt)
+        if frcmx is False:
+            frcmx= ''
         text = data['sales']['dates'][idx] + \
             ' ' + date + "<br>" + \
             'Number of sales: ' + str(data['sales']['counts'][idx]) + '<br>' + \
@@ -76,27 +74,24 @@ def plot_comparisons(comparison_data, meta):
         trace = go.Scatter(
             x=days,
             y=amounts,
-            name=hostinfo.datef_ym_to_BY(date),
-            text=point_label_comparisons(data)
+            name=hostinfo.datef_re(date, meta['aggtype']),
+            text=point_label_comparisons(data,meta)
         )
         traces.append(trace)
-    div = plotly.offline.plot({
-        "data": traces,
-        "layout": go.Layout(title=meta.get('title', 'data'),
-                            xaxis=dict(
+    layout = go.Layout(
+        title=meta.get('title', 'data'),
+        xaxis=dict(
             title=meta.get('xlabel', 'x')
         ),
-            yaxis=dict(
-                title=meta.get('ylabel', 'y'),
-                tickprefix=u"\xA3"
+        yaxis=dict(
+            title=meta.get('ylabel', 'y'),
+            tickprefix=u"\xA3"
         )
-        )
-    },
-        show_link=False,
-        output_type="div",
-        include_plotlyjs=False)
+    )
 
-    return div
+    layout.update(hovermode='closest')
+
+    return ptapi.traces_layout_to_div(traces, layout)
 
 
 def plot_sales(sales_data, meta=None):
@@ -141,9 +136,4 @@ def plot_sales(sales_data, meta=None):
     graph['layout']['yaxis2'].update(title='Amount')
     graph['layout'].update(showlegend=False, title='Sales summary')
 
-    div = plotly.offline.plot(graph,
-                              show_link=False,
-                              output_type="div",
-                              include_plotlyjs=False)
-
-    return div
+    return ptapi.graph_to_div(graph)

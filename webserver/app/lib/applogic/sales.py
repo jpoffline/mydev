@@ -5,6 +5,7 @@ import app.lib.tools.tools as tools
 import app.lib.applogic.salessql as salessql
 import aux_sales.plotting as plotting
 import app.lib.widgets.bswidgets as bswidgets
+import app.lib.tools.datetimetools as dtools
 
 
 class Sales(object):
@@ -106,8 +107,6 @@ class Sales(object):
         self._check_cache()
         return self._cached['average']
 
-
-
     def plot_sales(self, agglevel='day'):
         """ Get a plot of the sales """
         data = self._sales.get_amounts_plottable(agglevel=agglevel)
@@ -124,21 +123,36 @@ class Sales(object):
 
         return bswidgets.inWell().get(plot)
 
+    def agg_type_decode(self, agg_type):
+        if agg_type == 'year_to_month':
+            split_level = 'year'
+            agg_to = 'month'
+            xlabel = 'Month'
+        elif agg_type == 'month_to_day':
+            split_level = 'month'
+            agg_to = 'day'
+            xlabel = 'Day of the month'
+        return split_level, agg_to, xlabel
+
+
     def plot_compare_sales(self):
-        data = self.compare_sales()
+
+        agg_type = 'year_to_month'
+        split_level, agg_to, xlabel = self.agg_type_decode(agg_type)
+
+
+        data = self.compare_sales(agglevel=split_level, subagg=agg_to)
         meta = {
             'title': 'Sales comparisons',
-            'xlabel': 'Day of the month',
-            'ylabel': 'Amount sold'
+            'xlabel': xlabel,
+            'ylabel': 'Amount sold',
+            'aggtype': dtools.to_fmt(split_level)
         }
         plot = plotting.plot_comparisons(data, meta)
         return bswidgets.inWell().get(plot)
 
-    def compare_sales(self):
-        comparison_data = self._sales.get_agg_sales_for_all_dates()
-        return comparison_data
-
-
+    def compare_sales(self, agglevel, subagg):
+        return self._sales.get_agg_sales_for_all_dates(agglevel=agglevel, subagg=subagg)
 
     def loggedin(self):
         """ Returns whether or not the user

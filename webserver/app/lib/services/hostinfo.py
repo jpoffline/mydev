@@ -68,3 +68,14 @@ def reformat_date(date, orig_fmt, new_fmt):
 
 def datef_ym_to_BY(date):
     return reformat_date(date, '%Y-%m', '%B %Y')
+
+def datef_y_to_y(date):
+    return date
+
+def datef_re(date, format):
+    if format == '%Y':
+        return datef_y_to_y(date)
+    elif format == '%Y-%m':
+        return datef_ym_to_BY(date)
+    else:
+        return False

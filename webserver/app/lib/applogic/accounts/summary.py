@@ -1,7 +1,7 @@
 
 import quicksummary as quicksummary
 import summaryoverview as summaryoverview
-
+import accountreport as accountreport
 
 class SummariseByDescription(object):
     def __init__(self, printer, accounts):
@@ -53,7 +53,7 @@ class SummariseByDescription(object):
         for k, v in summary.iteritems():
             items.append({'name': k, 'meta': v})
         # Sort summary items on the total
-        items = sorted(items, key=lambda k: k['meta']['total'])
+        items = sorted(items, key=lambda k: k['meta']['total'], reverse=True)
         return items
 
     def _gen_summaries(self):
@@ -108,5 +108,33 @@ class SummariseByDescription(object):
             clean_debit, self._accounts.total_debit(), maxcount=1).to_csv(meta['summary-oneoff-debit'])
         qs_credit = self.quick_summary(
             clean_credit, self._accounts.total_credit(), maxcount=1).to_csv(meta['summary-oneoff-credit'])
+
+        report_debit_regular = self.quick_summary(
+            clean_debit, self._accounts.total_debit(), mincount=1).to_html_table()
+        
+        report_credit_regular = self.quick_summary(
+            clean_credit, self._accounts.total_credit(), mincount=1).to_html_table()
+
+
+        report_debit_oneoff = self.quick_summary(
+            clean_debit, self._accounts.total_debit(), maxcount=1).to_html_table()
+        
+        report_credit_oneoff = self.quick_summary(
+            clean_credit, self._accounts.total_credit(), maxcount=1).to_html_table()
+
+
+        report_meta = {
+            'report_debit_regular':report_debit_regular,
+            'report_credit_regular': report_credit_regular,
+            'report_debit_oneoff':report_debit_oneoff,
+            'report_credit_oneoff':report_credit_oneoff,
+            'period': self._summary['period'],
+            'total_debit' : str(self._summary['total_debit']),
+            'total_credit': str(self._summary['total_credit'])
+
+        }
+        accountreport.accountreport(meta['summary-html'], report_meta).create()
+
+
         
         

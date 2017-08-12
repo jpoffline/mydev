@@ -3,6 +3,7 @@ import quicksummary as quicksummary
 import summaryoverview as summaryoverview
 import accountreport as accountreport
 
+
 class SummariseByDescription(object):
     def __init__(self, printer, accounts):
         self._accounts = accounts
@@ -19,6 +20,7 @@ class SummariseByDescription(object):
             data[row.description] = {}
             data[row.description]['total'] = row.get(which)
             data[row.description]['count'] = 1
+            data[row.description]['group'] = row.group
             data[row.description]['transactions'] = [
                 (row.date, row.get(which))]
         return data
@@ -45,8 +47,8 @@ class SummariseByDescription(object):
         for k in summary:
             self._print_item_summary(k['name'], k['meta'], total, opts)
 
-    def quick_summary(self, summary, total, mincount=0,maxcount=None):
-        return quicksummary.QuickSummary(summary, total, mincount=mincount,maxcount=maxcount)
+    def quick_summary(self, summary, total, mincount=0, maxcount=None):
+        return quicksummary.QuickSummary(summary, total, mincount=mincount, maxcount=maxcount)
 
     def _clean_summary(self, summary):
         items = []
@@ -82,10 +84,10 @@ class SummariseByDescription(object):
 
         summary_credit = self._summary['credits']
         summary_debit = self._summary['debits']
+
         #print 'MAX', self.find_max_amount_group(summary_credit)
         #summaryoverview.SummaryOverview(summary).tocsv(config.SCRATCH + 'overview.csv')
         #print 'MAX', self.find_max_amount_group(summary_debit)
-        #print summary_debit
         #print summary_credit
         clean_credit = self._clean_summary(summary_credit)
         clean_debit = self._clean_summary(summary_debit)
@@ -99,42 +101,28 @@ class SummariseByDescription(object):
         qs_debit.to_csv(meta['summary-debit'])
         qs_credit.to_csv(meta['summary-credit'])
 
-        qs_debit = self.quick_summary(
-            clean_debit, self._accounts.total_debit(), mincount=1).to_csv(meta['summary-regular-debit'])
-        qs_credit = self.quick_summary(
-            clean_credit, self._accounts.total_credit(), mincount=1).to_csv(meta['summary-regular-credit'])
-        
-        qs_debit = self.quick_summary(
-            clean_debit, self._accounts.total_debit(), maxcount=1).to_csv(meta['summary-oneoff-debit'])
-        qs_credit = self.quick_summary(
-            clean_credit, self._accounts.total_credit(), maxcount=1).to_csv(meta['summary-oneoff-credit'])
+        summary_debit_min = self.quick_summary(
+            clean_debit, self._accounts.total_debit(), mincount=1)
+        summary_debit_max = self.quick_summary(
+            clean_debit, self._accounts.total_debit(), maxcount=1)
+        summary_credit_min = self.quick_summary(
+            clean_credit, self._accounts.total_credit(), mincount=1)
+        summary_credit_max = self.quick_summary(
+            clean_credit, self._accounts.total_credit(), maxcount=1)
 
-        report_debit_regular = self.quick_summary(
-            clean_debit, self._accounts.total_debit(), mincount=1).to_html_table()
-        
-        report_credit_regular = self.quick_summary(
-            clean_credit, self._accounts.total_credit(), mincount=1).to_html_table()
-
-
-        report_debit_oneoff = self.quick_summary(
-            clean_debit, self._accounts.total_debit(), maxcount=1).to_html_table()
-        
-        report_credit_oneoff = self.quick_summary(
-            clean_credit, self._accounts.total_credit(), maxcount=1).to_html_table()
-
+        summary_debit_min.to_csv(meta['summary-regular-debit'])
+        summary_debit_max.to_csv(meta['summary-oneoff-debit'])
+        summary_credit_min.to_csv(meta['summary-regular-credit'])
+        summary_credit_max.to_csv(meta['summary-oneoff-credit'])
 
         report_meta = {
-            'report_debit_regular':report_debit_regular,
-            'report_credit_regular': report_credit_regular,
-            'report_debit_oneoff':report_debit_oneoff,
-            'report_credit_oneoff':report_credit_oneoff,
+            'report_debit_regular': summary_debit_min.to_html_table(),
+            'report_credit_regular': summary_credit_min.to_html_table(),
+            'report_debit_oneoff': summary_debit_max.to_html_table(),
+            'report_credit_oneoff': summary_credit_max.to_html_table(),
             'period': self._summary['period'],
-            'total_debit' : str(self._summary['total_debit']),
+            'total_debit': str(self._summary['total_debit']),
             'total_credit': str(self._summary['total_credit'])
 
         }
         accountreport.accountreport(meta['summary-html'], report_meta).create()
-
-
-        
-        

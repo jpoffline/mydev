@@ -17,13 +17,13 @@ class QuickSummary(DUMPABLE):
         pass
 
     def _header(self):
-        return ('name', 'total', 'count', 'frac_global', 'frac_group')
+        return ('name', 'total', 'count', 'frac_global', 'frac_group','envelope')
 
     def _rows(self, item):
         return (item['name'],
                 round(item['meta']['total'], 2),
                 item['meta']['count'],
-                round(item['meta']['total'] / self._total * 100, 2), 0)
+                round(item['meta']['total'] / self._total * 100, 2), 0,item['meta']['group'])
 
     def _consolidate(self):
         for row in xrange(0, len(self._data)):

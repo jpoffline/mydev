@@ -8,7 +8,7 @@ mappings = open(config.SCRATCH + config.CONFIG_loc + config.MAPPINGS_file).read(
 mappings = json.loads(mappings)
 fileName = config.SCRATCH + config.INPUTS_loc + '/data.csv'
 
-accFile = accounts.AccountsFile(fileName, mappings['desc_maps'])
+accFile = accounts.AccountsFile(fileName, mappings)
 accFile.stats()
 
 

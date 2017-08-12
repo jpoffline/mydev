@@ -20,6 +20,13 @@ class DUMPABLE(object):
         """
         pass
 
+    def content(self):
+        pass
+
+    def to_file(self, filename):
+        display = open(filename, 'w')
+        display.write(self.content())
+        display.close()
 
     def to_csv(self,filename):
         print '* writing to file', filename

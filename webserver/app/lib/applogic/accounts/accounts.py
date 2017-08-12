@@ -22,12 +22,16 @@ class Transaction(object):
         self.debit = self.sanitise(row[5])
         self.credit = self.sanitise(row[6])
         self.balance = self.sanitise(row[7])
+        self.group = None
 
     def get(self, key):
         if key == 'credit':
             return self.credit
         elif key == 'debit':
             return self.debit
+
+    def set_group(self, grp):
+        self.group = grp
 
     def add(self, row):
         pass
@@ -54,14 +58,21 @@ class Accounts(object):
         self._total_credit = None
         self._period_begin = datetime.today()
         self._period_end = datetime.strptime("01/01/1950", "%d/%m/%Y")
-        self._mappings = mappings
+        self._descmappings = mappings['desc_maps']
+        self._envelopemappings = mappings['envelope_maps']
         pass
 
     def _check_transact_desc(self, description):
         # Map the transaction description
         # if possible.
-        return self._mappings.get(
+        return self._descmappings.get(
             description,description)
+
+    def _check_transact_env(self, desc):
+        for k,v in self._envelopemappings.iteritems():
+            if desc in v:
+                return k
+        return ''
 
     def _check_transact_date(self, date):
         # Check the transaction date
@@ -74,7 +85,9 @@ class Accounts(object):
             self._period_end = date
 
     def _add_transaction(self, transaction):
+        orig_desc = transaction.description
         transaction.description = self._check_transact_desc(transaction.description)
+        transaction.set_group(self._check_transact_env(orig_desc))
         self._rows.append(transaction)
         self._count += 1
         self._recalc = True

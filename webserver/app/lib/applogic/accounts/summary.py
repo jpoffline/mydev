@@ -45,8 +45,8 @@ class SummariseByDescription(object):
         for k in summary:
             self._print_item_summary(k['name'], k['meta'], total, opts)
 
-    def quick_summary(self, summary, total):
-        return quicksummary.QuickSummary(summary, total)
+    def quick_summary(self, summary, total, mincount=0,maxcount=None):
+        return quicksummary.QuickSummary(summary, total, mincount=mincount,maxcount=maxcount)
 
     def _clean_summary(self, summary):
         items = []
@@ -64,7 +64,8 @@ class SummariseByDescription(object):
                 summary_credit = self._gen_summary(
                     summary_credit, 'credit', row)
             if row.debit > 0:
-                summary_debit = self._gen_summary(summary_debit, 'debit', row)
+                summary_debit = self._gen_summary(
+                    summary_debit, 'debit', row)
 
         return {
             'credits': summary_credit,
@@ -97,3 +98,15 @@ class SummariseByDescription(object):
             clean_credit, self._accounts.total_credit())
         qs_debit.tocsv(meta['summary-debit'])
         qs_credit.tocsv(meta['summary-credit'])
+
+        qs_debit = self.quick_summary(
+            clean_debit, self._accounts.total_debit(), mincount=1).tocsv(meta['summary-regular-debit'])
+        qs_credit = self.quick_summary(
+            clean_credit, self._accounts.total_credit(), mincount=1).tocsv(meta['summary-regular-credit'])
+        
+        qs_debit = self.quick_summary(
+            clean_debit, self._accounts.total_debit(), maxcount=1).tocsv(meta['summary-oneoff-debit'])
+        qs_credit = self.quick_summary(
+            clean_credit, self._accounts.total_credit(), maxcount=1).tocsv(meta['summary-oneoff-credit'])
+        
+        

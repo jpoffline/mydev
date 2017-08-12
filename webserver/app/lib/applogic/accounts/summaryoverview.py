@@ -7,10 +7,14 @@ class SummaryOverview(object):
         self._summary = summary
         self._data = None
         self._generate()
-        
 
     def header(self):
-        return ('ncreditors', 'ndebitors', 'total_debit', 'total_credit', 'period_begin', 'period_end')
+        return ('ncreditors',
+                'ndebitors',
+                'total_debit',
+                'total_credit',
+                'period_begin',
+                'period_end')
 
     def _generate(self):
         summary_credit = self._summary['credits']

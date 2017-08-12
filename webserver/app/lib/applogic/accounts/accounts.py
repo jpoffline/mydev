@@ -1,13 +1,16 @@
 
 
-def remap_desc(input):
-    if input == 'VWFS  UK  LIMITED':
-        return 'Car payments'
-    return input
-
-
 class Transaction(object):
-    #Transaction Date	Transaction Type	Sort Code	Account Number	Transaction Description	Debit Amount	Credit Amount	Balance
+    #
+    # Transaction Date
+    # Transaction Type
+    # Sort Code
+    # Account Number
+    # Transaction Description
+    # Debit Amount
+    # Credit Amount
+    # Balance
+    #
     def __init__(self, id, row):
         self.id = id
         self.row = row
@@ -15,7 +18,7 @@ class Transaction(object):
         self.type = row[1]
         self.sortcode = row[2]
         self.accountnumber = row[3]
-        self.description = remap_desc(row[4])
+        self.description = row[4]
         self.debit = self.sanitise(row[5])
         self.credit = self.sanitise(row[6])
         self.balance = self.sanitise(row[7])
@@ -43,7 +46,7 @@ from datetime import datetime
 
 class Accounts(object):
 
-    def __init__(self):
+    def __init__(self, mappings={}):
         self._rows = []
         self._count = 0
         self._recalc = True
@@ -51,18 +54,32 @@ class Accounts(object):
         self._total_credit = None
         self._period_begin = datetime.today()
         self._period_end = datetime.strptime("01/01/1950", "%d/%m/%Y")
+        self._mappings = mappings
         pass
 
-    def _add_transaction(self, transaction):
-        self._rows.append(transaction)
-        self._count += 1
-        self._recalc = True
+    def _check_transact_desc(self, description):
+        # Map the transaction description
+        # if possible.
+        return self._mappings.get(
+            description,description)
 
-        date = datetime.strptime(transaction.date, "%d/%m/%y")
+    def _check_transact_date(self, date):
+        # Check the transaction date
+        # to find the earliest
+        # and latest dates.
+        date = datetime.strptime(date, "%d/%m/%y")
         if date < self._period_begin:
             self._period_begin = date
         if date > self._period_end:
             self._period_end = date
+
+    def _add_transaction(self, transaction):
+        transaction.description = self._check_transact_desc(transaction.description)
+        self._rows.append(transaction)
+        self._count += 1
+        self._recalc = True
+        self._check_transact_date(transaction.date)
+
 
     def add_transaction(self, transaction):
         transaction = Transaction(self._count, transaction)
@@ -99,9 +116,9 @@ class Accounts(object):
 
 
 class AccountsFile(object):
-    def __init__(self, filename):
+    def __init__(self, filename, mappings=None):
         self._filename = filename
-        self._accounts = Accounts()
+        self._accounts = Accounts(mappings=mappings)
         self._readfile()
 
     def _readfile(self):

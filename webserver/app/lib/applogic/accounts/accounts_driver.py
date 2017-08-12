@@ -2,10 +2,13 @@ import accounts as accounts
 import summary as summary
 import sys
 import config_accountdata as config
+import json
 
+mappings = open(config.SCRATCH + config.CONFIG_loc + config.MAPPINGS_file).read()
+mappings = json.loads(mappings)
 fileName = config.SCRATCH + config.INPUTS_loc + '/data.csv'
 
-accFile = accounts.AccountsFile(fileName)
+accFile = accounts.AccountsFile(fileName, mappings['desc_maps'])
 accFile.stats()
 
 
@@ -20,8 +23,12 @@ class Printer(object):
 
 output_meta = {
     'outlocs': {
-        'summary-debit': config.SCRATCH + config.OUTPUTS_loc + 'summary-debit.csv',
-        'summary-credit': config.SCRATCH + config.OUTPUTS_loc + 'summary-credit.csv',
+        'summary-debit': config.SCRATCH + config.OUTPUTS_loc + 'debit-summary.csv',
+        'summary-credit': config.SCRATCH + config.OUTPUTS_loc + 'credit-summary.csv',
+        'summary-regular-debit': config.SCRATCH + config.OUTPUTS_loc + 'debit-summary-regular.csv',
+        'summary-regular-credit': config.SCRATCH + config.OUTPUTS_loc + 'credit-summary-regular.csv',
+        'summary-oneoff-debit': config.SCRATCH + config.OUTPUTS_loc + 'debit-summary-oneoff.csv',
+        'summary-oneoff-credit': config.SCRATCH + config.OUTPUTS_loc + 'credit-summary-oneoff.csv'
     }
 }
 

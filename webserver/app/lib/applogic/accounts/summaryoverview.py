@@ -1,7 +1,7 @@
-import csvhelp as csv
 
+from dumpable import DUMPABLE
 
-class SummaryOverview(object):
+class SummaryOverview(DUMPABLE):
 
     def __init__(self, summary):
         self._summary = summary
@@ -28,5 +28,7 @@ class SummaryOverview(object):
             self._summary['period']['end']
         )]
 
-    def tocsv(self, filename):
-        csv.dump(filename, self.header(), self._data)
+    def data(self):
+        return self._data
+
+    

@@ -76,7 +76,7 @@ class SummariseByDescription(object):
         }
 
     def save_summaryOverview(self, filename=None):
-        summaryoverview.SummaryOverview(self._summary).tocsv(filename)
+        summaryoverview.SummaryOverview(self._summary).to_csv(filename)
 
     def create_summariesSave(self, meta):
 
@@ -96,17 +96,17 @@ class SummariseByDescription(object):
             clean_debit, self._accounts.total_debit())
         qs_credit = self.quick_summary(
             clean_credit, self._accounts.total_credit())
-        qs_debit.tocsv(meta['summary-debit'])
-        qs_credit.tocsv(meta['summary-credit'])
+        qs_debit.to_csv(meta['summary-debit'])
+        qs_credit.to_csv(meta['summary-credit'])
 
         qs_debit = self.quick_summary(
-            clean_debit, self._accounts.total_debit(), mincount=1).tocsv(meta['summary-regular-debit'])
+            clean_debit, self._accounts.total_debit(), mincount=1).to_csv(meta['summary-regular-debit'])
         qs_credit = self.quick_summary(
-            clean_credit, self._accounts.total_credit(), mincount=1).tocsv(meta['summary-regular-credit'])
+            clean_credit, self._accounts.total_credit(), mincount=1).to_csv(meta['summary-regular-credit'])
         
         qs_debit = self.quick_summary(
-            clean_debit, self._accounts.total_debit(), maxcount=1).tocsv(meta['summary-oneoff-debit'])
+            clean_debit, self._accounts.total_debit(), maxcount=1).to_csv(meta['summary-oneoff-debit'])
         qs_credit = self.quick_summary(
-            clean_credit, self._accounts.total_credit(), maxcount=1).tocsv(meta['summary-oneoff-credit'])
+            clean_credit, self._accounts.total_credit(), maxcount=1).to_csv(meta['summary-oneoff-credit'])
         
         

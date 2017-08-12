@@ -11,18 +11,24 @@ class SummariseByDescription(object):
         self._summary = self._gen_summaries()
 
     def _gen_summary(self, data, which, row):
-        if row.description in data:
-            data[row.description]['total'] += row.get(which)
-            data[row.description]['count'] += 1
-            data[row.description]['transactions'].append(
-                (row.date, row.get(which)))
+
+        if row.period in data:
+            if row.description in data[row.period]:
+                data[row.period][row.description]['total'] += row.get(which)
+                data[row.period][row.description]['count'] += 1
+                data[row.period][row.description]['transactions'].append(
+                    (row.date, row.get(which)))
+            else:
+                data[row.period][row.description] = {}
+                data[row.period][row.description]['total'] = row.get(which)
+                data[row.period][row.description]['count'] = 1
+                data[row.period][row.description]['period'] = row.period
+                data[row.period][row.description]['group'] = row.group
+                data[row.period][row.description]['transactions'] = [
+                    (row.date, row.get(which))]
         else:
-            data[row.description] = {}
-            data[row.description]['total'] = row.get(which)
-            data[row.description]['count'] = 1
-            data[row.description]['group'] = row.group
-            data[row.description]['transactions'] = [
-                (row.date, row.get(which))]
+            data[row.period] = {}
+            return self._gen_summary(data, which, row)
         return data
 
     def find_max_amount_group(self, group):
@@ -52,10 +58,11 @@ class SummariseByDescription(object):
 
     def _clean_summary(self, summary):
         items = []
-        for k, v in summary.iteritems():
-            items.append({'name': k, 'meta': v})
-        # Sort summary items on the total
-        items = sorted(items, key=lambda k: k['meta']['total'], reverse=True)
+        for kk, sum_period in summary.iteritems():
+            for k, v in sum_period.iteritems():
+                items.append({'name': k, 'meta': v})
+            # Sort summary items on the total
+            items = sorted(items, key=lambda k: k['meta']['total'], reverse=True)
         return items
 
     def _gen_summaries(self):
@@ -68,7 +75,7 @@ class SummariseByDescription(object):
             if row.debit > 0:
                 summary_debit = self._gen_summary(
                     summary_debit, 'debit', row)
-
+        
         return {
             'credits': summary_credit,
             'debits': summary_debit,
@@ -77,7 +84,7 @@ class SummariseByDescription(object):
             'period': self._accounts.period()
         }
 
-    def save_summaryOverview(self, filename=None):
+    def save_overview(self, filename=None):
         summaryoverview.SummaryOverview(self._summary).to_csv(filename)
 
     def create_summariesSave(self, meta):

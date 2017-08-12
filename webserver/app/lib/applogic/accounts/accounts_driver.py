@@ -6,7 +6,7 @@ import json
 
 mappings = open(config.SCRATCH + config.CONFIG_loc + config.MAPPINGS_file).read()
 mappings = json.loads(mappings)
-fileName = config.SCRATCH + config.INPUTS_loc + '/data.csv'
+fileName = config.SCRATCH + config.INPUTS_loc + '/data2.csv'
 
 accFile = accounts.AccountsFile(fileName, mappings)
 accFile.stats()
@@ -37,5 +37,5 @@ output_meta = {
 summary = summary.SummariseByDescription(
     Printer(sys.stdout), accFile._accounts)
 summary.create_summariesSave(output_meta['outlocs'])
-summary.save_summaryOverview(
+summary.save_overview(
     filename=config.SCRATCH + config.OUTPUTS_loc + 'overview.csv')

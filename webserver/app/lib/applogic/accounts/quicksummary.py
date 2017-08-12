@@ -17,10 +17,11 @@ class QuickSummary(DUMPABLE):
         pass
 
     def _header(self):
-        return ('name', 'total', 'count', 'frac_global', 'frac_group', 'envelope')
+        return ('name', 'period','total', 'count', 'frac_global', 'frac_group', 'envelope')
 
     def _rows(self, item):
         return (item['name'],
+                item['meta']['period'],
                 round(item['meta']['total'], 2),
                 item['meta']['count'],
                 round(item['meta']['total'] / self._total * 100, 2), 
@@ -30,7 +31,7 @@ class QuickSummary(DUMPABLE):
     def _consolidate(self):
         for row in xrange(0, len(self._data)):
             tmp = list(self._data[row])
-            tmp[4] = round(tmp[1] / self._total_this * 100, 2)
+            tmp[5] = round(tmp[2] / self._total_this * 100, 2)
             self._data[row] = tuple(tmp)
 
     def _generate_withmin(self):

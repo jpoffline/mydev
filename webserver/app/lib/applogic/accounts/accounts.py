@@ -23,15 +23,22 @@ class Transaction(object):
         self.credit = self.sanitise(row[6])
         self.balance = self.sanitise(row[7])
         self.group = None
+        self.period = None
 
     def get(self, key):
         if key == 'credit':
             return self.credit
         elif key == 'debit':
             return self.debit
+        else:
+            return False
 
     def set_group(self, grp):
         self.group = grp
+
+    def set_period(self, prd):
+        self.period = prd
+        #self.description += "-"+ prd
 
     def add(self, row):
         pass
@@ -57,19 +64,21 @@ class Accounts(object):
         self._total_debit = None
         self._total_credit = None
         self._period_begin = datetime.today()
-        self._period_end = datetime.strptime("01/01/1950", "%d/%m/%Y")
+        self._period_end = datetime.strptime("01/01/1900", "%d/%m/%Y")
         self._descmappings = mappings['desc_maps']
         self._envelopemappings = mappings['envelope_maps']
+        self._distinct_periods = []
+        
         pass
 
     def _check_transact_desc(self, description):
         # Map the transaction description
         # if possible.
         return self._descmappings.get(
-            description,description)
+            description, description)
 
     def _check_transact_env(self, desc):
-        for k,v in self._envelopemappings.iteritems():
+        for k, v in self._envelopemappings.iteritems():
             if desc in v:
                 return k
         return ''
@@ -84,15 +93,23 @@ class Accounts(object):
         if date > self._period_end:
             self._period_end = date
 
+        # Now see if the period has been seen before
+        date_mmyy = date.strftime("%m-%y")
+        if date_mmyy not in self._distinct_periods:
+            self._distinct_periods.append(date_mmyy)
+        return date_mmyy
+
     def _add_transaction(self, transaction):
         orig_desc = transaction.description
         transaction.description = self._check_transact_desc(orig_desc)
         transaction.set_group(self._check_transact_env(orig_desc))
+        period = self._check_transact_date(transaction.date)
+        transaction.set_period(period)
+        
         self._rows.append(transaction)
         self._count += 1
         self._recalc = True
-        self._check_transact_date(transaction.date)
-
+        
 
     def add_transaction(self, transaction):
         transaction = Transaction(self._count, transaction)

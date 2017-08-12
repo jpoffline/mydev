@@ -11,7 +11,9 @@ class accountreport(DUMPABLE):
         return self._report
 
     def create(self):
-        report = "<h1>Account report</h1>"
+        report = "<!DOCTYPE html><html>"
+        report += '<head><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></head><body>'
+        report += "<h1>Account report</h1>"
         report += "<h2>Period: " + \
             self._meta['period']['begin'] + " to " + \
             self._meta['period']['end'] + "</h1>"
@@ -34,6 +36,7 @@ class accountreport(DUMPABLE):
         report += "<td>" + self._meta['report_credit_oneoff'] + "</td>"
         report += "</tr>"
         report += "</table>"
+        report += "</body></html>"
         self._report = report
 
 

@@ -86,7 +86,7 @@ class Accounts(object):
 
     def _add_transaction(self, transaction):
         orig_desc = transaction.description
-        transaction.description = self._check_transact_desc(transaction.description)
+        transaction.description = self._check_transact_desc(orig_desc)
         transaction.set_group(self._check_transact_env(orig_desc))
         self._rows.append(transaction)
         self._count += 1

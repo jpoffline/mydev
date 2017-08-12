@@ -1,5 +1,6 @@
 import csv
 
+
 class DUMPABLE(object):
     def __init__(self):
         pass
@@ -11,7 +12,7 @@ class DUMPABLE(object):
         class
         """
         pass
-    
+
     def header(self):
         """
         Header data; needs to
@@ -28,7 +29,7 @@ class DUMPABLE(object):
         display.write(self.content())
         display.close()
 
-    def to_csv(self,filename):
+    def to_csv(self, filename):
         print '* writing to file', filename
         with open(filename, "wb") as csv_file:
             writer = csv.writer(csv_file, delimiter=',')

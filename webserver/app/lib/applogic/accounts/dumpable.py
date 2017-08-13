@@ -21,6 +21,7 @@ class DUMPABLE(object):
         """
         pass
 
+
     def content(self):
         pass
 
@@ -37,8 +38,11 @@ class DUMPABLE(object):
             for line in self.data():
                 writer.writerow(line)
 
+    def bs_table(self):
+        return "<table class='table table-striped table-condensed table-hover'>"
+
     def to_html_table(self, filename=None):
-        html = "<table>"
+        html = self.bs_table()
 
         hd = ""
         row = ""

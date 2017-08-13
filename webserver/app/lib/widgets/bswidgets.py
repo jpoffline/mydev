@@ -1,6 +1,23 @@
 from app.lib.widgets.htmltags import *
 import app.lib.tools.tools as tools
 
+
+class inWell_title(object):
+    def __init__(self, title, html, link=None):
+        self._html = html
+        self._title = title
+        self._link = link
+    def link(self):
+        if self._link is not None:
+            return """<div id='""" + self._link + """'></div>"""
+        else:
+            return ''
+    def get(self):
+        return inWell(self.link() +"""
+    <div class='col'><h1>""" + self._title + """</h1>
+        """ + self._html + """ </div>
+        """).get()
+
 class inWell(object):
     def __init__(self, html=None):
         self._html = html

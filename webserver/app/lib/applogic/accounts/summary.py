@@ -2,7 +2,7 @@
 import quicksummary as quicksummary
 import summaryoverview as summaryoverview
 import accountreport as accountreport
-
+import reccurences as reccurences
 
 class SummariseByDescription(object):
     def __init__(self, printer, accounts):
@@ -65,6 +65,36 @@ class SummariseByDescription(object):
             items = sorted(items, key=lambda k: k['meta']['total'], reverse=True)
         return items
 
+    def _find_recurring_all_periods(self, data):
+        periods = data.keys()
+        if len(periods) == 1: 
+            return []
+        periods.reverse()
+        recurring = []
+        for item, v in data[periods[0]].iteritems():
+            itsin = True
+            store = [data[periods[0]][item]]
+            for i in xrange(1,len(periods)):
+                if item not in data[periods[i]].keys():
+                    itsin = False
+                    break
+                store.append(data[periods[i]][item])
+            if itsin:
+                recurring.append({'name':item,'store':store})
+        recurring_items = {
+            'periods': periods,
+            'recurring_items':recurring
+        }
+
+        #for item in recurring_items['recurring_items']:
+        #    print item['name']
+        #    for t in item['store']:
+        #        print t['total'], t['count']
+
+        return recurring_items
+
+
+
     def _gen_summaries(self):
         summary_credit = {}
         summary_debit = {}
@@ -75,13 +105,19 @@ class SummariseByDescription(object):
             if row.debit > 0:
                 summary_debit = self._gen_summary(
                     summary_debit, 'debit', row)
-        
+        #self._find_recurring_all_periods(summary_debit)
+        #self._find_recurring_all_periods(summary_credit)
+
         return {
             'credits': summary_credit,
             'debits': summary_debit,
             'total_debit': self._accounts.total_debit(),
             'total_credit': self._accounts.total_credit(),
-            'period': self._accounts.period()
+            'count_items': self._accounts.counts(),
+            'period': self._accounts.period(),
+            'balance': self._accounts.balance_open_close(),
+            'recurring_credits':reccurences.reccurences(summary_credit),
+            'recurring_debits':reccurences.reccurences(summary_debit)
         }
 
     def save_overview(self, filename=None):
@@ -129,7 +165,11 @@ class SummariseByDescription(object):
             'report_credit_oneoff': summary_credit_max.to_html_table(),
             'period': self._summary['period'],
             'total_debit': str(self._summary['total_debit']),
-            'total_credit': str(self._summary['total_credit'])
+            'total_credit': str(self._summary['total_credit']),
+            'balance': self._summary['balance'],
+            'recurring_credits': self._summary['recurring_credits'].to_html_table(),
+            'recurring_debits': self._summary['recurring_debits'].to_html_table(),
+            'count_items': self._summary['count_items']
 
         }
         accountreport.accountreport(meta['summary-html'], report_meta).create()

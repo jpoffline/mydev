@@ -65,10 +65,12 @@ class Accounts(object):
         self._total_credit = None
         self._period_begin = datetime.today()
         self._period_end = datetime.strptime("01/01/1900", "%d/%m/%Y")
+        self._balance_opening = 0
+        self._balance_closing = 0
         self._descmappings = mappings['desc_maps']
         self._envelopemappings = mappings['envelope_maps']
         self._distinct_periods = []
-        
+
         pass
 
     def _check_transact_desc(self, description):
@@ -83,15 +85,17 @@ class Accounts(object):
                 return k
         return ''
 
-    def _check_transact_date(self, date):
+    def _check_transact_date(self, transact):
         # Check the transaction date
         # to find the earliest
         # and latest dates.
-        date = datetime.strptime(date, "%d/%m/%y")
+        date = datetime.strptime(transact.date, "%d/%m/%y")
         if date < self._period_begin:
             self._period_begin = date
+            self._balance_opening = transact.balance
         if date > self._period_end:
             self._period_end = date
+            self._balance_closing = transact.balance
 
         # Now see if the period has been seen before
         date_mmyy = date.strftime("%m-%y")
@@ -103,13 +107,12 @@ class Accounts(object):
         orig_desc = transaction.description
         transaction.description = self._check_transact_desc(orig_desc)
         transaction.set_group(self._check_transact_env(orig_desc))
-        period = self._check_transact_date(transaction.date)
+        period = self._check_transact_date(transaction)
         transaction.set_period(period)
-        
+
         self._rows.append(transaction)
         self._count += 1
         self._recalc = True
-        
 
     def add_transaction(self, transaction):
         transaction = Transaction(self._count, transaction)
@@ -141,7 +144,19 @@ class Accounts(object):
     def period(self):
         return{
             'begin': self._period_begin.strftime("%d/%m/%Y"),
-            'end': self._period_end.strftime("%d/%m/%Y")
+            'end': self._period_end.strftime("%d/%m/%Y"),
+            'distinct':self._distinct_periods
+        }
+    
+    def counts(self):
+        return{
+            'total':len(self._rows)
+        }
+
+    def balance_open_close(self):
+        return{
+            'open': self._balance_opening,
+            'close': self._balance_closing
         }
 
 

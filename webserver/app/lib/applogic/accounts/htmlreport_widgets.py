@@ -1,5 +1,20 @@
 
-def value_card(card_type, icon, body, link, footer):
+def value_card(card_type, icon, body, link=None, footer=None):
+    if link is not None and footer is not None:
+        link_part = """
+        <a href=" """ + link + """ " class="card-footer text-white clearfix small z-1">
+            <span class="float-left">""" + footer + """</span>
+            <span class="float-right">
+                <i class="fa fa-angle-right"></i>
+            </span>
+            </a>
+            """
+    elif footer is not None:
+        link_part = """
+        <a  class="card-footer text-white clearfix small z-1">
+        <span class="float-left">""" + footer + """</span></a>"""
+    else:
+        link_part = ''
     return """
         <div class="col-xl-3 col-sm-6 mb-3">
         <div class="card text-white bg-""" + card_type + """ o-hidden h-100">
@@ -11,12 +26,7 @@ def value_card(card_type, icon, body, link, footer):
                 """ + body + """
             </div>
             </div>
-            <a href=" """ + link + """ " class="card-footer text-white clearfix small z-1">
-            <span class="float-left">""" + footer + """</span>
-            <span class="float-right">
-                <i class="fa fa-angle-right"></i>
-            </span>
-            </a>
+            """ + link_part + """
         </div>
         </div>
         """
@@ -133,10 +143,14 @@ def side_nav(title, items, groups=''):
     """
 
 
-def side_nav_group_item(link, label):
+def side_nav_group_item(info):
+    link = info['link']
+    label = info['label']
+    icon = info['icon']
     return """
             <li>
-                <a href='#""" + link + """'>""" + label + """</a>
+                
+                <a href='#""" + link + """'><i class="fa fa-fw fa-""" + icon + """"></i>""" + label + """</a>
               </li>
               """
 
@@ -144,7 +158,7 @@ def side_nav_group(group_name, group_icon, group_items):
     group_html = []
     for item in group_items:
         group_html.append(side_nav_group_item(
-            item['link'], item['label']))
+            item))
     return """
               <li class="nav-item" data-toggle="tooltip" data-placement="right" title='""" + group_name + """'>
             <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapse""" + group_name + """">

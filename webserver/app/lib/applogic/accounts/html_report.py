@@ -10,6 +10,7 @@ class htmlreport(object):
         self._sidenav_items = []
         self._main_boxes = []
         self._side_nav_groups = []
+        self._value_cards = []
         self._top_matter = ''
         pass
 
@@ -37,15 +38,11 @@ class htmlreport(object):
         self._top_matter = matter
 
     def _content(self):
-        return self._breadcrumbs({}) + self._top_matter + """
-
+        return self._breadcrumbs(self._top_matter) + """
     <!-- Icon Cards -->
         <div class="row">
           """ + \
-            self._value_card('primary', 'comments',
-                             '26 New Messages!', '#', 'View Details') + \
-            self._value_card('warning', 'list',
-                             '11 New Tasks!', '#', 'View Details') + \
+            ''.join(self._value_cards)+ \
             """</div>""" + \
             ''.join(self._main_boxes)
 
@@ -56,6 +53,12 @@ class htmlreport(object):
                            info.get('footer', 'last update ' +
                                     self._update_datetime),
                            info.get('id', None))
+        )
+
+    def add_value_card(self, info):
+        self._value_cards.append(
+            self._value_card(info['state'],info['icon'],
+                             info['body'], info.get('link',None), info.get('linklabel',None))
         )
 
     def add_side_nav_item(self,info):
@@ -84,15 +87,13 @@ class htmlreport(object):
         return widgets.side_nav_item(title, link, icon, text, isactive)
 
     def _breadcrumbs(self, items):
+        
+        crbs = []
+        for item in items:
+            crbs.append("""<li class="breadcrumb-item">""" + item + """</li>""")
         return """
         <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="#">fhdjsk</a>
-          </li>
-          <li class="breadcrumb-item">
-            <a href="#">Dashboard</a>
-          </li>
-          <li class="breadcrumb-item active">My Dashboard</li>
+          """ + ''.join(crbs) + """
         </ol>
         """
 

@@ -41,7 +41,7 @@ class DUMPABLE(object):
     def bs_table(self):
         return "<table class='table table-striped table-condensed table-hover'>"
 
-    def to_html_table(self, filename=None):
+    def to_html_table(self, filename=None, topn=None):
         html = self.bs_table()
 
         hd = ""
@@ -50,6 +50,8 @@ class DUMPABLE(object):
             row += "<td><b>" + str(r) + "</b></td>"
         hd += "<tr>" + row + "</tr>"
         data = self.data()
+        if topn is not None:
+            data = data[:topn]
         for r in data:
             row = ""
             for i in r:

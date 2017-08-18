@@ -6,7 +6,8 @@ import json
 
 mappings = open(config.SCRATCH + config.CONFIG_loc + config.MAPPINGS_file).read()
 mappings = json.loads(mappings)
-fileName = config.SCRATCH + config.INPUTS_loc + '/data2.csv'
+#fileName = config.SCRATCH + config.INPUTS_loc + '/data.csv'
+fileName = config.SCRATCH + config.INPUTS_loc + '/savings-june-july.csv'
 
 accFile = accounts.AccountsFile(fileName, mappings)
 accFile.stats()

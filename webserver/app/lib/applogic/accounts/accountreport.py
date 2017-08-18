@@ -1,8 +1,8 @@
 
 from dumpable import DUMPABLE
 import app.lib.widgets.bswidgets as bswidgets
-
-
+import html_report as html_report
+import datetime as datetime
 class accountreport(DUMPABLE):
     def __init__(self, filename, meta):
         self._filename = filename
@@ -18,6 +18,7 @@ class accountreport(DUMPABLE):
     <script src="static/js/jquery-180717.js"></script>
     <script src="static/js/d3-180717.js"></script>
     <link rel="stylesheet" href="static/css/font-awesome.min.css">
+    <!--<link href="static/css/sb-admin.css" rel="stylesheet">-->
     """
 
     def content(self):
@@ -39,6 +40,20 @@ class accountreport(DUMPABLE):
             'boxvalue': self._meta['balance']['close']
         }
 
+        box_total_credit = {
+            'boxtype': 'success',
+            'icon': 'gbp',
+            'boxtext': 'Total credit',
+            'boxvalue': self._meta['total_credit']
+        }
+
+        box_total_debit = {
+            'boxtype': 'success',
+            'icon': 'gbp',
+            'boxtext': 'Total debit',
+            'boxvalue': self._meta['total_debit']
+        }
+
         box_counts = {
             'boxtype': 'info',
             'icon': 'record',
@@ -46,20 +61,15 @@ class accountreport(DUMPABLE):
             'boxvalue': self._meta['count_items']['total']
         }
 
-        boxes = bswidgets.bsValueBox([box_counts, box_open, box_close])
-
-        totals_bit = "<h2>Total debit: " + self._meta['total_debit'] + "</h2>" +\
-            "<h2>Total credit: " + self._meta['total_credit'] + "</h2>"
-
+        boxes = bswidgets.bsValueBox([box_counts, box_total_credit,box_total_debit,box_open, box_close])
         report = "<h1>Account report</h1>"
         report += "<h2>Period: " + \
             self._meta['period']['begin'] + " to " + \
             self._meta['period']['end'] + "</h1>"
         report += boxes.get()
-        report += bswidgets.inWell(totals_bit).get()
-        report += bswidgets.inWell_title("recurring_debits",
+        report += bswidgets.inWell_title("Debits: recurring",
                                          self._meta['recurring_debits'],'recurring_debits').get()        
-        report += bswidgets.inWell_title("recurring_credits",
+        report += bswidgets.inWell_title("Credits: recurring",
                                          self._meta['recurring_credits'],'recurring_credits').get()
         report += bswidgets.inWell_title("Debit report: multiple",
                                          self._meta['report_debit_regular'],'report_debit_regular').get()
@@ -79,13 +89,152 @@ class accountreport(DUMPABLE):
         self._report = self._template(meta)
 
         self.to_file(self._filename)
+        nice_new_report = html_report.htmlreport({
+            'update':datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        })
+
+        nice_new_report.add_main_box(
+            {
+                'icon': 'area-chart',
+                'title':'Top 5 one-off debits',
+                'content': self._meta['top5_oneoff_debit'],
+                'id':'top5_oneoff_debit',
+                'menugroup':'Credits'
+            }
+        )
+        nice_new_report.add_side_nav_item(
+            {
+                'title':'Top 5 one-off debits',
+                'link':'top5_oneoff_debit',
+                'icon':'wrench'
+            }
+        )
+
+        nice_new_report.add_main_box(
+            {
+                'icon': 'area-chart',
+                'title':'Credits: recurring',
+                'content': self._meta['recurring_credits'],
+                'id':'recurring_credits',
+                'menugroup':'Credits'
+            }
+        )
+        nice_new_report.add_main_box(
+            {
+                'icon': 'area-chart',
+                'title':'Credits: multiple',
+                'content': self._meta['report_credit_regular'],
+                'id':'report_credit_regular',
+                'menugroup':'Credits'
+            }
+        )
+        nice_new_report.add_main_box(
+            {
+                'icon': 'area-chart',
+                'title':'Credits: one-offs',
+                'content': self._meta['report_credit_oneoff'],
+                'id':'report_credit_oneoff',
+                'menugroup':'Credits'
+            }
+        )
+
+
+        nice_new_report.add_main_box(
+            {
+                'icon': 'area-chart',
+                'title':'Debits: recurring',
+                'content': self._meta['recurring_debits'],
+                'id':'recurring_debits',
+                'menugroup':'Debits'
+            }
+        )
+
+        nice_new_report.add_main_box(
+            {
+                'icon': 'area-chart',
+                'title':'Debits: multiple',
+                'content': self._meta['report_debit_regular'],
+                'id':'report_debit_regular',
+                'menugroup':'Debits'
+            }
+        )
+
+
+
+        nice_new_report.add_main_box(
+            {
+                'icon': 'area-chart',
+                'title':'Debit report: one-offs',
+                'content': self._meta['report_debit_oneoff'],
+                'id':'report_debit_oneoff',
+                'menugroup':'Debits'
+            }
+        )
+
+        nice_new_report.add_side_nav_group(
+            {
+                'name': 'Debits',
+                'icon':'area-chart',
+                'items':[
+                    {
+                    'link':'recurring_debits',
+                    'label':'Recurring'
+                    },
+                    {
+                    'link':'report_debit_oneoff',
+                    'label':'One-offs'
+                    },
+                    {
+                    'link':'report_debit_regular',
+                    'label':'Multiple'
+                    }
+                ]
+            }
+        )
+
+        nice_new_report.add_side_nav_group(
+            {
+                'name': 'Credits',
+                'icon':'area-chart',
+                'items':[
+                    {
+                    'link':'recurring_credits',
+                    'label':'Recurring'
+                    },
+                    {
+                        'link':'report_credit_oneoff',
+                        'label':'One-offs'
+                    },
+                    {
+                        'link':'report_credit_regular',
+                        'label':'Multiple'
+                    }
+                ]
+            }
+        )
+
+
+        nice_new_report.set_top_matter(
+            "<h2>Period: " + \
+            self._meta['period']['begin'] + " to " + \
+            self._meta['period']['end'] + "</h1>"
+        )
+
+
+        cont2 = nice_new_report.get()
+        display = open(self._filename + '2.html', 'w')
+        display.write(cont2)
+        display.close()
 
     def _nav_side(self):
         return """
         <div class="col-sm-3 col-md-2 sidebar">
     <ul class="nav nav-sidebar">
-                    <li><a href='#report_debit_regular'>debit/multi</a></li>
+                <li><a href='report.html'>Home</a></li>
+                <li><a href='#report_debit_regular'>debit/multi</a></li>
                 <li><a href='#report_debit_oneoff'>debit/one</a></li> 
+                <li><a href='#recurring_debits'>debits/recurring</a></li> 
+                <li><a href='#recurring_credits'>credits/recurring</a></li> 
                 <li><a href='#report_credit_regular'>credit/multi</a></li>
                 <li><a href='#report_credit_oneoff'>credit/one</a></li>
     </ul></div>
@@ -96,12 +245,14 @@ class accountreport(DUMPABLE):
         return """<nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/" id="menu-toggle">Accounts report</a>
+                <a class="navbar-brand" href="report.html" id="menu-toggle">Accounts report</a>
             </div>
             <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href='#report_debit_regular'>debit/multi</a></li>
                 <li><a href='#report_debit_oneoff'>debit/one</a></li> 
+                <li><a href='#recurring_debits'>debits/recurring</a></li> 
+                <li><a href='#recurring_credits'>credits/recurring</a></li> 
                 <li><a href='#report_credit_regular'>credit/multi</a></li>
                 <li><a href='#report_credit_oneoff'>credit/one</a></li>
             </ul>

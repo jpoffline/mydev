@@ -47,10 +47,33 @@ class QuickSummary(DUMPABLE):
     def _generate_withmax(self, maxcount):
         returns = []
         this_total = 0
+        names_in = []
+
+
+        dont_add = []
+        for i in xrange(0, len(self._summary)):
+            if self._summary[i]['meta']['count'] <= maxcount: 
+                for j in xrange(i,len(self._summary)):
+                    if self._summary[j]['meta']['count'] <= maxcount: 
+                        if self._summary[i]['name'] == self._summary[j]['name']:
+                            dont_add.append(self._summary[i]['name'])
+                            break
+        
+        dd2 = dict((i, dont_add.count(i)) for i in dont_add)
+        dont_add = []
+        for k,v in dd2.iteritems():
+            if v >1:
+                dont_add.append(k)
+        
         for item in self._summary:
             if item['meta']['count'] <= maxcount:
-                returns.append(self._rows(item))
-                this_total += item['meta']['total']
+                if item['name'] not in dont_add:
+                    returns.append(self._rows(item))
+                    this_total += item['meta']['total']
+                    names_in.append(item['name'])
+
+        #print returns
+        
         self._data = returns
         self._total_this = this_total
 
@@ -59,3 +82,6 @@ class QuickSummary(DUMPABLE):
 
     def header(self):
         return self._header()
+
+    def topn(self,n):
+        return self._data[:n]

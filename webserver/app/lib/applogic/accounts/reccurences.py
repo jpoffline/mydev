@@ -8,6 +8,7 @@ class reccurences(DUMPABLE):
         self._reccur = None
         self._periods = None
         self._find_recurring_all_periods()
+        
         pass
 
     def get(self):

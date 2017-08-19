@@ -78,7 +78,7 @@ class DUMPABLE(object):
             v[idx_data] for v in data
         ]
         labels = [
-            v[idx_labels] + '<br>' + str(v[idxs['labels2']]) + '% of all debits' for v in data
+            v[idx_labels] + '<br>' + str(v[idxs['labels2'][0]]) + idxs['labels2'][1] for v in data
         ]
         
         trace = go.Pie(labels=labels, values=values)

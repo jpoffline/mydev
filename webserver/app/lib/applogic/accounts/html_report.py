@@ -65,12 +65,16 @@ class htmlreport(object):
 
     def _content(self):
         return self._breadcrumbs(self._top_matter) + \
-            """<div class="row"><div class="col-lg-6"><div class="row">""" +\
-                ''.join(self._value_cards)+\
-             """</div></div>""" +\
-            """<div class="col-lg-6">""" +\
+            """<div class="row">
+                <div class="col-lg-4">
+                   <div class="row">""" +\
+                      ''.join(self._value_cards)+\
+                """</div>
+                </div>""" +\
+            """<div class="col-lg-8">""" +\
                 ''.join(self._pie_charts) +\
-             """</div></div>""" +\
+             """</div>
+             </div>""" +\
                 ''.join(self._main_boxes)
 
     def _value_card(self, card_type, icon, body, link, footer):

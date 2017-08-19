@@ -15,6 +15,8 @@ class htmlreport(object):
         self._top_matter = ''
         self._snav = snav.html_sidenav_complete('Admin')
         self._pie_charts = []
+        self._meta = meta['meta']
+        
         pass
 
     def add_main_box(self, info):

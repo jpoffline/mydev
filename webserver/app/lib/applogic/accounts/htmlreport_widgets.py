@@ -90,8 +90,10 @@ def side_nav_item(title, link, icon, text, isactive=False):
         </li>
         """
 
+def static_item_link(assest_dir,item, meta):
+    return """<link href='""" + assest_dir + item + """' """ + meta + """>"""
 
-def head_meta(title):
+def head_meta(title, assest_dir = 'static/'):
     return """
 
     <meta charset="utf-8">
@@ -105,28 +107,27 @@ def head_meta(title):
 
 
     <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
+    """ + static_item_link(assest_dir, "vendor/bootstrap/css/bootstrap.min.css", "rel='stylesheet'") + """
     <!-- Custom fonts for this template -->
-    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <!-- Plugin CSS -->
-    <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+    <link href="static/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="css/sb-admin.css" rel="stylesheet">
+    <link href="static/css/sb-admin.css" rel="stylesheet">
 
-    <script src="js/plotly-180717.js"></script>
+    <script src="static/js/plotly-180717.js"></script>
     <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/popper/popper.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/vendor/jquery/jquery.min.js"></script>
+    <script src="static/vendor/popper/popper.min.js"></script>
+    <script src="static/vendor/bootstrap/js/bootstrap.min.js"></script>
 
     <!-- Plugin JavaScript -->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-    <script src="vendor/chart.js/Chart.min.js"></script>
-    <script src="vendor/datatables/jquery.dataTables.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
+    <script src="static/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="static/vendor/chart.js/Chart.min.js"></script>
+    <script src="static/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.js"></script>
 
     
   """
@@ -139,7 +140,7 @@ def end_meta():
       <i class="fa fa-angle-up"></i>
     </a>
     <!-- Custom scripts for this template -->
-    <script src="js/sb-admin.min.js"></script>
+    <script src="static/js/sb-admin.min.js"></script>
     """
 
 

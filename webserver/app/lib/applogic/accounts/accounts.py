@@ -161,17 +161,21 @@ class Accounts(object):
 
 
 class AccountsFile(object):
-    def __init__(self, filename, mappings=None):
-        self._filename = filename
+    def __init__(self, filename, mappings=None, multi=False):
+        if not multi:
+            self._filename = [filename]
+        else:
+            self._filename = filename
         self._accounts = Accounts(mappings=mappings)
         self._readfile()
 
     def _readfile(self):
         import csv
-        reader = csv.reader(open(self._filename, 'rU'), dialect=csv.excel_tab)
-        data = [row for row in reader]
-        for trans in data[1:]:
-            self._accounts.add_transaction(trans[0].split(','))
+        for filename in self._filename:
+            reader = csv.reader(open(filename, 'rU'), dialect=csv.excel_tab)
+            data = [row for row in reader]
+            for trans in data[1:]:
+                self._accounts.add_transaction(trans[0].split(','))
 
     def stats(self):
         print 'Total credit', self._accounts.total_credit()

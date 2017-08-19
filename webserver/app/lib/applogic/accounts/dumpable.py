@@ -41,11 +41,11 @@ class DUMPABLE(object):
                 writer.writerow(line)
 
     def bs_table(self):
-        return "<table class='table table-striped table-condensed table-hover'>"
+        return "<table class='table table-striped table-condensed table-hover' style='font-size:60%;'>"
 
     def to_html_table(self, filename=None, topn=None):
-        html = self.bs_table()
 
+        html = self.bs_table()
         hd = ""
         row = ""
         for r in self.header():

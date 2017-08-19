@@ -6,4 +6,3 @@ CONFIG_loc = 'config/'
 MAPPINGS_file = 'mappings.json'
 
 HTMLOUT_loc = OUTPUTS_loc + 'html/'
-HTML_report_file = 'report.html'

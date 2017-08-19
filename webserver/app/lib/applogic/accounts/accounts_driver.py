@@ -4,12 +4,19 @@ import sys
 import config_accountdata as config
 import json
 
-mappings = open(config.SCRATCH + config.CONFIG_loc + config.MAPPINGS_file).read()
+mappings = open(config.SCRATCH + config.CONFIG_loc +
+                config.MAPPINGS_file).read()
 mappings = json.loads(mappings)
-#fileName = config.SCRATCH + config.INPUTS_loc + '/data2.csv'
-fileName = config.SCRATCH + config.INPUTS_loc + '/savings-june-july.csv'
 
-accFile = accounts.AccountsFile(fileName, mappings)
+outhtml_fileName_suffix = 'current-may-july'
+
+AccountsFile_names = [
+    config.SCRATCH + config.INPUTS_loc + '/' + 'current-may' + '.csv',
+    config.SCRATCH + config.INPUTS_loc + '/' + 'current-june' + '.csv',
+    config.SCRATCH + config.INPUTS_loc + '/' + 'current-july' + '.csv']
+
+
+accFile = accounts.AccountsFile(AccountsFile_names, mappings, multi=True)
 accFile.stats()
 
 
@@ -30,13 +37,16 @@ output_meta = {
         'summary-regular-credit': config.SCRATCH + config.OUTPUTS_loc + 'credit-summary-regular.csv',
         'summary-oneoff-debit': config.SCRATCH + config.OUTPUTS_loc + 'debit-summary-oneoff.csv',
         'summary-oneoff-credit': config.SCRATCH + config.OUTPUTS_loc + 'credit-summary-oneoff.csv',
-        'summary-html': config.SCRATCH + config.HTMLOUT_loc + config.HTML_report_file
-
+        'summary-html': config.SCRATCH + config.HTMLOUT_loc + outhtml_fileName_suffix + '.html'
     }
 }
 
 summary = summary.SummariseByDescription(
-    Printer(sys.stdout), accFile._accounts)
+    Printer(sys.stdout), accFile._accounts,
+    meta={
+        'description': outhtml_fileName_suffix
+    })
+
 summary.create_summariesSave(output_meta['outlocs'])
 summary.save_overview(
     filename=config.SCRATCH + config.OUTPUTS_loc + 'overview.csv')

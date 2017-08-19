@@ -9,6 +9,7 @@ class QuickSummary(DUMPABLE):
         self._total_this = None
         self._data = None
         self._mincount = mincount
+        self._dont_add = None
         if maxcount is None:
             self._generate_withmin()
         else:
@@ -36,28 +37,25 @@ class QuickSummary(DUMPABLE):
 
     def _generate_withmin(self):
         returns = []
+
+        if self._dont_add is None:
+            self._find_dontadd()
+
         this_total = 0
         for item in self._summary:
-            if item['meta']['count'] > self._mincount:
+            if item['meta']['count'] > self._mincount and item['name'] not in self._dont_add:
                 returns.append(self._rows(item))
                 this_total += item['meta']['total']
         self._data = returns
         self._total_this = this_total
 
-    def _generate_withmax(self, maxcount):
-        returns = []
-        this_total = 0
-        names_in = []
-
-
+    def _find_dontadd(self):
         dont_add = []
         for i in xrange(0, len(self._summary)):
-            if self._summary[i]['meta']['count'] <= maxcount: 
-                for j in xrange(i,len(self._summary)):
-                    if self._summary[j]['meta']['count'] <= maxcount: 
-                        if self._summary[i]['name'] == self._summary[j]['name']:
-                            dont_add.append(self._summary[i]['name'])
-                            break
+            for j in xrange(i,len(self._summary)):
+                if self._summary[i]['name'] == self._summary[j]['name']:
+                    dont_add.append(self._summary[i]['name'])
+                    break
         
         dd2 = dict((i, dont_add.count(i)) for i in dont_add)
         dont_add = []
@@ -65,9 +63,20 @@ class QuickSummary(DUMPABLE):
             if v >1:
                 dont_add.append(k)
         
+        self._dont_add = dont_add
+
+    def _generate_withmax(self, maxcount):
+        returns = []
+        this_total = 0
+        names_in = []
+
+        if self._dont_add is None:
+            self._find_dontadd()
+        
+
         for item in self._summary:
             if item['meta']['count'] <= maxcount:
-                if item['name'] not in dont_add:
+                if item['name'] not in self._dont_add:
                     returns.append(self._rows(item))
                     this_total += item['meta']['total']
                     names_in.append(item['name'])

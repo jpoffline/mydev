@@ -175,7 +175,7 @@ def side_nav_group_item(info):
     icon = info['icon']
     return """
             <li>
-                <a href='#""" + link + """'>
+                <a href='""" + link + """'>
                   <i class="fa fa-fw fa-""" + icon + """"></i>
                   """ + label + """
                 </a>

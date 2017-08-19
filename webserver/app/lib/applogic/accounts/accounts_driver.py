@@ -8,17 +8,30 @@ mappings = open(config.SCRATCH + config.CONFIG_loc +
                 config.MAPPINGS_file).read()
 mappings = json.loads(mappings)
 
-outhtml_fileName_suffix = 'current-may-july'
+outhtml_fileName_suffix = 'savings-may-july'
 
 AccountsFile_names = [
-    config.SCRATCH + config.INPUTS_loc + '/' + 'current-may' + '.csv',
-    config.SCRATCH + config.INPUTS_loc + '/' + 'current-june' + '.csv',
-    config.SCRATCH + config.INPUTS_loc + '/' + 'current-july' + '.csv']
+    config.SCRATCH + config.INPUTS_loc + '/' + 'savings-may' + '.csv',
+    config.SCRATCH + config.INPUTS_loc + '/' + 'savings-june' + '.csv',
+    config.SCRATCH + config.INPUTS_loc + '/' + 'savings-july' + '.csv']
 
 
 accFile = accounts.AccountsFile(AccountsFile_names, mappings, multi=True)
 accFile.stats()
 
+
+link_pages = [
+    {
+        'link': 'current-may-july.html',
+        'label': 'Current/may-july',
+        'icon': 'recycle'
+    },
+    {
+        'link': 'savings-may-july.html',
+        'label': 'Savings/may-july',
+        'icon': 'recycle'
+    }
+]
 
 class Printer(object):
     def __init__(self, where):
@@ -37,7 +50,8 @@ output_meta = {
         'summary-regular-credit': config.SCRATCH + config.OUTPUTS_loc + 'credit-summary-regular.csv',
         'summary-oneoff-debit': config.SCRATCH + config.OUTPUTS_loc + 'debit-summary-oneoff.csv',
         'summary-oneoff-credit': config.SCRATCH + config.OUTPUTS_loc + 'credit-summary-oneoff.csv',
-        'summary-html': config.SCRATCH + config.HTMLOUT_loc + outhtml_fileName_suffix + '.html'
+        'summary-html': config.SCRATCH + config.HTMLOUT_loc + outhtml_fileName_suffix + '.html',
+        'link_pages':link_pages
     }
 }
 

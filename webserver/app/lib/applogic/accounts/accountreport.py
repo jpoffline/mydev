@@ -96,21 +96,30 @@ class accountreport(DUMPABLE):
 
         nice_new_report.add_side_nav_group(
             {
+                'name': 'Accounts',
+                'icon': 'calculator',
+                'items': self._meta['link_pages']
+            }
+        )
+
+
+        nice_new_report.add_side_nav_group(
+            {
                 'name': 'Debits',
                 'icon': 'level-down',
                 'items': [
                     {
-                        'link': 'recurring_debits',
+                        'link': '#recurring_debits',
                         'label': 'Recurring',
                         'icon': 'recycle'
                     },
                     {
-                        'link': 'report_debit_oneoff',
+                        'link': '#report_debit_oneoff',
                         'label': 'One-offs',
                         'icon': 'window-maximize'
                     },
                     {
-                        'link': 'report_debit_regular',
+                        'link': '#report_debit_regular',
                         'label': 'Multiple',
                         'icon': 'window-restore'
                     }
@@ -124,17 +133,17 @@ class accountreport(DUMPABLE):
                 'icon': 'level-up',
                 'items': [
                     {
-                        'link': 'recurring_credits',
+                        'link': '#recurring_credits',
                         'label': 'Recurring',
                         'icon': 'recycle'
                     },
                     {
-                        'link': 'report_credit_oneoff',
+                        'link': '#report_credit_oneoff',
                         'label': 'One-offs',
                         'icon': 'window-maximize'
                     },
                     {
-                        'link': 'report_credit_regular',
+                        'link': '#report_credit_regular',
                         'label': 'Multiple',
                         'icon': 'window-restore'
                     }

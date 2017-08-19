@@ -158,7 +158,8 @@ class SummariseByDescription(object):
             'count_items': self._summary['count_items'],
             'top5_oneoff_debit':summary_debit_max.to_html_table(topn=5),
             'top5_oneoff_debit_pie':summary_debit_max.to_plot_pie({'values':2,'labels':0,'labels2':(4,'% of all debits')}),
-            'meta': self._meta
+            'meta': self._meta,
+            'link_pages':meta['link_pages']
         }
 
         if tocsv:

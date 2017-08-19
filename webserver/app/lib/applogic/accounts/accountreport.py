@@ -262,6 +262,9 @@ class accountreport(DUMPABLE):
             self._meta['period']['end']]
         )
 
+        nice_new_report.add_pie(pie=self._meta['top5_oneoff_debit_pie'],
+        title='Top 5 one off debits')
+
         cont2 = nice_new_report.get()
         display = open(self._filename + '2.html', 'w')
         display.write(cont2)

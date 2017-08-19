@@ -1,5 +1,7 @@
 import csv
-
+from plotly import tools as plytools
+import plotly
+import plotly.graph_objs as go
 
 class DUMPABLE(object):
     def __init__(self):
@@ -63,3 +65,24 @@ class DUMPABLE(object):
         display = open(filename, 'w')
         display.write(html)
         display.close()
+
+
+    def to_plot_pie(self, idxs,topn=5):
+        data = self.data()
+        if topn is not None:
+            data = data[:topn]
+        
+        idx_data = idxs['values']
+        idx_labels = idxs['labels']
+        values = [
+            v[idx_data] for v in data
+        ]
+        labels = [
+            v[idx_labels] + '<br>' + str(v[idxs['labels2']]) + '% of all debits' for v in data
+        ]
+        
+        trace = go.Pie(labels=labels, values=values)
+        return plotly.offline.plot([trace],
+                               show_link=False,
+                               output_type="div",
+                               include_plotlyjs=False)

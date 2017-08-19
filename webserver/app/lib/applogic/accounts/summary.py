@@ -170,7 +170,9 @@ class SummariseByDescription(object):
             'recurring_credits': self._summary['recurring_credits'].to_html_table(),
             'recurring_debits': self._summary['recurring_debits'].to_html_table(),
             'count_items': self._summary['count_items'],
-            'top5_oneoff_debit':summary_debit_max.to_html_table(topn=5)
+            'top5_oneoff_debit':summary_debit_max.to_html_table(topn=5),
+            'top5_oneoff_debit_pie':summary_debit_max.to_plot_pie({'values':2,'labels':0,'labels2':4})
 
         }
+        
         accountreport.accountreport(meta['summary-html'], report_meta).create()

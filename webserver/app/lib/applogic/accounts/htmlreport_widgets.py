@@ -1,5 +1,23 @@
 
-def value_card(card_type, icon, body, link=None, footer=None):
+
+def make_page(head, nav, content, matter):
+    return """
+        <!DOCTYPE html>
+        <html lang="en">
+            <head>""" + head + """</head>
+            <body class="fixed-nav" id="page-top">
+                """ + nav + """
+                <div class="content-wrapper py-3">
+                    <div class="container-fluid">
+                    """ + content + """
+                    </div>
+                </div>
+                """ + matter + """
+            </body>
+        </html>
+        """
+
+def value_card(card_type, icon, body, link=None, footer=None,width=3):
     if link is not None and footer is not None:
         link_part = """
         <a href=" """ + link + """ " class="card-footer text-white clearfix small z-1">
@@ -11,12 +29,12 @@ def value_card(card_type, icon, body, link=None, footer=None):
             """
     elif footer is not None:
         link_part = """
-        <a  class="card-footer text-white clearfix small z-1">
+        <a class="card-footer text-white clearfix small z-1">
         <span class="float-left">""" + footer + """</span></a>"""
     else:
         link_part = ''
     return """
-        <div class="col-xl-3 col-sm-6 mb-3">
+        <div class="col-xl-"""+str(width)+""" col-sm-6 mb-3">
         <div class="card text-white bg-""" + card_type + """ o-hidden h-100">
             <div class="card-body">
             <div class="card-body-icon">
@@ -30,6 +48,8 @@ def value_card(card_type, icon, body, link=None, footer=None):
         </div>
         </div>
         """
+
+
 
 
 def link(url=None):
@@ -82,6 +102,8 @@ def head_meta(title):
     <meta name="author" content="">
     <title>""" + title + """</title>
 
+
+
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -93,16 +115,9 @@ def head_meta(title):
 
     <!-- Custom styles for this template -->
     <link href="css/sb-admin.css" rel="stylesheet">
-  """
 
-
-def end_meta():
-    return """
-        <!-- Scroll to Top Button -->
-    <a class="scroll-to-top rounded" href="#page-top">
-      <i class="fa fa-angle-up"></i>
-    </a>
-        <!-- Bootstrap core JavaScript -->
+    <script src="js/plotly-180717.js"></script>
+    <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/popper/popper.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -113,6 +128,16 @@ def end_meta():
     <script src="vendor/datatables/jquery.dataTables.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
 
+    
+  """
+
+
+def end_meta():
+    return """
+        <!-- Scroll to Top Button -->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
     <!-- Custom scripts for this template -->
     <script src="js/sb-admin.min.js"></script>
     """
@@ -149,10 +174,13 @@ def side_nav_group_item(info):
     icon = info['icon']
     return """
             <li>
-                
-                <a href='#""" + link + """'><i class="fa fa-fw fa-""" + icon + """"></i>""" + label + """</a>
-              </li>
+                <a href='#""" + link + """'>
+                  <i class="fa fa-fw fa-""" + icon + """"></i>
+                  """ + label + """
+                </a>
+            </li>
               """
+
 
 def side_nav_group(group_name, group_icon, group_items):
     group_html = []
@@ -164,10 +192,28 @@ def side_nav_group(group_name, group_icon, group_items):
             <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapse""" + group_name + """">
               <i class="fa fa-fw fa-""" + group_icon + """"></i>
               <span class="nav-link-text">
-                """ + group_name + """</span>
+                """ + group_name + """
+              </span>
             </a>
             <ul class="sidenav-second-level collapse" id="collapse""" + group_name + """">
               """ + ''.join(group_html) + """
             </ul>
           </li>
         """
+
+
+def pie_chart_area(icon ='pie-chart', title='', content = '', footer = ''):
+    return """
+     <div class="card mb-3">
+              <div class="card-header">
+                <i class='fa fa-""" + icon + """'></i>
+                """ + title + """
+              </div>
+              <div class="card-body">
+                """ + content + """
+              </div>
+              <div class="card-footer small text-muted">
+                """ + footer + """
+              </div>
+            </div>
+    """

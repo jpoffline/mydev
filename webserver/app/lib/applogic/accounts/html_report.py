@@ -1,5 +1,6 @@
 
 import htmlreport_widgets as widgets
+import html_side_nav_group as snav
 
 
 class htmlreport(object):
@@ -12,39 +13,9 @@ class htmlreport(object):
         self._side_nav_groups = []
         self._value_cards = []
         self._top_matter = ''
+        self._snav = snav.html_sidenav_complete('Admin')
+        self._pie_charts = []
         pass
-
-    def get(self):
-        return self._main_template()
-
-    def _main_template(self):
-        return """
-        <!DOCTYPE html>
-        <html lang="en">
-            <head>""" + self._head(self._title) + """</head>
-            <body class="fixed-nav" id="page-top">
-                """ + self._side_nav() + """
-                <div class="content-wrapper py-3">
-                    <div class="container-fluid">
-                    """ + self._content() + """
-                    </div>
-                </div>
-                """ + self._endmatter() + """
-            </body>
-        </html>
-        """
-
-    def set_top_matter(self, matter):
-        self._top_matter = matter
-
-    def _content(self):
-        return self._breadcrumbs(self._top_matter) + """
-    <!-- Icon Cards -->
-        <div class="row">
-          """ + \
-            ''.join(self._value_cards)+ \
-            """</div>""" + \
-            ''.join(self._main_boxes)
 
     def add_main_box(self, info):
         self._main_boxes.append(
@@ -57,22 +28,53 @@ class htmlreport(object):
 
     def add_value_card(self, info):
         self._value_cards.append(
-            self._value_card(info['state'],info['icon'],
-                             info['body'], info.get('link',None), info.get('linklabel',None))
+            self._value_card(info['state'], info['icon'],
+                             info['body'], info.get('link', None), 
+                             info.get('linklabel', None)
+                             )
         )
 
-    def add_side_nav_item(self,info):
-        self._sidenav_items.append(
-            self._side_nav_item(
-                info['title'],
-                info['link'],
-                info['icon'],
-                info['title']
-            )
+    def add_side_nav_item(self, info):
+        self._snav.add_item(info)
+
+    def add_side_nav_group(self, group):
+        self._snav.add_group(group)
+
+    def add_pie(self, pie=None, title='',footer=''):
+        if footer == '':
+            footer = 'last update ' +self._update_datetime
+        self._pie_charts.append(
+            widgets.pie_chart_area(
+                content=pie,title=title,
+                footer=footer
+                )
         )
+
+    def get(self):
+        return self._main_template()
+
+    def _main_template(self):
+        return widgets.make_page(self._head(self._title),
+                                 self._snav.to_html(),
+                                 self._content(),
+                                 self._endmatter()
+                                 )
+
+    def set_top_matter(self, matter):
+        self._top_matter = matter
+
+    def _content(self):
+        return self._breadcrumbs(self._top_matter) + \
+            """<div class="row"><div class="col-lg-6"><div class="row">""" +\
+                ''.join(self._value_cards)+\
+             """</div></div>""" +\
+            """<div class="col-lg-6">""" +\
+                ''.join(self._pie_charts) +\
+             """</div></div>""" +\
+                ''.join(self._main_boxes)
 
     def _value_card(self, card_type, icon, body, link, footer):
-        return widgets.value_card(card_type, icon, body, link, footer)
+        return widgets.value_card(card_type, icon, body, link, footer,width=6)
 
     def _main_box(self, icon, title, body, footer, id=None):
         return widgets.main_box(icon, title, body, footer, id)
@@ -83,41 +85,14 @@ class htmlreport(object):
     def _endmatter(self):
         return widgets.end_meta()
 
-    def _side_nav_item(self, title, link, icon, text, isactive=False):
-        return widgets.side_nav_item(title, link, icon, text, isactive)
-
     def _breadcrumbs(self, items):
-        
+
         crbs = []
         for item in items:
-            crbs.append("""<li class="breadcrumb-item">""" + item + """</li>""")
+            crbs.append("""<li class="breadcrumb-item">""" +
+                        item + """</li>""")
         return """
         <ol class="breadcrumb">
           """ + ''.join(crbs) + """
         </ol>
         """
-
-    def _side_nav(self, title='Admin'):
-        return widgets.side_nav(title, self._sidenav_items, self._side_nav_groups)
-
-    def _side_nav_group(self):
-
-        group_name = 'Components'
-        group_icon = 'wrench'
-
-        group_items = [
-            {
-                'link': '',
-                'label': 'Static Navigation'
-            }, {
-                'link': '',
-                'label': 'Custom Card Examples'
-            }
-        ]
-
-        return widgets.side_nav_group(group_name, group_icon, group_items)
-
-    def add_side_nav_group(self, group):
-        self._side_nav_groups.append(
-            widgets.side_nav_group(group['name'], group['icon'], group['items'])
-        )

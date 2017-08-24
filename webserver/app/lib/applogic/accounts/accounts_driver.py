@@ -8,30 +8,34 @@ mappings = open(config.SCRATCH + config.CONFIG_loc +
                 config.MAPPINGS_file).read()
 mappings = json.loads(mappings)
 
-outhtml_fileName_suffix = 'savings-may-july'
+acc_type = 'savings'
 
-AccountsFile_names = [
-    config.SCRATCH + config.INPUTS_loc + '/' + 'savings-may' + '.csv',
-    config.SCRATCH + config.INPUTS_loc + '/' + 'savings-june' + '.csv',
-    config.SCRATCH + config.INPUTS_loc + '/' + 'savings-july' + '.csv']
+months = ['may', 'june','july']
 
+outhtml_fileName_suffix = acc_type + '-may-july'
 
-accFile = accounts.AccountsFile(AccountsFile_names, mappings, multi=True)
-accFile.stats()
-
+input_AccountsFile_names = [
+    config.SCRATCH + config.INPUTS_loc + '/' + acc_type + '-may' + '.csv',
+    config.SCRATCH + config.INPUTS_loc + '/' + acc_type + '-june' + '.csv',
+    config.SCRATCH + config.INPUTS_loc + '/' + acc_type + '-july' + '.csv']
 
 link_pages = [
     {
-        'link': 'current-may-july.html',
+        'link': 'current-may-july.php',
         'label': 'Current/may-july',
         'icon': 'recycle'
     },
     {
-        'link': 'savings-may-july.html',
+        'link': 'savings-may-july.php',
         'label': 'Savings/may-july',
         'icon': 'recycle'
     }
 ]
+
+
+accFile = accounts.AccountsFile(input_AccountsFile_names, mappings, multi=True)
+accFile.stats()
+
 
 class Printer(object):
     def __init__(self, where):
@@ -50,8 +54,8 @@ output_meta = {
         'summary-regular-credit': config.SCRATCH + config.OUTPUTS_loc + 'credit-summary-regular.csv',
         'summary-oneoff-debit': config.SCRATCH + config.OUTPUTS_loc + 'debit-summary-oneoff.csv',
         'summary-oneoff-credit': config.SCRATCH + config.OUTPUTS_loc + 'credit-summary-oneoff.csv',
-        'summary-html': config.SCRATCH + config.HTMLOUT_loc + outhtml_fileName_suffix + '.html',
-        'link_pages':link_pages
+        'summary-html': config.HTMLOUT_loc + outhtml_fileName_suffix + '.php',
+        'link_pages': link_pages
     }
 }
 

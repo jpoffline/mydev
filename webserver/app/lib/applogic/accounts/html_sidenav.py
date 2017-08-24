@@ -1,6 +1,6 @@
 
 import htmlreport_widgets as widgets
-
+from dumpable import DUMPABLE
 
 class html_sidenav_group(object):
     def __init__(self, meta={}, name='', icon='', items=[]):
@@ -32,17 +32,23 @@ class html_sidenav_item(object):
         return self._side_nav_item()
 
 
-class html_sidenav_complete(object):
+class html_sidenav_complete(DUMPABLE):
     def __init__(self, title):
         self._title = title
         self._items = []
         self._groups = []
+        self._content = ''
         pass
 
+    def content(self):
+        return self._content
+
     def to_html(self):
-        return widgets.side_nav(self._title, 
+        self._content = widgets.side_nav(self._title, 
                                 [g.to_html() for g in self._items], 
                                 [g.to_html() for g in self._groups])
+        
+        return self.to_php_partial('menu.php')
 
     def _side_nav_item(self, title, link, icon, text, isactive=False):
         return widgets.side_nav_item(title, link, icon, text, isactive)

@@ -1,10 +1,12 @@
 
 
-def make_page(head, nav, content, matter):
+def make_page(head='', nav='', content='', endmatter=''):
     return """
         <!DOCTYPE html>
         <html lang="en">
-            <head>""" + head + """</head>
+            <head>
+              """ + head + """
+            </head>
             <body class="fixed-nav" id="page-top">
                 """ + nav + """
                 <div class="content-wrapper py-3">
@@ -12,12 +14,13 @@ def make_page(head, nav, content, matter):
                     """ + content + """
                     </div>
                 </div>
-                """ + matter + """
+                """ + endmatter + """
             </body>
         </html>
         """
 
-def value_card(card_type, icon, body, link=None, footer=None,width=3):
+
+def value_card(card_type, icon, body, link=None, footer=None, width=3):
     if link is not None and footer is not None:
         link_part = """
         <a href=" """ + link + """ " class="card-footer text-white clearfix small z-1">
@@ -34,7 +37,7 @@ def value_card(card_type, icon, body, link=None, footer=None,width=3):
     else:
         link_part = ''
     return """
-        <div class="col-xl-"""+str(width)+""" col-sm-6 mb-3">
+        <div class="col-xl-""" + str(width) + """ col-sm-6 mb-3">
         <div class="card text-white bg-""" + card_type + """ o-hidden h-100">
             <div class="card-body">
             <div class="card-body-icon">
@@ -48,8 +51,6 @@ def value_card(card_type, icon, body, link=None, footer=None,width=3):
         </div>
         </div>
         """
-
-
 
 
 def link(url=None):
@@ -90,10 +91,14 @@ def side_nav_item(title, link, icon, text, isactive=False):
         </li>
         """
 
-def static_item_link(assest_dir,item, meta):
+
+def static_item_link(assest_dir, item, meta):
     return """<link href='""" + assest_dir + item + """' """ + meta + """>"""
 
-def head_meta(title, assest_dir = 'static/'):
+def static_item_script(assest_dir, item):
+    return """<script src='""" + assest_dir + item + """'></script>"""
+
+def head_meta(title, assest_dir='../static/'):
     return """
 
     <meta charset="utf-8">
@@ -109,38 +114,34 @@ def head_meta(title, assest_dir = 'static/'):
     <!-- Bootstrap core CSS -->
     """ + static_item_link(assest_dir, "vendor/bootstrap/css/bootstrap.min.css", "rel='stylesheet'") + """
     <!-- Custom fonts for this template -->
-    <link href="static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
+    """ + static_item_link(assest_dir, "vendor/font-awesome/css/font-awesome.min.css", "rel='stylesheet' type='text/css'") + """
     <!-- Plugin CSS -->
-    <link href="static/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
-
+    """ + static_item_link(assest_dir, "vendor/datatables/dataTables.bootstrap4.css", "rel='stylesheet'") + """
     <!-- Custom styles for this template -->
-    <link href="static/css/sb-admin.css" rel="stylesheet">
+    """ + static_item_link(assest_dir, "css/sb-admin.css", "rel='stylesheet'") + """
+    """ + static_item_script(assest_dir, "js/plotly-180717.js") + """
 
-    <script src="static/js/plotly-180717.js"></script>
     <!-- Bootstrap core JavaScript -->
-    <script src="static/vendor/jquery/jquery.min.js"></script>
-    <script src="static/vendor/popper/popper.min.js"></script>
-    <script src="static/vendor/bootstrap/js/bootstrap.min.js"></script>
+    """ + static_item_script(assest_dir, "vendor/jquery/jquery.min.js") + """
+    """ + static_item_script(assest_dir, "vendor/popper/popper.min.js") + """
+    """ + static_item_script(assest_dir, "vendor/bootstrap/js/bootstrap.min.js") + """
 
     <!-- Plugin JavaScript -->
-    <script src="static/vendor/jquery-easing/jquery.easing.min.js"></script>
-    <script src="static/vendor/chart.js/Chart.min.js"></script>
-    <script src="static/vendor/datatables/jquery.dataTables.js"></script>
-    <script src="static/vendor/datatables/dataTables.bootstrap4.js"></script>
-
-    
+    """ + static_item_script(assest_dir, "vendor/jquery-easing/jquery.easing.min.js") + """
+    """ + static_item_script(assest_dir, "vendor/chart.js/Chart.min.js") + """
+    """ + static_item_script(assest_dir, "vendor/datatables/jquery.dataTables.js") + """
+    """ + static_item_script(assest_dir, "vendor/datatables/dataTables.bootstrap4.js") + """
   """
 
 
-def end_meta():
+def end_meta(assest_dir = '../static/'):
     return """
-        <!-- Scroll to Top Button -->
+    <!-- Scroll to Top Button -->
     <a class="scroll-to-top rounded" href="#page-top">
       <i class="fa fa-angle-up"></i>
     </a>
     <!-- Custom scripts for this template -->
-    <script src="static/js/sb-admin.min.js"></script>
+    """ + static_item_script(assest_dir, "js/sb-admin.min.js") + """
     """
 
 
@@ -203,7 +204,7 @@ def side_nav_group(group_name, group_icon, group_items):
         """
 
 
-def pie_chart_area(icon ='pie-chart', title='', content = '', footer = ''):
+def pie_chart_area(icon='pie-chart', title='', content='', footer=''):
     return """
      <div class="card mb-3">
               <div class="card-header">

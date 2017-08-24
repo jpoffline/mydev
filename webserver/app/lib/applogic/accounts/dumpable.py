@@ -3,7 +3,10 @@ from plotly import tools as plytools
 import plotly
 import plotly.graph_objs as go
 
+import config_accountdata as config
+
 class DUMPABLE(object):
+    
     def __init__(self):
         pass
 
@@ -27,7 +30,16 @@ class DUMPABLE(object):
     def content(self):
         pass
 
+    def to_php_partial(self, filename):
+        ploc = config.HTMLOUT_loc + config.PARTIALS_loc
+        fn = ploc + filename
+        self.to_file(fn)
+        return """ <?php include('""" +config.PARTIALS_loc + filename + """'); ?> """
+        
+
+
     def to_file(self, filename):
+        print '* writing to file', filename
         display = open(filename, 'w')
         display.write(self.content())
         display.close()

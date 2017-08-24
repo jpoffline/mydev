@@ -1,6 +1,6 @@
 
 import htmlreport_widgets as widgets
-import html_side_nav_group as snav
+import html_sidenav as snav
 
 
 class htmlreport(object):
@@ -13,18 +13,20 @@ class htmlreport(object):
         self._side_nav_groups = []
         self._value_cards = []
         self._top_matter = ''
-        self._snav = snav.html_sidenav_complete('Admin')
+        self._snav = snav.html_sidenav_complete(self._title)
         self._pie_charts = []
         self._meta = meta['meta']
         
         pass
 
+    def get_last_update_str(self):
+        return 'Last update ' + self._update_datetime
+
     def add_main_box(self, info):
         self._main_boxes.append(
             self._main_box(info['icon'], info['title'],
                            info['content'],
-                           info.get('footer', 'last update ' +
-                                    self._update_datetime),
+                           info.get('footer', self.get_last_update_str()),
                            info.get('id', None))
         )
 
@@ -44,7 +46,7 @@ class htmlreport(object):
 
     def add_pie(self, pie=None, title='',footer=''):
         if footer == '':
-            footer = 'last update ' +self._update_datetime
+            footer = self.get_last_update_str()
         self._pie_charts.append(
             widgets.pie_chart_area(
                 content=pie,title=title,
@@ -56,10 +58,10 @@ class htmlreport(object):
         return self._main_template()
 
     def _main_template(self):
-        return widgets.make_page(self._head(self._title),
-                                 self._snav.to_html(),
-                                 self._content(),
-                                 self._endmatter()
+        return widgets.make_page(head=self._head(self._title),
+                                 nav=self._snav.to_html(),
+                                 content=self._content(),
+                                 endmatter=self._endmatter()
                                  )
 
     def set_top_matter(self, matter):

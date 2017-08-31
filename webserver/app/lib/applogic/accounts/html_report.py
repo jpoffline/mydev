@@ -1,6 +1,6 @@
 
 import htmlreport_widgets as widgets
-import html_sidenav as snav
+import html_nav as snav
 
 
 class htmlreport(object):
@@ -13,7 +13,7 @@ class htmlreport(object):
         self._side_nav_groups = []
         self._value_cards = []
         self._top_matter = ''
-        self._snav = snav.html_sidenav_complete(self._title)
+        self._snav = snav.html_nav_complete(self._title)
         self._pie_charts = []
         self._meta = meta['meta']
         

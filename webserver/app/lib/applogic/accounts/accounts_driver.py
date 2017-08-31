@@ -3,12 +3,13 @@ import summary as summary
 import sys
 import config_accountdata as config
 import json
+import html_landing as htmllanding
 
 mappings = open(config.SCRATCH + config.CONFIG_loc +
                 config.MAPPINGS_file).read()
 mappings = json.loads(mappings)
 
-acc_type = 'savings'
+acc_type = 'current'
 
 months = ['may', 'june','july']
 
@@ -21,14 +22,16 @@ input_AccountsFile_names = [
 
 link_pages = [
     {
-        'link': 'current-may-july.php',
-        'label': 'Current/may-july',
-        'icon': 'recycle'
+        'title': 'Current',
+        'short': '2017',
+        'body': 'May -> July',
+        'link': 'current-may-july.php'
     },
     {
-        'link': 'savings-may-july.php',
-        'label': 'Savings/may-july',
-        'icon': 'recycle'
+        'title': 'Savings',
+        'short': '2017',
+        'body': 'May -> July',
+        'link': 'savings-may-july.php'
     }
 ]
 
@@ -68,3 +71,6 @@ summary = summary.SummariseByDescription(
 summary.create_summariesSave(output_meta['outlocs'])
 summary.save_overview(
     filename=config.SCRATCH + config.OUTPUTS_loc + 'overview.csv')
+
+
+htmllanding.htmllanding().to_file(config.HTMLOUT_loc + 'index2.html')

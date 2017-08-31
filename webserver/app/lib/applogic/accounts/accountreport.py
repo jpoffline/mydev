@@ -9,14 +9,26 @@ class accountreport(DUMPABLE):
     def __init__(self, filename, meta):
         self._filename = filename
         self._meta = meta
-        
 
     def content(self):
 
         nice_new_report = html_report.htmlreport({
             'update': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            'meta':self._meta['meta']
+            'meta': self._meta['meta']
         })
+
+        nice_new_report._snav.add_top_collection({
+            'name': 'Accounts',
+            'icon': 'calculator'
+        }
+        )
+
+        for page in self._meta['link_pages']:
+            nice_new_report._snav.add_top_item_to_collection(
+                'Accounts',
+                page
+            )
+
 
         nice_new_report.add_main_box(
             {
@@ -93,15 +105,6 @@ class accountreport(DUMPABLE):
                 'menugroup': 'Debits'
             }
         )
-
-        nice_new_report.add_side_nav_group(
-            {
-                'name': 'Accounts',
-                'icon': 'calculator',
-                'items': self._meta['link_pages']
-            }
-        )
-
 
         nice_new_report.add_side_nav_group(
             {
@@ -186,15 +189,14 @@ class accountreport(DUMPABLE):
             }
         )
 
-        desc =  self._meta['meta']['description'].split('-')
+        desc = self._meta['meta']['description'].split('-')
         nice_new_report.set_top_matter(
             [desc[0],
-             desc[1] + ' ('+self._meta['period']['begin'] + ')',
-             desc[2] + ' ('+self._meta['period']['end'] + ')']
+             desc[1] + ' (' + self._meta['period']['begin'] + ')',
+             desc[2] + ' (' + self._meta['period']['end'] + ')']
         )
-        
+
         nice_new_report.add_pie(pie=self._meta['top5_oneoff_debit_pie'],
                                 title='Top 5 one off debits')
 
         return nice_new_report.get()
-

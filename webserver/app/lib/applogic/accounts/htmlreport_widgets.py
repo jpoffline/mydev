@@ -4,9 +4,7 @@ def make_page(head='', nav='', content='', endmatter=''):
     return """
         <!DOCTYPE html>
         <html lang="en">
-            <head>
-              """ + head + """
-            </head>
+            <head>""" + head + """</head>
             <body class="fixed-nav" id="page-top">
                 """ + nav + """
                 <div class="content-wrapper py-3">
@@ -92,8 +90,11 @@ def side_nav_item(title, link, icon, text, isactive=False):
         """
 
 
-def static_item_link(assest_dir, item, meta):
-    return """<link href='""" + assest_dir + item + """' """ + meta + """>"""
+def static_item_link(assest_dir, item, meta=None):
+    m = "rel='stylesheet'"
+    if meta is not None:
+        m = m + " " + meta
+    return """<link href='""" + assest_dir + item + """' """ + m + """>"""
 
 def static_item_script(assest_dir, item):
     return """<script src='""" + assest_dir + item + """'></script>"""
@@ -112,13 +113,13 @@ def head_meta(title, assest_dir='../static/'):
 
 
     <!-- Bootstrap core CSS -->
-    """ + static_item_link(assest_dir, "vendor/bootstrap/css/bootstrap.min.css", "rel='stylesheet'") + """
+    """ + static_item_link(assest_dir, "vendor/bootstrap/css/bootstrap.min.css") + """
     <!-- Custom fonts for this template -->
-    """ + static_item_link(assest_dir, "vendor/font-awesome/css/font-awesome.min.css", "rel='stylesheet' type='text/css'") + """
+    """ + static_item_link(assest_dir, "vendor/font-awesome/css/font-awesome.min.css", "type='text/css'") + """
     <!-- Plugin CSS -->
-    """ + static_item_link(assest_dir, "vendor/datatables/dataTables.bootstrap4.css", "rel='stylesheet'") + """
+    """ + static_item_link(assest_dir, "vendor/datatables/dataTables.bootstrap4.css") + """
     <!-- Custom styles for this template -->
-    """ + static_item_link(assest_dir, "css/sb-admin.css", "rel='stylesheet'") + """
+    """ + static_item_link(assest_dir, "css/sb-admin.css") + """
     """ + static_item_script(assest_dir, "js/plotly-180717.js") + """
 
     <!-- Bootstrap core JavaScript -->
@@ -145,7 +146,7 @@ def end_meta(assest_dir = '../static/'):
     """
 
 
-def side_nav(title, items, groups=''):
+def side_nav(title, items, groups='',top_nav=''):
     items_html = "".join(items)
     groups = "".join(groups)
     return """
@@ -158,6 +159,7 @@ def side_nav(title, items, groups=''):
         <ul class="navbar-nav navbar-sidenav">
         """ + items_html + groups + """
         </ul>
+        """ + top_nav + """
         <ul class="navbar-nav sidenav-toggler">
           <li class="nav-item">
             <a class="nav-link text-center" id="sidenavToggler">

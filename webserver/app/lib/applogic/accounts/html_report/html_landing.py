@@ -1,4 +1,4 @@
-from dumpable import DUMPABLE
+from app.lib.applogic.accounts.dumpable import DUMPABLE
 import htmlreport_widgets as widgets
 import html_sidenav as snav
 import html_topnav as tnav
@@ -8,34 +8,6 @@ class htmllanding(DUMPABLE):
         self._title = 'Accounts'
         self._meta = meta
         self._tnav = tnav.html_topnav_complete()
-        self.add_dummy()
-
-    def add_dummy(self):
-        self._tnav.add_collection({
-            'name':'Messages',
-            'icon':'calculator'
-            }
-        )
-        self._tnav.add_item_to_collection(
-            'Messages',
-            {
-                'title': 'Current',
-                'short': '2017',
-                'body': 'May -> July',
-                'link': 'current-may-july.php'
-            }
-        )
-
-        self._tnav.add_item_to_collection(
-            'Messages',
-            {
-                'title': 'Savings',
-                'short': '2017',
-                'body': 'May -> July',
-                'link': 'savings-may-july.php'
-            }
-        )
-
 
     def get(self):
         return self._main_template()

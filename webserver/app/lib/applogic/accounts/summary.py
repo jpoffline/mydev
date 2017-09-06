@@ -143,12 +143,15 @@ class SummariseByDescription(object):
             clean_credit, self._accounts.total_credit(), maxcount=1)
 
 
+        
+
 
         report_meta = {
             'report_debit_regular': summary_debit_min.to_html_table(),
             'report_credit_regular': summary_credit_min.to_html_table(),
             'report_debit_oneoff': summary_debit_max.to_html_table(),
             'report_credit_oneoff': summary_credit_max.to_html_table(),
+            'bar_credit_oneoff': summary_debit_max.to_hist(),
             'period': self._summary['period'],
             'total_debit': str(self._summary['total_debit']),
             'total_credit': str(self._summary['total_credit']),

@@ -3,13 +3,13 @@ import summary as summary
 import sys
 import config_accountdata as config
 import json
-import html_landing as htmllanding
+import html_report.html_landing as htmllanding
 
 mappings = open(config.SCRATCH + config.CONFIG_loc +
                 config.MAPPINGS_file).read()
 mappings = json.loads(mappings)
 
-acc_type = 'current'
+acc_type = 'savings'
 
 months = ['may', 'june','july']
 

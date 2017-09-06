@@ -1,5 +1,5 @@
 import htmlreport_widgets as widgets
-from dumpable import DUMPABLE
+from app.lib.applogic.accounts.dumpable import DUMPABLE
 
 
 class tnav_item(object):
@@ -38,7 +38,7 @@ class tnav_collection(object):
             <a class="nav-link dropdown-toggle mr-lg-2" href="#" id='""" + this_id + """' data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class='fa fa-fw fa-""" + self._icon + """'></i>
               <span class="d-lg-none">""" + self._name + """
-                <span class="badge badge-pill badge-primary">12 New</span>
+                <span class="badge badge-pill badge-primary">""" + count +""" items</span>
               </span>
               <span class="new-indicator text-primary d-none d-lg-block">
                 <i class="fa fa-fw fa-circle"></i>

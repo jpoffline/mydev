@@ -94,3 +94,23 @@ class QuickSummary(DUMPABLE):
 
     def topn(self,n):
         return self._data[:n]
+
+
+
+    def hist(self):
+
+        nbins = 20
+        bin_max = self._data[0][2]
+        bin_delta = bin_max / nbins
+        bins = [0] * nbins
+        cnts = [0] * nbins
+        for d in self._data:
+            idx = int(d[2] / bin_max * nbins) - 1
+            idx = max(idx, 0)
+            bins[idx] += d[2]
+            cnts[idx] += 1
+
+        b = [i*bin_delta for i in xrange(0,nbins)]
+
+        cnts = [str(c) + ' transactions' for c in cnts]
+        return b,bins,cnts

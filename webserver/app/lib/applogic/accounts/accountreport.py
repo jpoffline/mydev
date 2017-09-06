@@ -1,7 +1,7 @@
 
 from dumpable import DUMPABLE
 import app.lib.widgets.bswidgets as bswidgets
-import html_report as html_report
+import html_report.html_report as html_report
 import datetime as datetime
 
 
@@ -30,6 +30,26 @@ class accountreport(DUMPABLE):
             )
 
 
+        
+
+        nice_new_report.add_side_nav_item(
+            {
+                'title': 'Top 5 one-off debits',
+                'link': 'top5_oneoff_debit',
+                'icon': 'wrench'
+            }
+        )
+
+        nice_new_report.add_main_box(
+            {
+                'icon': 'area-chart',
+                'title': 'Credits: one-off bar',
+                'content': self._meta['bar_credit_oneoff'],
+                'id': 'bar_credit_oneoff',
+                'menugroup': 'Credits'
+            }
+        )
+
         nice_new_report.add_main_box(
             {
                 'icon': 'area-chart',
@@ -37,14 +57,6 @@ class accountreport(DUMPABLE):
                 'content': self._meta['top5_oneoff_debit'],
                 'id': 'top5_oneoff_debit',
                 'menugroup': 'Credits'
-            }
-        )
-
-        nice_new_report.add_side_nav_item(
-            {
-                'title': 'Top 5 one-off debits',
-                'link': 'top5_oneoff_debit',
-                'icon': 'wrench'
             }
         )
 
@@ -136,6 +148,11 @@ class accountreport(DUMPABLE):
                 'icon': 'level-up',
                 'items': [
                     {
+                        'link':'#bar_credit_oneoff',
+                        'label':'One off bar',
+                        'icon': 'flash'
+                    },
+                    {
                         'link': '#recurring_credits',
                         'label': 'Recurring',
                         'icon': 'recycle'
@@ -171,24 +188,7 @@ class accountreport(DUMPABLE):
             }
         )
 
-        nice_new_report.add_value_card(
-            {
-                'state': 'info',
-                'icon': 'gbp',
-                'body': '{:20,.2f}'.format(float(self._meta['total_credit'])),
-                'linklabel': 'Total credit'
-            }
-        )
-
-        nice_new_report.add_value_card(
-            {
-                'state': 'warning',
-                'icon': 'gbp',
-                'body': '{:20,.2f}'.format(float(self._meta['total_debit'])),
-                'linklabel': 'Total debit'
-            }
-        )
-
+        
         desc = self._meta['meta']['description'].split('-')
         nice_new_report.set_top_matter(
             [desc[0],

@@ -1,6 +1,6 @@
 
 import htmlreport_widgets as widgets
-from dumpable import DUMPABLE
+from app.lib.applogic.accounts.dumpable import DUMPABLE
 import html_topnav as tnav
 import html_sidenav as snav
 
